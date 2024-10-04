@@ -21,7 +21,7 @@ const BannerImg = {
 const FooterLinks = [
   {
     title: "Home",
-    link: "/#",
+    link: "/home",
   },
   {
     title: "About",

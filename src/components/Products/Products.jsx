@@ -170,6 +170,8 @@ const Products = () => {
     navigate(`/product-details/${id}`); // Redirect to the product details page
   };
 
+
+
   return (
     <div className="mt-14 mb-12">
       <div className="container">
@@ -189,14 +191,14 @@ const Products = () => {
 
         {/* Body section */}
         <div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5">
             {/* Card section */}
             {ProductsData.map((data) => (
               <div
                 data-aos="fade-up"
                 data-aos-delay={data.aosDelay}
                 key={data.id}
-                className="space-y-3 bg-white rounded-md shadow-md p-4"
+                className="space-y-3 bg-white rounded-md shadow-md p-4 cursor-pointer"
                 onClick={()=>{
                   handleProductClick(data.id)
                 }}
@@ -222,7 +224,12 @@ const Products = () => {
           </div>
 
           {/* View All Button */}
-          <div className="flex justify-center">
+          <div 
+          className="flex justify-center"
+          onClick={()=>{
+            navigate('/all-products')
+          }}
+          >
             <button className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
               View All
             </button>

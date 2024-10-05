@@ -26,6 +26,13 @@ const ProductsData = [
     description:
       "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
+  {
+    id: 4,
+    img: Img2,
+    title: "Printed shirt",
+    description:
+      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
 ];
 const TopProducts = ({ handleOrderPopup }) => {
   return (
@@ -36,6 +43,7 @@ const TopProducts = ({ handleOrderPopup }) => {
           <p data-aos="fade-up" className="text-sm text-primary">
             Top Rated Products for you
           </p>
+          
           <h1 data-aos="fade-up" className="text-3xl font-bold">
             Best Products
           </h1>
@@ -45,7 +53,7 @@ const TopProducts = ({ handleOrderPopup }) => {
           </p>
         </div>
         {/* Body section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-20 md:gap-5 place-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4  gap-5 md:gap-5 place-items-center">
           {ProductsData.map((data) => (
             <div
               data-aos="zoom-in"

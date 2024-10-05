@@ -76,6 +76,13 @@ import ProductDetails from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import WishlistPage from "./pages/WishListPage";
+import DeliveryAddress from "./pages/DeliveryAddress";
+import AllCategoryProducts from "./pages/AllCategoryProductsPage";
+import SearchBar from "./components/Navbar/SearchBar";
+import AllProductsPage from "./pages/AllProductsPage";
+import ScrollToTop from "./components/ScrollToTop";
+import OrderSummary from "./pages/OrderSummaryPage";
+import AccountSettings from "./pages/AccountSettings";
 // import KidsWear from "./pages/KidsWear";
 // import MensWear from "./pages/MensWear";
 // import Electronics from "./pages/Electronics";
@@ -87,6 +94,14 @@ const App = () => {
 
   const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);
+  };
+
+
+
+  const handleSearch = (term) => {
+    alert('term')
+    // setSearchTerm(term);
+    // navigate("/"); // Redirect to Home page
   };
 
   React.useEffect(() => {
@@ -101,10 +116,10 @@ const App = () => {
 
   return (
     <Router>
-      <div className="bg-white dark:bg-gray-900 dark:text-white duration-200">
-        <Navbar/>
-       
-
+      <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 mt-14">
+        <Navbar onSearch={handleSearch}/>
+        <SearchBar/>
+        <ScrollToTop/>
         <Routes>
         
           <Route path="/" element={<Home />} />
@@ -114,7 +129,11 @@ const App = () => {
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/register" element={<RegisterPage/>} />
           <Route path="/wishlist" element={<WishlistPage/>} />
-         
+          <Route path="/delivery-address" element={<DeliveryAddress/>} />
+          <Route path="/all-category/:type" element={<AllCategoryProducts/>} />
+          <Route path="/all-products" element={<AllProductsPage/>} />
+          <Route path="order-summary" element={<OrderSummary/>} />
+          <Route path='account' element={<AccountSettings/>} />
           {/* Add other routes as needed */}
           {/* Example: <Route path="/top-rated" element={<TopRated />} /> */}
         </Routes>

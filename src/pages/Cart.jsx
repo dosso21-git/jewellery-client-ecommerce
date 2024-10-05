@@ -120,7 +120,7 @@ const CartPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 dark:bg-gray-900">
+    <div className="container mx-auto p-4 dark:bg-gray-900 mt-32">
       <h2 className="text-2xl font-bold mb-4 text-center dark:text-white">Shopping Cart</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Cart Items */}

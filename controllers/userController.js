@@ -6,6 +6,7 @@ const User = require("../models/userModel");
 // const Coupon = require("../models/couponModel");
 // const Order = require("../models/orderModel");
 const { generateToken } = require("../config/jwtToken");
+const { use } = require("bcrypt/promises");
 // const sendEmail = require("./emailCtrl");
 
 
@@ -567,3 +568,12 @@ module.exports = {
   // getOrderByUserId,
   // updateOrderStatus,
 };
+
+
+
+
+
+
+
+
+

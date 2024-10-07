@@ -140,6 +140,9 @@
 import React, { useState } from "react";
 import OrderSummary from "./OrderSummaryPage";
 import { FaBars, FaTimes } from "react-icons/fa";
+import LoginPage from "./LoginPage";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const AccountSettings = () => {
   const [activeSection, setActiveSection] = useState("profile");
@@ -148,6 +151,7 @@ const AccountSettings = () => {
   const [userProfile, setUserProfile] = useState({
     name: "Rafiqur Rahman",
     role: "Team Manager",
+    image : 'https://www.suntiros.com/wp-content/uploads/2016/12/Akshay-Kumar-Height-Weight-Age-Biography-More.jpg',
     location: "Leeds, United Kingdom",
     email: "rafiqurrahman51@gmail.com",
     phone: "+09 345 346 46",
@@ -155,6 +159,18 @@ const AccountSettings = () => {
     country: "United Kingdom",
     city: "Leeds, East London",
   });
+
+
+
+  const token = Cookies.get('loginToken') ;
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Cookies.remove('loginToken'); // Remove token from cookies
+    navigate('/');
+  };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -169,10 +185,18 @@ const AccountSettings = () => {
             <h2 className="text-xl font-semibold mb-4">My Profile</h2>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
               <div className="flex justify-between items-center mb-6">
-                <div>
-                  <p className="text-lg font-bold">{userProfile.name}</p>
-                  <p>{userProfile.role}</p>
-                  <p>{userProfile.location}</p>
+                <div className="flex items-center">
+                  {/* Profile Image */}
+                  <img
+                    src={userProfile.image || "default-profile-image.jpg"} // Placeholder image if no image URL is provided
+                    alt="Profile"
+                    className="w-16 h-16 rounded-full mr-4"
+                  />
+                  <div>
+                    <p className="text-lg font-bold">{userProfile.name}</p>
+                    <p>{userProfile.role}</p>
+                    <p>{userProfile.location}</p>
+                  </div>
                 </div>
                 {isEditing ? (
                   <button className="text-blue-500" onClick={() => setIsEditing(false)}>Save</button>
@@ -180,6 +204,7 @@ const AccountSettings = () => {
                   <button className="text-blue-500" onClick={() => setIsEditing(true)}>Edit</button>
                 )}
               </div>
+        
               <div className="border-t pt-4">
                 <h3 className="text-lg font-semibold">Personal Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
@@ -279,8 +304,13 @@ const AccountSettings = () => {
             </div>
           </div>
         );
+        
       case "orders":
         return <OrderSummary />;
+        case "reset-password":
+          return <OrderSummary />;
+          case "Login":
+            return <LoginPage />;
       // Other sections...
       default:
         return <p>Select a section...</p>;
@@ -289,39 +319,71 @@ const AccountSettings = () => {
 
   return (
     <div className="flex h-screen mt-36 bg-gray-50 dark:bg-gray-900">
-      {/* Sidebar Toggle Button for Mobile */}
-      <button
-        className="absolute top-36 left-4 md:hidden p-2 bg-gray-200 rounded"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        aria-label="Toggle Sidebar"
-      >
-        {sidebarOpen ? <FaTimes /> : <FaBars />}
-      </button>
+  {/* Sidebar Toggle Button for Mobile */}
+  <button
+    className="absolute top-36 left-4 md:hidden p-2 bg-gray-200 rounded"
+    onClick={() => setSidebarOpen(!sidebarOpen)}
+    aria-label="Toggle Sidebar"
+  >
+    {sidebarOpen ? <FaTimes /> : <FaBars />}
+  </button>
 
-      {/* Sidebar */}
-      <div className={`w-64 bg-gray-100 dark:bg-gray-800 p-4 ${sidebarOpen ? 'block' : 'hidden'} md:block`}>
-        <nav className="space-y-4">
-          {["profile", "orders", "teams", "notifications", "billing"].map((section) => (
+  {/* Sidebar (static on larger screens) */}
+  <div
+    className={`w-64 bg-gray-100 dark:bg-gray-800 p-4 ${
+      sidebarOpen ? "block" : "hidden"
+    } md:block h-full`}
+  >
+    <nav className="space-y-4">
+      {["profile","orders", "teams", "notifications", "billing"].map(
+        (section) => (
+          <button
+            key={section}
+            className={`block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 ${
+              activeSection === section
+                ? "bg-gray-200 dark:bg-gray-700"
+                : ""
+            }`}
+            onClick={() => {
+              setActiveSection(section);
+              setSidebarOpen(false); // Close sidebar on mobile
+            }}
+            aria-label={section.charAt(0).toUpperCase() + section.slice(1)}
+          >
+            {section.charAt(0).toUpperCase() + section.slice(1)}
+          </button>
+        )
+      )}
+
+       {/* Conditional Login/Logout Button */}
+       {token ? (
             <button
-              key={section}
-              className={`block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 ${activeSection === section ? "bg-gray-200 dark:bg-gray-700" : ""}`}
-              onClick={() => {
-                setActiveSection(section);
-                setSidebarOpen(false); // Close sidebar on mobile
-              }}
-              aria-label={section.charAt(0).toUpperCase() + section.slice(1)}
+              className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+              onClick={handleLogout}
+              aria-label="Logout"
             >
-              {section.charAt(0).toUpperCase() + section.slice(1)}
+              Logout
             </button>
-          ))}
-        </nav>
-      </div>
+          ) : (
+            <button
+              className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+              onClick={() => setActiveSection("Login")}
+              aria-label="Login"
+            >
+              Login
+            </button>
+          )}
 
-      {/* Main Content */}
-      <div className={`flex-grow p-6`}>
-        {renderContent()}
-      </div>
-    </div>
+    </nav>
+  </div>
+
+  {/* Main Content (Scrollable) */}
+  <div className="flex-grow p-6 overflow-y-auto">
+    {renderContent()}
+  </div>
+</div>
+
+
   );
 };
 

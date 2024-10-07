@@ -1,15 +1,45 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 const RegisterPage = () => {
-  const [name, setName] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null); // To store any errors from the API
+  const [loading, setLoading] = useState(false); // For loading state
+  const [message,setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Name:", name, "Email:", email, "Password:", password);
-    // Add your registration logic here
+    setLoading(true);
+    setError(null); // Reset error state
+    setMessage(null); // Reset message state
+  
+    try {
+      const response = await axios.post('/register', {
+        email,
+        firstname,
+        lastname,
+        mobile,
+        password,
+      });
+  
+      // Handle successful registration
+      console.log(response.data);
+      setMessage(response.data.message); // Set success message
+      // Redirect or show a success message
+    } catch (error) {
+      // Handle error
+      const errorMessage = error.response?.data?.error || 'An error occurred. Please try again.';
+      setMessage(errorMessage); // Set error message
+      console.error('Registration error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   return (
     <section className="h-screen flex items-center justify-center bg-gray-100">
@@ -27,18 +57,35 @@ const RegisterPage = () => {
           {/* Right Column with Form */}
           <div className="md:w-5/12 lg:ml-6">
             <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
+            <h3 className="text-red-500">{message}</h3>
+            {error && <p className="text-red-500 text-center">{error}</p>} {/* Display error message */}
             <form onSubmit={handleSubmit}>
-              {/* Name input */}
+              {/* First Name input */}
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Name or 
+                <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">
+                  First Name
                 </label>
                 <input
                   type="text"
-                  id="name"
+                  id="firstname"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={firstname}
+                  onChange={(e) => setFirstname(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Last Name input */}
+              <div className="mb-4">
+                <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastname"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={lastname}
+                  onChange={(e) => setLastname(e.target.value)}
                   required
                 />
               </div>
@@ -46,7 +93,7 @@ const RegisterPage = () => {
               {/* Email input */}
               <div className="mb-4">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email address or Mobile
+                  Email address
                 </label>
                 <input
                   type="email"
@@ -54,6 +101,21 @@ const RegisterPage = () => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Mobile input */}
+              <div className="mb-4">
+                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">
+                  Mobile Number
+                </label>
+                <input
+                  type="text"
+                  id="mobile"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
                   required
                 />
               </div>
@@ -76,9 +138,10 @@ const RegisterPage = () => {
               {/* Submit button */}
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                className={`w-full bg-blue-600 text-white py-2 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={loading}
               >
-                Register
+                {loading ? 'Registering...' : 'Register'}
               </button>
             </form>
 
@@ -97,7 +160,7 @@ const RegisterPage = () => {
               </button>
             </div>
 
-            {/* Optional: Link to login */}
+            {/* Link to login */}
             <div className="mt-4 text-center">
               <p className="text-gray-600">
                 Already have an account?{" "}

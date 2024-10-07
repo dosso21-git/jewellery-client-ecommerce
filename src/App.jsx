@@ -175,6 +175,7 @@ import AllProductsPage from "./pages/AllProductsPage";
 import OrderSummary from "./pages/OrderSummaryPage";
 import AccountSettings from "./pages/AccountSettings";
 import MainLayout from './components/MainLayout';
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   React.useEffect(() => {
@@ -189,6 +190,7 @@ const App = () => {
 
   return (
     <AppProvider>
+       <ErrorBoundary>
       <Router>
         <Routes>
           <Route path="/" element={<MainLayout><Home /></MainLayout>} />
@@ -205,6 +207,7 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </Router>
+      </ErrorBoundary>
     </AppProvider>
   );
 };

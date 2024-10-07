@@ -6,12 +6,13 @@ const User = require("../models/userModel");
 // const Coupon = require("../models/couponModel");
 // const Order = require("../models/orderModel");
 const { generateToken } = require("../config/jwtToken");
+const { use } = require("bcrypt/promises");
 // const sendEmail = require("./emailCtrl");
 
 
-// Create User
+
 const createUser = async (req, res) => {
-  const { email, firstname, lastname, mobile, password } = req.body;
+  const { email, firstname, lastname, mobile, password, role } = req.body; // Accept role from the request body
   const saltRounds = 10;
 
   try {
@@ -21,23 +22,26 @@ const createUser = async (req, res) => {
 
     const findUserByEmail = await User.findOne({ email });
     if (findUserByEmail) {
-      return res.status(409).json({ error: { email: "Email already exists. Please login." } });
+      return res.status(409).json({ error: "Email already exists. Please login." });
     }
 
     const findUserByMobile = await User.findOne({ mobile });
     if (findUserByMobile) {
-      return res.status(409).json({ error: { mobile: "Mobile number already exists. Please login." } });
+      return res.status(409).json({ error: "Mobile number already exists. Please login." });
     }
 
     const salt = await bcrypt.genSalt(saltRounds);
     const passwordHash = await bcrypt.hash(password, salt);
+
+    const userRole = role && role.toLowerCase() === 'admin' ? 'admin' : 'user';
 
     const newUser = await User.create({
       firstname,
       lastname,
       email,
       mobile,
-      password: passwordHash
+      password: passwordHash,
+      role: userRole,
     });
 
     return res.status(201).json({ message: 'User registered successfully.' });
@@ -47,7 +51,6 @@ const createUser = async (req, res) => {
   }
 };
 
-// Admin Login
 const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -66,48 +69,53 @@ const loginAdmin = async (req, res) => {
 
     const isPasswordMatched = await bcrypt.compare(password, findAdmin.password);
     if (!isPasswordMatched) {
-      return res.status(401).json({ error: { password: "Incorrect password." } });
-    }
+      return res.status(401).json({ message: "Incorrect password." });
+  }
 
     const refreshToken = generateToken(findAdmin._id);
-    await User.findByIdAndUpdate(
-      findAdmin.id,
-      { token: refreshToken },
-      { new: true }
-    );
+  await User.findByIdAndUpdate(
+    findAdmin.id,
+    { token: refreshToken },
+    { new: true }
+  );
 
-    return res.status(200).json({
-      _id: findAdmin._id,
-      firstname: findAdmin.firstname,
-      lastname: findAdmin.lastname,
-      email: findAdmin.email,
-      mobile: findAdmin.mobile,
-      token: generateToken(findAdmin._id),
-    });
+  return res.status(200).json({
+    _id: findAdmin._id,
+    firstname: findAdmin.firstname,
+    lastname: findAdmin.lastname,
+    email: findAdmin.email,
+    mobile: findAdmin.mobile,
+    token: generateToken(findAdmin._id),
+  });
 
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
+} catch (error) {
+  return res.status(500).json({ message: error.message });
+}
 };
 
-// Login User
 const loginUserCtrl = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, mobile, password } = req.body;
 
   try {
-    const findUser = await User.findOne({ email });
+    // Find user by either email or mobile
+    const findUser = await User.findOne({
+      $or: [{ email }, { mobile }]
+    });
+
     if (!findUser) {
-      return res.status(401).json({ error: { email: "Incorrect Email." } });
+      return res.status(401).json({ error:  "Incorrect Email or Mobile."  });
     }
 
+    // Check if the password is correct
     const isPasswordMatched = await bcrypt.compare(password, findUser.password);
     if (!isPasswordMatched) {
-      return res.status(401).json({ error: { password: "Incorrect password." } });
+      return res.status(401).json({ error: "Incorrect password."  });
     }
 
+    // Generate a token and update it in the user's record
     const token = generateToken(findUser._id);
     await User.findByIdAndUpdate(
-      findUser.id,
+      findUser._id,
       { token },
       { new: true }
     );
@@ -126,6 +134,76 @@ const loginUserCtrl = async (req, res) => {
   }
 };
 
+const updatedUser = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        firstname: req.body.firstname || existingUser.firstname,
+        lastname: req.body.lastname || existingUser.lastname,
+        email: req.body.email || existingUser.email,
+        mobile: req.body.mobile || existingUser.mobile,
+      },
+      { new: true }
+    );
+
+    if (updatedUser) {
+      return res.status(200).json({
+        message: 'User updated successfully',
+        user: updatedUser,
+      });
+    } else {
+      return res.status(400).json({ error: 'Failed to update user' });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: 'Server error', details: error.message });
+  }
+};
+
+const deleteaUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleteaUser = await User.findByIdAndDelete(id);
+    res.json({
+      deleteaUser,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getallUser = async (req, res) => {
+  try {
+    const getUsers = await User.find();
+    res.json(getUsers);
+  }
+  catch (error) {
+    throw new Error(error);
+  }
+};
+
+// Get a single-user
+const getaUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getaUser = await User.findById(id);
+    res.json({
+      getaUser,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
 // save user Address
 const saveAddress = async (req, res, next) => {
   const { _id } = req.user;
@@ -142,68 +220,6 @@ const saveAddress = async (req, res, next) => {
       }
     );
     res.json(updatedUser);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-// Update a user
-const updatedUser = async (req, res) => {
-  const { _id } = req.params;
-  validateMongoId(_id);
-  try {
-    const updateUser = await User.findByIdAndUpdate(_id, {
-      firstname: req?.body.firstname,
-      lastname: req?.body.lastname,
-      email: req?.body.email,
-      mobile: req?.body.mobile,
-    },
-      {
-        new: true,
-      });
-    res.json(updateUser);
-
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-// Get All users
-const getallUser = async (req, res) => {
-  try {
-    const getUsers = await User.find();
-    res.json(getUsers);
-  }
-  catch (error) {
-    throw new Error(error);
-  }
-};
-
-// Get a single-user
-const getaUser = async (req, res) => {
-  const { id } = req.params;
-  // console.log(id);
-  validateMongoId(id);
-  try {
-    const getaUser = await User.findById(id);
-    res.json({
-      getaUser,
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-// Delete a single-user
-const deleteaUser = async (req, res) => {
-  const { id } = req.params;
-  validateMongoId(id);
-
-  try {
-    const deleteaUser = await User.findByIdAndDelete(id);
-    res.json({
-      deleteaUser,
-    });
   } catch (error) {
     throw new Error(error);
   }
@@ -529,11 +545,11 @@ module.exports = {
   createUser,
   loginAdmin,
   loginUserCtrl,
+  updatedUser,
+  deleteaUser,
+  getaUser,
+  getallUser,
   // saveAddress,
-  // getallUser,
-  // getaUser,
-  // deleteaUser,
-  // updatedUser,
   // blockUser,
   // unblockUser,
   // handleRefreshToken,
@@ -552,3 +568,12 @@ module.exports = {
   // getOrderByUserId,
   // updateOrderStatus,
 };
+
+
+
+
+
+
+
+
+

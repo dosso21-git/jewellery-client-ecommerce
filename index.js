@@ -12,15 +12,12 @@ connectDB();
 const app = express();
 
 app.use(cors())
-// Middleware
 app.use(express.json());
 
-// Routes
 app.use('/api/user', userRoutes);
 app.use('/api/user', productRoutes)
 
 
-// Handle unmatched routes (404)
 app.use((req, res) => {
     res.status(404).json({ message: 'You are hitting a wrong API URL' });
 });

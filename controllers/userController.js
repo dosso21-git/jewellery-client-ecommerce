@@ -6,6 +6,7 @@ const User = require("../models/userModel");
 // const Coupon = require("../models/couponModel");
 // const Order = require("../models/orderModel");
 const { generateToken } = require("../config/jwtToken");
+const { use } = require("bcrypt/promises");
 // const sendEmail = require("./emailCtrl");
 
 
@@ -21,7 +22,7 @@ const createUser = async (req, res) => {
 
     const findUserByEmail = await User.findOne({ email });
     if (findUserByEmail) {
-      return res.status(409).json({ error: { email: "Email already exists. Please login." } });
+      return res.status(409).json({ error: "Email already exists. Please login."  });
     }
 
     const findUserByMobile = await User.findOne({ mobile });
@@ -571,3 +572,12 @@ module.exports = {
   // getOrderByUserId,
   // updateOrderStatus,
 };
+
+
+
+
+
+
+
+
+

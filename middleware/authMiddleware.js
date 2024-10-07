@@ -23,4 +23,16 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const isAdmin = async (req, res, next) => {
+  const { email } = req.user
+  const adminUser = await User.findOne({ email })
+  if (adminUser.role !== "admin") {
+      return res.status(403).json({ message: "You are not an admin." })
+  }
+  else {
+      next()
+  }
+}
+
+
+module.exports = { protect, isAdmin };

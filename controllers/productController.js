@@ -14,7 +14,7 @@ const createProduct = async (req, res) => {
             price: req.body.price,
             category: req.body.category,
             quantity: req.body.quantity,
-            img: pictureUrls,
+            images: pictureUrls
         });
 
         await newProduct.save();

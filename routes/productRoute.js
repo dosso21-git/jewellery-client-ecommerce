@@ -26,6 +26,6 @@ router.get('/product/getall', getAllProducts);
 router.get('/product/get/:id', getProductById);
 router.delete('/delete/:id', protect, deleteProduct);
 router.put('/update/:id', protect, upload, updateProduct);
-router.put('/product/category/:category', getProductsByCategory);
+router.get('/product/category/:category', getProductsByCategory);
 
 module.exports = router;

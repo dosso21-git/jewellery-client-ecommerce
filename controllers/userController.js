@@ -21,12 +21,12 @@ const createUser = async (req, res) => {
 
     const findUserByEmail = await User.findOne({ email });
     if (findUserByEmail) {
-      return res.status(409).json({ error: { email: "Email already exists. Please login." } });
+      return res.status(409).json({ error: "Email already exists. Please login." });
     }
 
     const findUserByMobile = await User.findOne({ mobile });
     if (findUserByMobile) {
-      return res.status(409).json({ error: { mobile: "Mobile number already exists. Please login." } });
+      return res.status(409).json({ error: "Mobile number already exists. Please login." });
     }
 
     const salt = await bcrypt.genSalt(saltRounds);
@@ -68,28 +68,28 @@ const loginAdmin = async (req, res) => {
 
     const isPasswordMatched = await bcrypt.compare(password, findAdmin.password);
     if (!isPasswordMatched) {
-      return res.status(401).json({ error: { password: "Incorrect password." } });
-    }
+      return res.status(401).json({ message: "Incorrect password." });
+  }
 
     const refreshToken = generateToken(findAdmin._id);
-    await User.findByIdAndUpdate(
-      findAdmin.id,
-      { token: refreshToken },
-      { new: true }
-    );
+  await User.findByIdAndUpdate(
+    findAdmin.id,
+    { token: refreshToken },
+    { new: true }
+  );
 
-    return res.status(200).json({
-      _id: findAdmin._id,
-      firstname: findAdmin.firstname,
-      lastname: findAdmin.lastname,
-      email: findAdmin.email,
-      mobile: findAdmin.mobile,
-      token: generateToken(findAdmin._id),
-    });
+  return res.status(200).json({
+    _id: findAdmin._id,
+    firstname: findAdmin.firstname,
+    lastname: findAdmin.lastname,
+    email: findAdmin.email,
+    mobile: findAdmin.mobile,
+    token: generateToken(findAdmin._id),
+  });
 
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
+} catch (error) {
+  return res.status(500).json({ message: error.message });
+}
 };
 
 const loginUserCtrl = async (req, res) => {
@@ -100,15 +100,15 @@ const loginUserCtrl = async (req, res) => {
     const findUser = await User.findOne({
       $or: [{ email }, { mobile }]
     });
-    
+
     if (!findUser) {
-      return res.status(401).json({ error: { message: "Incorrect Email or Mobile." } });
+      return res.status(401).json({ error:  "Incorrect Email or Mobile."  });
     }
 
     // Check if the password is correct
     const isPasswordMatched = await bcrypt.compare(password, findUser.password);
     if (!isPasswordMatched) {
-      return res.status(401).json({ error: { password: "Incorrect password." } });
+      return res.status(401).json({ error: "Incorrect password."  });
     }
 
     // Generate a token and update it in the user's record
@@ -166,6 +166,43 @@ const updatedUser = async (req, res) => {
   }
 };
 
+const deleteaUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleteaUser = await User.findByIdAndDelete(id);
+    res.json({
+      deleteaUser,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getallUser = async (req, res) => {
+  try {
+    const getUsers = await User.find();
+    res.json(getUsers);
+  }
+  catch (error) {
+    throw new Error(error);
+  }
+};
+
+// Get a single-user
+const getaUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getaUser = await User.findById(id);
+    res.json({
+      getaUser,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
 // save user Address
 const saveAddress = async (req, res, next) => {
   const { _id } = req.user;
@@ -182,47 +219,6 @@ const saveAddress = async (req, res, next) => {
       }
     );
     res.json(updatedUser);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-// Get All users
-const getallUser = async (req, res) => {
-  try {
-    const getUsers = await User.find();
-    res.json(getUsers);
-  }
-  catch (error) {
-    throw new Error(error);
-  }
-};
-
-// Get a single-user
-const getaUser = async (req, res) => {
-  const { id } = req.params;
-  // console.log(id);
-  validateMongoId(id);
-  try {
-    const getaUser = await User.findById(id);
-    res.json({
-      getaUser,
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-// Delete a single-user
-const deleteaUser = async (req, res) => {
-  const { id } = req.params;
-  validateMongoId(id);
-
-  try {
-    const deleteaUser = await User.findByIdAndDelete(id);
-    res.json({
-      deleteaUser,
-    });
   } catch (error) {
     throw new Error(error);
   }
@@ -549,10 +545,10 @@ module.exports = {
   loginAdmin,
   loginUserCtrl,
   updatedUser,
+  deleteaUser,
+  getaUser,
+  getallUser,
   // saveAddress,
-  // getallUser,
-  // getaUser,
-  // deleteaUser,
   // blockUser,
   // unblockUser,
   // handleRefreshToken,

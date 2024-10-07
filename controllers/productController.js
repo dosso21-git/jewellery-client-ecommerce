@@ -164,4 +164,4 @@ const deleteDishPicture = async (req, res) => {
 };
 
 
-module.exports = { createProduct };
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct };

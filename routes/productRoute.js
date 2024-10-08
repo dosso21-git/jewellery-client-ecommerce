@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer")
 const { CloudinaryStorage } = require('multer-storage-cloudinary')
 const path = require("path")
-const { createProduct, getProductById, deleteProduct, updateProduct, getAllProducts, getProductsByCategory, deleteProductPicture, addRating, getMostSellingProducts } = require('../controllers/productController');
+const { createProduct, getProductById, deleteProduct, updateProduct, getAllProducts, getProductsByCategory, deleteProductPicture, getMostSellingProducts, trackProductView, getPopularProducts } = require('../controllers/productController');
 const { protect, getIpAddress, publicApiAccess, } = require('../middleware/authMiddleware');
 const cloudinary = require('../config/cloudinary.js');
 const { giveRating, getTopRatedProducts } = require('../controllers/ratingController.js');
@@ -36,6 +36,8 @@ router.delete('/admin/delete/:productId/image/:pictureIndex', protect, deletePro
 router.put('/admin/update/:id', protect, upload, updateProduct);
 router.post('/product/rate', protect, giveRating);
 router.get('/product/getratign', getTopRatedProducts);
+router.get('/product/popular/:productId', trackProductView);
+router.get('/product/getpopularproduct', getPopularProducts);
 
 
 module.exports = router;

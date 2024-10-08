@@ -1,6 +1,4 @@
 const Order = require("../models/order_model");
-
-
 // Create a new order
 exports.createOrder = async (req, res) => {
   try {
@@ -48,13 +46,10 @@ exports.updateOrder = async (req, res) => {
   try {
     const orderId = req.params.id;
     const updates = req.body;
-
     const updatedOrder = await Order.findByIdAndUpdate(orderId, updates, { new: true });
-
     if (!updatedOrder) {
       return res.status(404).json({ message: 'Order not found' });
     }
-
     return res.status(200).json({ message: 'Order updated successfully', order: updatedOrder });
   } catch (error) {
     return res.status(400).json({ message: 'Error updating order', error: error.message });
@@ -65,13 +60,10 @@ exports.updateOrder = async (req, res) => {
 exports.deleteOrder = async (req, res) => {
   try {
     const orderId = req.params.id;
-
     const deletedOrder = await Order.findByIdAndDelete(orderId);
-
     if (!deletedOrder) {
       return res.status(404).json({ message: 'Order not found' });
     }
-
     return res.status(200).json({ message: 'Order deleted successfully' });
   } catch (error) {
     return res.status(500).json({ message: 'Error deleting order', error: error.message });

@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 const cloudinary = require("../config/cloudinary")
+const Rating = require("../models/ratingModel")
 
 const createProduct = async (req, res) => {
     try {
@@ -36,7 +37,7 @@ const getAllProducts = async (req, res) => {
         const product = await Product.find({})
         res.status(200).json(product)
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching dishes', error })
+        res.status(500).json({ message: 'Error fetching Products', error })
     }
 }
 
@@ -46,12 +47,12 @@ const getProductById = async (req, res) => {
         const product = await Product.findById(id)
 
         if (!product) {
-            return res.status(404).json({ message: 'Dish not found' })
+            return res.status(404).json({ message: 'Product not found' })
         }
 
         res.status(200).json(product)
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching dish', error })
+        res.status(500).json({ message: 'Error fetching Product', error })
     }
 }
 
@@ -116,6 +117,20 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const getMostSellingProducts = async (req, res) => {
+    const limit = parseInt(req.query.limit) || 10;
+
+    try {
+        const products = await Product.find()
+            .sort({ sold: -1 })
+            .limit(limit);
+
+        return res.status(200).json(products);
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", error });
+    }
+};
+
 const deleteProductPicture = async (req, res) => {
     const { productId, pictureIndex } = req.params;
 
@@ -147,7 +162,7 @@ const deleteProductPicture = async (req, res) => {
                 max_results: 500
             });
             console.log('Existing Resources:', resources);
-            
+
             return res.status(500).json({
                 error: 'Failed to delete image from Cloudinary',
                 details: cloudinaryResponse
@@ -166,7 +181,6 @@ const deleteProductPicture = async (req, res) => {
         return res.status(500).json({ error: 'Server Error' });
     }
 };
-
 
 const getProductsByCategory = async (req, res) => {
     try {
@@ -192,30 +206,4 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
-const addRating = async (req, res) => {
-    const { star, comment, productId } = req.body;
-
-    try {
-        const rating = new Rating({
-            star,
-            comment,
-            postedby: req.user._id,
-            product: productId,
-        });
-
-        await rating.save();
-
-        await Product.findByIdAndUpdate(
-            productId,
-            { $push: { ratings: rating._id } },
-            { new: true }
-        );
-
-        res.status(201).json({ message: "Rating added successfully!", rating });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error adding rating.", error });
-    }
-};
-
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, deleteProductPicture };
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, };

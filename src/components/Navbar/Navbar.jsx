@@ -326,6 +326,7 @@ import { MdAccountCircle } from "react-icons/md";
 import { FaCaretDown, FaBars, FaTimes } from "react-icons/fa";
 import DarkMode from "./DarkMode";
 import { useNavigate } from "react-router-dom";
+import Notification from "../Notification";
 
 const Menu = [
   { id: 1, name: "Home", link: "/" },
@@ -352,10 +353,13 @@ const Navbar = () => {
       {/* upper Navbar */}
       <div className="bg-primary/40 py-2">
         <div className="container flex justify-between items-center">
+        {/* <div className="hidden sm:flex justify-center"> */}
           <div className="flex items-center">
             <a href="#" className="flex items-center gap-1">
               <img src={Logo} alt="Logo" className="w-8 sm:w-10" />
+              <div className="hidden sm:flex justify-center">
               <span className="sm:text-2xl">Jewellery-Shop</span> {/* Hide on mobile */}
+              </div>
             </a>
           </div>
 
@@ -404,7 +408,7 @@ const Navbar = () => {
           </div>
 
           {/* Profile and Cart Buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-10">
             <button
               onClick={() => {
                 navigate('/account');
@@ -424,6 +428,9 @@ const Navbar = () => {
             {/* Darkmode Switch */}
             <div>
               <DarkMode />
+            </div>
+            <div>
+              <Notification />
             </div>
           </div>
         </div>

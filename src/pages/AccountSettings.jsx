@@ -149,15 +149,15 @@ const AccountSettings = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState({
-    name: "Rafiqur Rahman",
+    name: "Testing user ",
     role: "Team Manager",
     image : 'https://www.suntiros.com/wp-content/uploads/2016/12/Akshay-Kumar-Height-Weight-Age-Biography-More.jpg',
-    location: "Leeds, United Kingdom",
-    email: "rafiqurrahman51@gmail.com",
+    location: "Leeds, United india",
+    email: "test@gmail.com",
     phone: "+09 345 346 46",
     bio: "Team Manager",
-    country: "United Kingdom",
-    city: "Leeds, East London",
+    country: "United india",
+    city: "Leeds, East india",
   });
 
 

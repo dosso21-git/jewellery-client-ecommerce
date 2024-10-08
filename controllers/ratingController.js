@@ -73,7 +73,7 @@ const getTopRatedProducts = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Top-rated products fetched successfully",
-            products: topRatedProducts,
+            data: topRatedProducts,
         });
     } catch (error) {
         res.status(500).json({
@@ -83,5 +83,13 @@ const getTopRatedProducts = async (req, res) => {
         });
     }
 };
+
+
+module.exports = {
+    getTopRatedProducts,
+};
+
+
+
 
 module.exports = { giveRating, getTopRatedProducts };

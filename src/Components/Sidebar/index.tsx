@@ -27,7 +27,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   // Manage dropdown state for activities
   const [isActivitiesOpen, setActivitiesOpen] = useState(false);
   const [token, setToken] = useState<string | null>(Cookies.get('userToken'));
-  const loginType = Cookies.get('loginType'); // Fetch loginType from cookies
+  // const loginType = Cookies.get('loginType'); // Fetch loginType from cookies
 
   // Close on click outside
   useEffect(() => {
@@ -67,10 +67,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const handleMenuClick = () => {
     setSidebarOpen(false);
   };
-
-
-
-  let usertype_name =  Cookies.get("loginType");
+  
   return (
     <aside
       ref={sidebar}
@@ -122,27 +119,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               {/* Menu Item Calendar */}
               <li>
-  { usertype_name == 'team_lead' && <NavLink
-    to="/dashboard/statics"
-    onClick={handleMenuClick}
-    className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${
-      pathname.includes('calendar') && ''
-    }`}
-  >
-    <FaCalendar className="text-lg text-green-400" />
-    Statics
-  </NavLink>}
+ 
 
- { usertype_name === 'team_lead' && <NavLink
-    to="/dashboard/create-lead"
-    onClick={handleMenuClick}
-    className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${
-      pathname.includes('calendar') && ''
-    }`}
-  >
-    <FaCalendar className="text-lg text-green-400" />
-    create-lead
-  </NavLink>}
+ 
 
   <NavLink
     to="/dashboard/calendar"
@@ -174,42 +153,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
 
-              {/* <li>
-                <NavLink
-                  to="/dashboard/contact"
-                  onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black hover:text-white duration-300 ease-in-out dark:text-white hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('calender') && 'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  < MdContactPhone className="text-xl text-purple-400" />
-                 Contacts
-                </NavLink>
-              </li> */}
-
-              {/* <li>
-                <NavLink
-                  to="/dashboard/call"
-                  onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('documents') && 'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  < FaPhoneVolume  className="text-lg text-blue-500 " />
-                 Call
-                </NavLink>
-              </li> */}
-
+            
               <li>
                 <NavLink
-                  to="/dashboard/meeting"
+                  to="/dashboard/products"
                   onClick={handleMenuClick}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes('documents') && 'bg-graydark dark:bg-meta-4'
                   }`}
                 >
                   < MdGroups2 className="text-xl text-green-400" />
-                 Meeting
+                Add Products
                 </NavLink>
               </li>
 
@@ -278,21 +232,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
   
               </li>
-              {loginType === 'sales_person' || loginType === 'counselor' ? (
-                   
-              <li>
-                <NavLink
-                  to="/dashboard/sales"
-                  onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black hover:text-white duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-meta-4 ${
-                    pathname.includes('documents') && 'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  < MdGroups2 className="text-xl" />
-                 Sales
-                </NavLink>
-              </li>
-              ) : null}
+            
 
             </ul>
            

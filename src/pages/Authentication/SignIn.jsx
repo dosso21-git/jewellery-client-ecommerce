@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Cookies from "js-cookie";
-import axios from 'axios';
+import axios from "axios";
 
 const SignIn = () => {
   const [focusedField, setFocusedField] = useState("");
@@ -13,109 +13,74 @@ const SignIn = () => {
   const [formTouched, setFormTouched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  const [loginType, setLoginType] = useState();
-  const [userTypes, setUserTypes] = useState([]); // State to store user types
+  const [loginType, setLoginType] = useState("");
 
   const navigate = useNavigate();
-  const apiUrl = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    const savedEmail = Cookies.get("savedEmail");
-    const savedPassword = Cookies.get("savedPassword");
+  // Validate Email and Password (You can add your validation logic here)
+  const validateEmail = (value) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      setErrors((prev) => ({ ...prev, email: "Invalid email address" }));
+    } else {
+      setErrors((prev) => ({ ...prev, email: "" }));
+    }
+  };
 
-    if (savedEmail) setEmail(savedEmail);
-    if (savedPassword) setPassword(savedPassword);
-  }, []);
+  const validatePassword = (value) => {
+    if (value.length < 6) {
+      setErrors((prev) => ({ ...prev, password: "Password must be at least 6 characters" }));
+    } else {
+      setErrors((prev) => ({ ...prev, password: "" }));
+    }
+  };
 
-  // Fetch user types from the API
-  useEffect(() => {
-    const fetchUserTypes = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/usertypes/getall`);
-        
-        // Access the user types from the nested data property
-        if (Array.isArray(response.data.data)) {
-          setUserTypes(response.data.data); // Use response.data.data to get the user types
-        } else {
-          console.error("Unexpected response structure:", response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching user types:", error);
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setApiError("Please fill out both email and password");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/user/login", {
+        email,
+        password
+      });
+      console.log("Response:", response); // Log the entire response
+    
+      if (response.data.token) {
+        // Save the token in cookies
+        Cookies.set("userToken", response.data.token);
+    
+        // Redirect user to dashboard or appropriate page
+        navigate("/dashboard");
+      } else {
+        setApiError("Invalid login credentials");
       }
-    };
+    } catch (error) {
+      setApiError("Login failed. Please try again.");
+      console.error("Login Error:", error);
+    }
   
-    fetchUserTypes();
-  }, [apiUrl]);
 
+    setLoading(false);
+  };
+
+  // Toggle Password Visibility
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
 
-  const validateEmail = (email) => {
-    let emailError = "";
-    if (!email) {
-      emailError = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      emailError = "Email is invalid";
-    }
-    setErrors((prevErrors) => ({ ...prevErrors, email: emailError }));
-  };
-
-  const validatePassword = (password) => {
-    let passwordError = "";
-    if (!password) {
-      passwordError = "Password is required";
-    } else if (password.length < 6) {
-      passwordError = "Password must be at least 6 characters";
-    }
-    setErrors((prevErrors) => ({ ...prevErrors, password: passwordError }));
-  };
-
   const handleBlur = (field) => {
-    if (field === "email" && email === "") {
-      setFocusedField("");
-    } else if (field === "password" && password === "") {
-      setFocusedField("");
-    }
-  };
-
-  axios.defaults.baseURL = apiUrl;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setApiError("");
-
-    // Perform validation
-    validateEmail(email);
-    validatePassword(password);
-
-    // Check for errors before proceeding
-    if (errors.email || errors.password) {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await axios.post(`${apiUrl}/login`, {
-        email,
-        password,
-        usertype_name: loginType,
-      });
-
-      console.log(response.data);
-      Cookies.set("userToken", response.data.token);
-      Cookies.set("loginType", loginType);
-      Cookies.set("employeeName", response.data.name);
-
-      axios.defaults.headers.common['Authorization'] = `${response.data.token}`;
-
-      navigate("/dashboard");
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
-      setApiError(errorMessage);
-    } finally {
-      setLoading(false);
+    setFocusedField("");
+    if (field === "email") {
+      validateEmail(email);
+    } else if (field === "password") {
+      validatePassword(password);
     }
   };
 
@@ -147,7 +112,6 @@ const SignIn = () => {
             }`}
             onFocus={() => setFocusedField("email")}
             onBlur={() => handleBlur("email")}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
           />
           <span
             className={`absolute left-2 top-2 transform transition-all duration-300 ${
@@ -183,7 +147,6 @@ const SignIn = () => {
             }`}
             onFocus={() => setFocusedField("password")}
             onBlur={() => handleBlur("password")}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
           />
           <button
             type="button"
@@ -208,31 +171,7 @@ const SignIn = () => {
           )}
         </div>
 
-        {/* Login Type Dropdown */}
-        <div className="relative w-full">
-  {userTypes.length === 0 ? ( // Check if userTypes is empty
-    <select className="w-full p-2 border-2 border-black rounded-lg outline-none bg-transparent text-black" disabled>
-      <option>Loading user types...</option>
-    </select>
-  ) : (
-    <select
-      value={loginType || ""}
-      onChange={(e) => setLoginType(e.target.value)}
-      className="w-full p-2 border-2 border-black rounded-lg outline-none bg-transparent text-black"
-    >
-      <option value="" disabled>Select Login Type</option>
-      {userTypes.map((userType) => (
-        <option key={userType.id} value={userType.usertype_name}>
-          {userType.usertype_name}
-        </option>
-      ))}
-    </select>
-  )}
-  <span className="absolute left-2 top-2 translate-y-[-1.5rem] text-black bg-white p-1">
-    Login As
-  </span>
-</div>
-
+        {/* Display API Error */}
         {apiError && (
           <p className="text-red-500 text-xs sm:text-sm md:text-xs mb-1">{apiError}</p>
         )}
@@ -241,11 +180,9 @@ const SignIn = () => {
           type="submit"
           className="h-[45px] w-[100px] rounded-3xl border-2 border-black cursor-pointer bg-transparent transition-all duration-500 uppercase text-xs tracking-wider mb-8 hover:bg-black hover:text-white"
           disabled={loading}
-        
         >
           {loading ? "Signing in..." : "Sign in"}
         </button>
-
       </form>
     </div>
   );

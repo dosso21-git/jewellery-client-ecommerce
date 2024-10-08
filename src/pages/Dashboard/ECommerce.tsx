@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaUser, FaStar, FaTasks, FaUsers } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import CardDataStats from '../../components/CardDataStats';
@@ -9,58 +9,36 @@ import axios from 'axios';
 
 // Define a type for the user data
 interface UserData {
-  name: string;
+  firstname: string;
   [key: string]: any; // To allow other potential user properties
 }
 
 const ECommerce: React.FC = () => {
   const navigate = useNavigate();
-  const [userdata, setData] = useState<UserData | null>(null); // UserData or null
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const apiUrl = import.meta.env.VITE_API_URL as string;
 
-  // Get token and loginType from cookies
+
+
+
+
   const [token, setToken] = useState<string | null>(Cookies.get('userToken'));
-  const loginType = Cookies.get('loginType') || ''; // loginType can be empty string if not present
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-  // Set default axios headers
-  axios.defaults.headers.common['Authorization'] = `${token}`;
-  axios.defaults.baseURL = apiUrl;
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.baseURL = apiUrl;
+  }
+
+
+  // Use static user data for the name
+  const [userdata] = useState<UserData>({
+    firstname: 'John',
+  });
 
   // Navigation handlers
   const handleAttendance = () => navigate('/dashboard/attendance');
   const handleReview = () => navigate('/dashboard/review');
   const handleTask = () => navigate('/dashboard/task');
   const handleTaskDetail = () => navigate('/dashboard/taskdetail');
-  const handleLead = () => navigate('/dashboard/viewlead');
-
-  useEffect(() => {
-    const fetchEmployeeData = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/employee/get`); // Adjust endpoint as needed
-        setData(response.data);
-      } catch (error: any) {
-        setError(error.response?.data?.message || error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEmployeeData();
-  }, [apiUrl]);
-
-  if (loading) {
-    return <p className="text-white text-center mt-4">Loading...</p>;
-  }
-
-  if (error) {
-    return <p className="text-red-500 text-center mt-4">{error}</p>;
-  }
-
-  if (!userdata) {
-    return <p className="text-white text-center mt-4">No data found</p>;
-  }
 
   return (
     <>
@@ -95,7 +73,7 @@ const ECommerce: React.FC = () => {
           <div>
             <h1 className="text-4xl font-bold text-black dark:text-white">
               Welcome,{' '}
-              <span className="text-blue-300 uppercase">{userdata.name}</span>
+              <span className="text-blue-300 uppercase">{userdata.firstname}</span>
             </h1>
           </div>
         </div>
@@ -109,31 +87,22 @@ const ECommerce: React.FC = () => {
         </div>
 
         <div onClick={handleTask} className="cursor-pointer">
-          <CardDataStats title="Task Assign" total="05" rate="0%" levelUp>
+          <CardDataStats title="See all User" total="05" rate="0%" levelUp>
             <FaTasks className="text-orange-500 dark:text-white text-3xl transition-transform transform hover:scale-110" />
           </CardDataStats>
         </div>
 
         <div onClick={handleTaskDetail} className="cursor-pointer">
-          <CardDataStats title="Send Task Detail" total="10" rate="" levelDown>
+          <CardDataStats title="Detail" total="10" rate="" levelDown>
             <FaUsers className="text-green-500 dark:text-white text-3xl transition-transform transform hover:scale-110" />
           </CardDataStats>
         </div>
 
         <div onClick={handleReview} className="cursor-pointer">
-          <CardDataStats title="Your Reviews" total="4.5" rate="4.5%" levelUp>
+          <CardDataStats title="View Product Reviews" total="4.5" rate="4.5%" levelUp>
             <FaStar className="text-yellow-400 dark:text-white text-3xl transition-transform transform hover:scale-110" />
           </CardDataStats>
         </div>
-
-        {/* Conditionally render the View Lead card based on loginType */}
-        {(loginType === 'sales_person' || loginType === 'counselor') && (
-          <div onClick={handleLead} className="cursor-pointer">
-            <CardDataStats title="View Lead" total="4.5" rate="4.5%" levelUp>
-              <FaStar className="text-yellow-400 dark:text-white text-3xl transition-transform transform hover:scale-110" />
-            </CardDataStats>
-          </div>
-        )}
       </div>
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">

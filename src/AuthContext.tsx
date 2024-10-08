@@ -13,15 +13,16 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(Cookies.get('userToken'));
   const apiUrl = import.meta.env.VITE_API_URL;
-  useEffect(() => {
+
+  // useEffect(() => {
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `${token}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       axios.defaults.baseURL = apiUrl;
     }
     //  else {
     //   delete axios.defaults.headers.common['Authorization'];
     // }
-  }, [token]);
+  // }, [token]);
 
   return (
     <AuthContext.Provider value={{ token, setToken }}>

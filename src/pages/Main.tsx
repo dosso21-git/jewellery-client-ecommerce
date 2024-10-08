@@ -21,12 +21,15 @@ import Task from './LeadList';
 import Contact from './Contact';
 import TaskDetail from './TaskDetail';
 import Call from './Call';
-import Meeting from './Meeting';
+import Products from './Products'
 import Sales from './Sales';
 import Lead from './Lead';
 import SalespersonsCounselorsList from './Models/SalespersonsCounselorsList';
 import LeadEntryForm from './Dashboard/CreateLead';
 // import UpdateLead from './Updatelead';
+
+
+
 
 
 
@@ -161,11 +164,11 @@ const Main = () => {
           /> 
 
              <Route
-            path="/meeting"
+            path="/products"
             element={
              <>
              <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Meeting/>
+           <Products />
           </>
             }
           />

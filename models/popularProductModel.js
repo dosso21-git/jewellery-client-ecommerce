@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const popularProductSchema = new mongoose.Schema({
+const PopularProductSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product',
@@ -13,5 +13,5 @@ const popularProductSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
-module.exports = mongoose.model('PopularProduct', popularProductSchema);
+const PopularProduct = mongoose.model("PopularProduct", RecentViewSchema);
+module.exports = PopularProduct;

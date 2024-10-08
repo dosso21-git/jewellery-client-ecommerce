@@ -42,8 +42,7 @@ router.get('/product/getpopularproduct', getPopularProducts);
 
 
 
-
-
+// All Data Counts
 router.get('/admin/getdata', protect, getCounts)
 
 

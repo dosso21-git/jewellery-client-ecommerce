@@ -24,7 +24,7 @@ const upload = multer({ storage: storage }).array('pictures', 10);
 
 // Without Login
 router.post('/admin/create', protect, upload, createProduct);
-router.get('/product/getall', publicApiAccess, getIpAddress, getAllProducts);
+router.get('/product/getall', publicApiAccess, getAllProducts);
 router.get('/product/get/:id', publicApiAccess, getIpAddress, getProductById);
 router.get('/product/get/mostsellingproduct', publicApiAccess, getIpAddress, getMostSellingProducts);
 router.get('/product/category/:category', publicApiAccess, getProductsByCategory);

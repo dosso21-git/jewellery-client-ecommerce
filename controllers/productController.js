@@ -130,7 +130,7 @@ const getMostSellingProducts = async (req, res) => {
             .sort({ sold: -1 })
             .limit(limit);
 
-        return res.status(200).json(products);
+        return res.status(200).json({data:products});
     } catch (error) {
         return res.status(500).json({ message: "Server error", error });
     }

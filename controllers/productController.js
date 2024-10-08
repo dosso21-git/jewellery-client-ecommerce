@@ -187,7 +187,6 @@ const deleteProductPicture = async (req, res) => {
     }
 };
 
-
 const getProductsByCategory = async (req, res) => {
     try {
         const category = req.params.category; // Get the category from the request parameters
@@ -212,58 +211,4 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
-const addRating = async (req, res) => {
-    const { star, comment, productId } = req.body;
-
-    try {
-        const rating = new Rating({
-            star,
-            comment,
-            postedby: req.user._id,
-            product: productId,
-        });
-
-        await rating.save();
-
-        await Product.findByIdAndUpdate(
-            productId,
-            { $push: { ratings: rating._id } },
-            { new: true }
-        );
-
-        res.status(201).json({ message: "Rating added successfully!", rating });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error adding rating.", error });
-    }
-};
-
-const getTopRatedProducts = async (req, res) => {
-    try {
-        const products = await Product.find()
-            .populate("ratings")
-            .exec();
-
-        const productsWithAverageRating = products.map(product => {
-            const ratings = product.ratings;
-            const totalStars = ratings.reduce((acc, rating) => acc + rating.star, 0);
-            const averageRating = ratings.length ? totalStars / ratings.length : 0;
-
-            return {
-                ...product.toObject(),
-                averageRating,
-            };
-        });
-
-        const sortedProducts = productsWithAverageRating.sort((a, b) => b.averageRating - a.averageRating);
-
-        const topRatedProducts = sortedProducts.slice(0, 10);
-
-        res.status(200).json(topRatedProducts);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error fetching top-rated products.", error });
-    }
-};
-
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, addRating, getTopRatedProducts };
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, };

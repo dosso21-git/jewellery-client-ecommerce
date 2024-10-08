@@ -43,4 +43,45 @@ const giveRating = async (req, res) => {
     }
 };
 
-module.exports = { giveRating };
+const getTopRatedProducts = async (req, res) => {
+    try {
+        const products = await Product.find({})
+            .populate({
+                path: "ratings",
+                select: "star",
+            })
+            .exec();
+
+        const topRatedProducts = products.map((product) => {
+            let totalStars = 0;
+            let ratingCount = product.ratings.length;
+
+            product.ratings.forEach((rating) => {
+                totalStars += rating.star;
+            });
+
+            const averageRating = ratingCount > 0 ? totalStars / ratingCount : 0;
+
+            return {
+                ...product.toObject(),
+                totalrating: averageRating,
+            };
+        });
+
+        topRatedProducts.sort((a, b) => b.totalrating - a.totalrating);
+
+        res.status(200).json({
+            success: true,
+            message: "Top-rated products fetched successfully",
+            products: topRatedProducts,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch top-rated products",
+            error: error.message,
+        });
+    }
+};
+
+module.exports = { giveRating, getTopRatedProducts };

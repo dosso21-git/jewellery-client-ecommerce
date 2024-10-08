@@ -94,16 +94,13 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
-
         const deletedProduct = await Product.findById(id);
         if (!deletedProduct) {
             return res.status(404).json({ message: 'Product not found' });
         }
-
         const imagePaths = deletedProduct.images;
         for (const imageUrl of imagePaths) {
             const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
-
             await cloudinary.uploader.destroy(publicId, (error, result) => {
                 if (error) {
                     console.error(`Failed to delete image ${publicId} from Cloudinary:`, error);
@@ -112,9 +109,7 @@ const deleteProduct = async (req, res) => {
                 }
             });
         }
-
         await Product.findByIdAndDelete(id);
-
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
         console.error('Error deleting product:', error);

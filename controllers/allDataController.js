@@ -3,7 +3,6 @@ const PopularProduct = require('../models/popularProductModel');
 const Product = require('../models/productModel');
 const RecentView = require('../models/recentViewModel');
 const User = require('../models/userModel');
-const Rating = require('../models/ratingModel')
 
 const getCounts = async (req, res) => {
     try {

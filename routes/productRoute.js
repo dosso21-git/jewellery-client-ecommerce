@@ -7,6 +7,7 @@ const { createProduct, getProductById, deleteProduct, updateProduct, getAllProdu
 const { protect, getIpAddress, publicApiAccess, } = require('../middleware/authMiddleware');
 const cloudinary = require('../config/cloudinary.js');
 const { giveRating, getTopRatedProducts } = require('../controllers/ratingController.js');
+const { getCounts } = require('../controllers/allDataController.js');
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -35,9 +36,12 @@ router.delete('/admin/delete/:id', protect, deleteProduct);
 router.delete('/admin/delete/:productId/image/:pictureIndex', protect, deleteProductPicture); // Not working
 router.put('/admin/update/:id', protect, upload, updateProduct);
 router.post('/product/rate', protect, giveRating);
-router.get('/product/toprated', getTopRatedProducts);
+router.get("/product/toprated", getTopRatedProducts);
 router.get('/product/popular/:productId', trackProductView);
 router.get('/product/getpopularproduct', getPopularProducts);
+
+
+router.get('/admin/getdata', protect, getCounts)
 
 
 module.exports = router;

@@ -197,4 +197,30 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
+const addRating = async (req, res) => {
+    const { star, comment, productId } = req.body;
+
+    try {
+        const rating = new Rating({
+            star,
+            comment,
+            postedby: req.user._id,
+            product: productId,
+        });
+
+        await rating.save();
+
+        await Product.findByIdAndUpdate(
+            productId,
+            { $push: { ratings: rating._id } },
+            { new: true }
+        );
+
+        res.status(201).json({ message: "Rating added successfully!", rating });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error adding rating.", error });
+    }
+};
+
 module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, deleteProductPicture };

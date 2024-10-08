@@ -70,27 +70,27 @@ const loginAdmin = async (req, res) => {
     const isPasswordMatched = await bcrypt.compare(password, findAdmin.password);
     if (!isPasswordMatched) {
       return res.status(401).json({ message: "Incorrect password." });
-  }
+    }
 
     const refreshToken = generateToken(findAdmin._id);
-  await User.findByIdAndUpdate(
-    findAdmin.id,
-    { token: refreshToken },
-    { new: true }
-  );
+    await User.findByIdAndUpdate(
+      findAdmin.id,
+      { token: refreshToken },
+      { new: true }
+    );
 
-  return res.status(200).json({
-    _id: findAdmin._id,
-    firstname: findAdmin.firstname,
-    lastname: findAdmin.lastname,
-    email: findAdmin.email,
-    mobile: findAdmin.mobile,
-    token: generateToken(findAdmin._id),
-  });
+    return res.status(200).json({
+      _id: findAdmin._id,
+      firstname: findAdmin.firstname,
+      lastname: findAdmin.lastname,
+      email: findAdmin.email,
+      mobile: findAdmin.mobile,
+      token: generateToken(findAdmin._id),
+    });
 
-} catch (error) {
-  return res.status(500).json({ message: error.message });
-}
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 const loginUserCtrl = async (req, res) => {
@@ -103,13 +103,13 @@ const loginUserCtrl = async (req, res) => {
     });
 
     if (!findUser) {
-      return res.status(401).json({ error:  "Incorrect Email or Mobile."  });
+      return res.status(401).json({ error: "Incorrect Email or Mobile." });
     }
 
     // Check if the password is correct
     const isPasswordMatched = await bcrypt.compare(password, findUser.password);
     if (!isPasswordMatched) {
-      return res.status(401).json({ error: "Incorrect password."  });
+      return res.status(401).json({ error: "Incorrect password." });
     }
 
     // Generate a token and update it in the user's record
@@ -171,22 +171,53 @@ const deleteaUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deleteaUser = await User.findByIdAndDelete(id);
+    const deletedUser = await User.findByIdAndUpdate(id, {
+      isDeleted: true,
+    }, { new: true });
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.json({
-      deleteaUser,
+      message: "User marked as deleted successfully",
+      deletedUser,
     });
   } catch (error) {
-    throw new Error(error);
+    console.error("Error marking user as deleted:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+const restoreUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const restoredUser = await User.findByIdAndUpdate(id, {
+      isDeleted: false,
+    }, { new: true });
+
+    if (!restoredUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "User restored successfully",
+      restoredUser,
+    });
+  } catch (error) {
+    console.error("Error restoring user:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
 const getallUser = async (req, res) => {
   try {
-    const getUsers = await User.find();
+    const getUsers = await User.find({ isDeleted: false });
     res.json(getUsers);
-  }
-  catch (error) {
-    throw new Error(error);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -227,7 +258,6 @@ const saveAddress = async (req, res, next) => {
 
 const blockUser = async (req, res) => {
   const { id } = req.params;
-  validateMongoId(id);
 
   try {
     const blockusr = await User.findByIdAndUpdate(
@@ -248,7 +278,6 @@ const blockUser = async (req, res) => {
 // Unblock User
 const unblockUser = async (req, res) => {
   const { id } = req.params;
-  validateMongoId(id);
 
   try {
     const unblock = await User.findByIdAndUpdate(
@@ -547,11 +576,12 @@ module.exports = {
   loginUserCtrl,
   updatedUser,
   deleteaUser,
+  restoreUser,
   getaUser,
   getallUser,
+  blockUser,
+  unblockUser,
   // saveAddress,
-  // blockUser,
-  // unblockUser,
   // handleRefreshToken,
   // logout,
   // updatePassword,

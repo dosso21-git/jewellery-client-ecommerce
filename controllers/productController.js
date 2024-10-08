@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const cloudinary = require("../config/cloudinary")
 
 const createProduct = async (req, res) => {
     try {
@@ -10,7 +11,7 @@ const createProduct = async (req, res) => {
 
         const newProduct = new Product({
             title: req.body.title,
-            description: req.body.subHeading,
+            description: req.body.description,
             price: req.body.price,
             category: req.body.category,
             quantity: req.body.quantity,
@@ -60,21 +61,18 @@ const updateProduct = async (req, res) => {
 
         const existingProduct = await Product.findById(id);
         if (!existingProduct) {
-            return res.status(404).json({ message: 'Dish not found' });
+            return res.status(404).json({ message: 'Product not found' });
         }
 
         if (req.files && req.files.length > 0) {
-            const existingImages = existingProduct.img;
+            const uploadedImages = await Promise.all(
+                req.files.map(async (file) => {
+                    const result = await cloudinary.uploader.upload(file.path);
+                    return result.secure_url;
+                })
+            );
 
-            for (const imageUrl of existingImages) {
-                const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
-                console.log(`Attempting to delete image with public ID: ${publicId}`);
-                const result = await cloudinary.uploader.destroy(publicId);
-                console.log(`Delete result for ${publicId}:`, result);
-            }
-
-            const newImages = req.files.map(file => file.path);
-            existingProduct.img = newImages;
+            existingProduct.images = [...existingProduct.images, ...uploadedImages];
         }
 
         existingProduct.title = req.body.title || existingProduct.title;
@@ -101,7 +99,7 @@ const deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        const imagePaths = deletedProduct.img;
+        const imagePaths = deletedProduct.images;
         for (const imageUrl of imagePaths) {
             const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
 
@@ -123,7 +121,7 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-const deleteDishPicture = async (req, res) => {
+const deleteDeletePicture = async (req, res) => {
     const { dishId, pictureIndex } = req.params;
 
     try {
@@ -164,4 +162,28 @@ const deleteDishPicture = async (req, res) => {
 };
 
 
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct };
+const getProductsByCategory = async (req, res) => {
+    try {
+        const category = req.params.category; // Get the category from the request parameters
+        const products = await Product.find({ category }); // Find products by category
+
+        if (!products || products.length === 0) {
+            return res.status(404).json({
+                message: "No products found in this category",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            products,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error fetching products",
+            error: error.message,
+        });
+    }
+};
+
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory };

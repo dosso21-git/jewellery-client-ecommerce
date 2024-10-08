@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 const cloudinary = require("../config/cloudinary")
+const Rating = require("../models/ratingModel")
 
 const createProduct = async (req, res) => {
     try {
@@ -36,7 +37,7 @@ const getAllProducts = async (req, res) => {
         const product = await Product.find({})
         res.status(200).json(product)
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching dishes', error })
+        res.status(500).json({ message: 'Error fetching Products', error })
     }
 }
 
@@ -46,12 +47,12 @@ const getProductById = async (req, res) => {
         const product = await Product.findById(id)
 
         if (!product) {
-            return res.status(404).json({ message: 'Dish not found' })
+            return res.status(404).json({ message: 'Product not found' })
         }
 
         res.status(200).json(product)
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching dish', error })
+        res.status(500).json({ message: 'Error fetching Product', error })
     }
 }
 
@@ -121,6 +122,20 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const getMostSellingProducts = async (req, res) => {
+    const limit = parseInt(req.query.limit) || 10;
+
+    try {
+        const products = await Product.find()
+            .sort({ sold: -1 })
+            .limit(limit);
+
+        return res.status(200).json(products);
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", error });
+    }
+};
+
 const deleteProductPicture = async (req, res) => {
     const { productId, pictureIndex } = req.params;
 
@@ -152,7 +167,7 @@ const deleteProductPicture = async (req, res) => {
                 max_results: 500
             });
             console.log('Existing Resources:', resources);
-            
+
             return res.status(500).json({
                 error: 'Failed to delete image from Cloudinary',
                 details: cloudinaryResponse
@@ -223,4 +238,32 @@ const addRating = async (req, res) => {
     }
 };
 
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, deleteProductPicture };
+const getTopRatedProducts = async (req, res) => {
+    try {
+        const products = await Product.find()
+            .populate("ratings")
+            .exec();
+
+        const productsWithAverageRating = products.map(product => {
+            const ratings = product.ratings;
+            const totalStars = ratings.reduce((acc, rating) => acc + rating.star, 0);
+            const averageRating = ratings.length ? totalStars / ratings.length : 0;
+
+            return {
+                ...product.toObject(),
+                averageRating,
+            };
+        });
+
+        const sortedProducts = productsWithAverageRating.sort((a, b) => b.averageRating - a.averageRating);
+
+        const topRatedProducts = sortedProducts.slice(0, 10);
+
+        res.status(200).json(topRatedProducts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error fetching top-rated products.", error });
+    }
+};
+
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, addRating, getTopRatedProducts };

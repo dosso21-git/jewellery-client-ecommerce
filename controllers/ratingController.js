@@ -65,7 +65,7 @@ const getTopRatedProducts = async (req, res) => {
             return {
                 ...product.toObject(),
                 totalrating: averageRating,
-                comments: product.ratings.map(rating => rating.comment) // Collect comments
+                comments: product.ratings.map(rating => rating.comment)
             };
         });
 

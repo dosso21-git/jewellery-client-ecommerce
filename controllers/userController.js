@@ -97,7 +97,7 @@ const loginUserCtrl = async (req, res) => {
   const { email, mobile, password } = req.body;
 
   try {
-    // Find user by either email or mobile
+
     const findUser = await User.findOne({
       $or: [{ email }, { mobile }]
     });
@@ -136,32 +136,33 @@ const loginUserCtrl = async (req, res) => {
 
 const updatedUser = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user;
+console.log("drgfhcvb:", userId);
 
-    const existingUser = await User.findById(userId);
-    if (!existingUser) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    // const existingUser = await User.findById(userId);
+    // if (!existingUser) {
+    //   return res.status(404).json({ error: 'User not found' });
+    // }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        firstname: req.body.firstname || existingUser.firstname,
-        lastname: req.body.lastname || existingUser.lastname,
-        email: req.body.email || existingUser.email,
-        mobile: req.body.mobile || existingUser.mobile,
-      },
-      { new: true }
-    );
+    // const updatedUser = await User.findByIdAndUpdate(
+    //   userId,
+    //   {
+    //     firstname: req.body.firstname || existingUser.firstname,
+    //     lastname: req.body.lastname || existingUser.lastname,
+    //     email: req.body.email || existingUser.email,
+    //     mobile: req.body.mobile || existingUser.mobile,
+    //   },
+    //   { new: true }
+    // );
 
-    if (updatedUser) {
-      return res.status(200).json({
-        message: 'User updated successfully',
-        user: updatedUser,
-      });
-    } else {
-      return res.status(400).json({ error: 'Failed to update user' });
-    }
+    // if (updatedUser) {
+    //   return res.status(200).json({
+    //     message: 'User updated successfully',
+    //     user: updatedUser,
+    //   });
+    // } else {
+    //   return res.status(400).json({ error: 'Failed to update user' });
+    // }
   } catch (error) {
     return res.status(500).json({ error: 'Server error', details: error.message });
   }

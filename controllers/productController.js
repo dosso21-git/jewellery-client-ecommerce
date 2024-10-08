@@ -1,6 +1,6 @@
 const Product = require("../models/productModel");
 const cloudinary = require("../config/cloudinary")
-const Rating = require("../models/ratingModel")
+const PopularProduct = require("../models/popularProductModel")
 
 const createProduct = async (req, res) => {
     try {
@@ -94,16 +94,13 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
-
         const deletedProduct = await Product.findById(id);
         if (!deletedProduct) {
             return res.status(404).json({ message: 'Product not found' });
         }
-
         const imagePaths = deletedProduct.images;
         for (const imageUrl of imagePaths) {
             const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
-
             await cloudinary.uploader.destroy(publicId, (error, result) => {
                 if (error) {
                     console.error(`Failed to delete image ${publicId} from Cloudinary:`, error);
@@ -112,9 +109,7 @@ const deleteProduct = async (req, res) => {
                 }
             });
         }
-
         await Product.findByIdAndDelete(id);
-
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
         console.error('Error deleting product:', error);
@@ -152,7 +147,6 @@ const deleteProductPicture = async (req, res) => {
         const imageUrl = product.images[pictureIndex];
         console.log(`Image URL: ${imageUrl}`);
 
-        // Extract the public ID correctly without the version
         const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
         console.log(`Attempting to delete Cloudinary image with publicId: "${publicId}"`);
 
@@ -160,7 +154,6 @@ const deleteProductPicture = async (req, res) => {
         console.log(`Cloudinary Response:`, cloudinaryResponse);
 
         if (cloudinaryResponse.result !== 'ok') {
-            // If deletion fails, check existing resources
             const resources = await cloudinary.api.resources({
                 type: 'upload',
                 prefix: 'products/',
@@ -189,8 +182,8 @@ const deleteProductPicture = async (req, res) => {
 
 const getProductsByCategory = async (req, res) => {
     try {
-        const category = req.params.category; // Get the category from the request parameters
-        const products = await Product.find({ category }); // Find products by category
+        const category = req.params.category;
+        const products = await Product.find({ category });
 
         if (!products || products.length === 0) {
             return res.status(404).json({
@@ -211,4 +204,56 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, };
+const trackProductView = async (req, res) => {
+    const { productId } = req.params;
+
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        let popularProduct = await PopularProduct.findOne({ productId });
+        if (!popularProduct) {
+            popularProduct = new PopularProduct({
+                productId: product._id,
+                popularityScore: 1,
+            });
+        } else {
+            popularProduct.popularityScore += 1;
+        }
+
+        await popularProduct.save();
+
+        return res.status(200).json({
+            message: 'Product view tracked successfully',
+            popularityScore: popularProduct.popularityScore,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const getPopularProducts = async (req, res) => {
+    try {
+        const popularProducts = await PopularProduct.find({})
+            .sort({ popularityScore: -1 })
+            .populate('productId', 'title description price images category');
+
+        if (!popularProducts || popularProducts.length === 0) {
+            return res.status(404).json({ message: 'No popular products found' });
+        }
+
+        return res.status(200).json({
+            message: 'Popular products retrieved successfully',
+            popularProducts,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts };

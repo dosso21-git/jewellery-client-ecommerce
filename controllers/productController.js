@@ -1,6 +1,6 @@
 const Product = require("../models/productModel");
 const cloudinary = require("../config/cloudinary")
-const Rating = require("../models/ratingModel")
+const PopularProduct = require("../models/popularProductModel")
 
 const createProduct = async (req, res) => {
     try {
@@ -204,5 +204,56 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
+const trackProductView = async (req, res) => {
+    const { productId } = req.params;
 
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, };
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        let popularProduct = await PopularProduct.findOne({ productId });
+        if (!popularProduct) {
+            popularProduct = new PopularProduct({
+                productId: product._id,
+                popularityScore: 1,
+            });
+        } else {
+            popularProduct.popularityScore += 1;
+        }
+
+        await popularProduct.save();
+
+        return res.status(200).json({
+            message: 'Product view tracked successfully',
+            popularityScore: popularProduct.popularityScore,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const getPopularProducts = async (req, res) => {
+    try {
+        const popularProducts = await PopularProduct.find({})
+            .sort({ popularityScore: -1 })
+            .populate('productId', 'title description price images category');
+
+        if (!popularProducts || popularProducts.length === 0) {
+            return res.status(404).json({ message: 'No popular products found' });
+        }
+
+        return res.status(200).json({
+            message: 'Popular products retrieved successfully',
+            popularProducts,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts };

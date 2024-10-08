@@ -147,7 +147,6 @@ const deleteProductPicture = async (req, res) => {
         const imageUrl = product.images[pictureIndex];
         console.log(`Image URL: ${imageUrl}`);
 
-        // Extract the public ID correctly without the version
         const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
         console.log(`Attempting to delete Cloudinary image with publicId: "${publicId}"`);
 
@@ -155,7 +154,6 @@ const deleteProductPicture = async (req, res) => {
         console.log(`Cloudinary Response:`, cloudinaryResponse);
 
         if (cloudinaryResponse.result !== 'ok') {
-            // If deletion fails, check existing resources
             const resources = await cloudinary.api.resources({
                 type: 'upload',
                 prefix: 'products/',
@@ -184,8 +182,8 @@ const deleteProductPicture = async (req, res) => {
 
 const getProductsByCategory = async (req, res) => {
     try {
-        const category = req.params.category; // Get the category from the request parameters
-        const products = await Product.find({ category }); // Find products by category
+        const category = req.params.category;
+        const products = await Product.find({ category });
 
         if (!products || products.length === 0) {
             return res.status(404).json({
@@ -205,5 +203,6 @@ const getProductsByCategory = async (req, res) => {
         });
     }
 };
+
 
 module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, };

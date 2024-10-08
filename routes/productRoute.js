@@ -6,7 +6,7 @@ const path = require("path")
 const { createProduct, getProductById, deleteProduct, updateProduct, getAllProducts, getProductsByCategory, deleteProductPicture, addRating, getMostSellingProducts } = require('../controllers/productController');
 const { protect, getIpAddress, publicApiAccess, } = require('../middleware/authMiddleware');
 const cloudinary = require('../config/cloudinary.js');
-const { giveRating } = require('../controllers/ratingController.js');
+const { giveRating, getTopRatedProducts } = require('../controllers/ratingController.js');
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -35,6 +35,7 @@ router.delete('/admin/delete/:id', protect, deleteProduct);
 router.delete('/admin/delete/:productId/image/:pictureIndex', protect, deleteProductPicture); // Not working
 router.put('/admin/update/:id', protect, upload, updateProduct);
 router.post('/product/rate', protect, giveRating);
+router.get('/product/getratign', getTopRatedProducts);
 
 
 module.exports = router;

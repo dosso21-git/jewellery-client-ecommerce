@@ -33,8 +33,7 @@ exports.createRecentView = async (req, res) => {
 exports.getRecentViews = async (req, res) => {
     try {
         const recentViews = await RecentView.find()
-            .populate("productId", "productName price")
-            .populate("visitedby", "firstname email");
+            .populate("productId")
 
         res.status(200).json({
             success: true,

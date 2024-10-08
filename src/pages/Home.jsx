@@ -11,6 +11,7 @@ import Footer from "../components/Footer/Footer";
 import Popup from "../components/Popup/Popup";
 import Hero from "../components/Hero/Hero";
 import CategoryProducts from "../components/Products/CategoryProducts";
+import PullToRefresh from "../components/PullToRefresh";
 
 
 
@@ -63,9 +64,15 @@ const Home = () => {
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
+  const fetchData = () =>{
+    alert('wroking fine')
+  }
+
   return (
     <div>
       {/* Search Results */}
+      <PullToRefresh fetchData={fetchData}>
       {searchTerm&& (
         <div className="search-results mt-32">
           <h2 className="text-center text-xl">Search Results:</h2>
@@ -113,6 +120,7 @@ const Home = () => {
           <Popup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
         </>
       )}
+       </PullToRefresh>
     </div>
   );
 };

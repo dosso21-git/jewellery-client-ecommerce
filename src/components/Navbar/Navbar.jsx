@@ -335,9 +335,10 @@ const Menu = [
 ];
 
 const DropdownLinks = [
-  { id: 1, name: "Trending Products", link: "/#" },
-  { id: 2, name: "Best Selling", link: "/#" },
-  { id: 3, name: "Top Rated", link: "/home" },
+  { id: 1, name: "Trending Products", link: "/trending" },
+  { id: 2, name: "Most Popular", link: "/most-popular" }, 
+  { id: 2, name: "Most Selling", link: "/most-selling" },
+  { id: 3, name: "Top Rated", link: "/top-rated" },
 ];
 
 const Navbar = () => {

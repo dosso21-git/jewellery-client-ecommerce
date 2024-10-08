@@ -176,6 +176,10 @@ import OrderSummary from "./pages/OrderSummaryPage";
 import AccountSettings from "./pages/AccountSettings";
 import MainLayout from './components/MainLayout';
 import ErrorBoundary from "./components/ErrorBoundary";
+import TrendingProductsPage from "./pages/TrendingProducts";
+import BestSellingProductsPage from "./pages/BestSellingProducts";
+import MostSellingProducts from "./pages/MostSellingProducts";
+import MostPopularProducts from "./pages/MostPopular";
 
 const App = () => {
   React.useEffect(() => {
@@ -191,10 +195,14 @@ const App = () => {
   return (
     <AppProvider>
        <ErrorBoundary>
-      <Router>
+       <Router>
         <Routes>
           <Route path="/" element={<MainLayout><Home /></MainLayout>} />
           <Route path="top-rated" element={<MainLayout><TopRated /></MainLayout>} />
+          <Route path="trending" element={<MainLayout><TrendingProductsPage/></MainLayout>} /> 
+          <Route path="most-selling" element={<MainLayout><MostSellingProducts/></MainLayout>} /> 
+          <Route path="most-popular" element={<MainLayout><MostPopularProducts/></MainLayout>} /> 
+          <Route path="best-selling" element={<MainLayout><BestSellingProductsPage/></MainLayout>} /> 
           <Route path="cart" element={<MainLayout><CartPage /></MainLayout>} />
           <Route path="/product-details/:id" element={<MainLayout><ProductDetails /></MainLayout>} />
           <Route path="/wishlist" element={<MainLayout><WishlistPage /></MainLayout>} />

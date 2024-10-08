@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import PopupMessage from './PopupMessage';
-import { FaEdit, FaTrashAlt, FaChevronLeft, FaChevronRight , FaSearch} from 'react-icons/fa';
+import { FaEdit, FaTrashAlt, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
 
 const ManageDishes = () => {
   const [products, setProducts] = useState([]);
@@ -18,8 +18,9 @@ const ManageDishes = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [currentImageIndices, setCurrentImageIndices] = useState({});
   const [searchInput, setSearchInput] = useState('');
-  const [showPopup, setShowPopup] = useState(false); // State for showing the popup
-  const [confirmAction, setConfirmAction] = useState(null); // Action to confirm on popup
+  const [showPopup, setShowPopup] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(''); // State for success message
 
   useEffect(() => {
     fetchProducts();
@@ -65,8 +66,10 @@ const ManageDishes = () => {
     try {
       if (editingProduct) {
         await confirmUpdate(editingProduct._id, formDataObj);
+        setSuccessMessage('Product updated successfully!'); // Set success message
       } else {
-        await axios.post('user/create', formDataObj);
+        await axios.post('user/admin/create', formDataObj);
+        setSuccessMessage('Product created successfully!'); // Set success message
       }
       fetchProducts();
       resetForm();
@@ -90,8 +93,8 @@ const ManageDishes = () => {
   };
 
   const ConfirmDelete = (id) => {
-    setConfirmAction(() => () => handleDelete(id)); // Set the delete action
-    setShowPopup(true); // Show the popup
+    setConfirmAction(() => () => handleDelete(id));
+    setShowPopup(true);
   };
 
   const handleDelete = async (id) => {
@@ -162,16 +165,6 @@ const ManageDishes = () => {
     });
   };
 
-  // if (loader) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen">
-  //       <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-  //         <span className="visually-hidden">Loading...</span>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="container mx-auto p-8">
       <div className="mb-4 relative">
@@ -180,8 +173,8 @@ const ManageDishes = () => {
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          onKeyDown={(e)=>{
-            if(e.key === 'Enter'){
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
               handleSearch();
             }
           }}
@@ -190,7 +183,7 @@ const ManageDishes = () => {
         />
         <button
           onClick={handleSearch}
-          className=" absolute text-lg text-blue-600 left-3 bottom-2 transform -translate-y-1/2 text-gray-600"
+          className="absolute text-lg text-blue-600 left-3 bottom-2 transform -translate-y-1/2 text-gray-600"
         >
           <FaSearch />
         </button>
@@ -239,30 +232,30 @@ const ManageDishes = () => {
           return (
             <div key={product._id} className="bg-white shadow-md rounded-lg p-6">
               {product.images && product.images.length > 0 && (
-  <div className="relative mb-4">
-    <img
-      src={product.images[currentImageIndex]}
-      alt={`Dish ${product.title} Image`}
-      className="w-full h-48 rounded"
-    />
-    {/* Left Button */}
-    <button
-      onClick={() => handleImageChange('left', product._id)}
-      className="absolute text-xl left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-300"
-      style={{ zIndex: 1 }} // Ensures the button is on top
-    >
-      <FaChevronLeft />
-    </button>
-    {/* Right Button */}
-    <button
-      onClick={() => handleImageChange('right', product._id)}
-      className="absolute text-xl right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-300"
-      style={{ zIndex: 1 }} // Ensures the button is on top
-    >
-      <FaChevronRight />
-    </button>
-  </div>
-)}
+                <div className="relative mb-4">
+                  <img
+                    src={product.images[currentImageIndex]}
+                    alt={`Dish ${product.title} Image`}
+                    className="w-full h-48 rounded"
+                  />
+                  {/* Left Button */}
+                  <button
+                    onClick={() => handleImageChange('left', product._id)}
+                    className="absolute text-xl left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-300"
+                    style={{ zIndex: 1 }}
+                  >
+                    <FaChevronLeft />
+                  </button>
+                  {/* Right Button */}
+                  <button
+                    onClick={() => handleImageChange('right', product._id)}
+                    className="absolute text-xl right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-300"
+                    style={{ zIndex: 1 }}
+                  >
+                    <FaChevronRight />
+                  </button>
+                </div>
+              )}
 
               <h3 className="text-xl font-semibold">{product.title}</h3>
               <p className="text-gray-600">{product.description}</p>
@@ -289,8 +282,16 @@ const ManageDishes = () => {
           onConfirm={confirmAction}
           onCancel={() => {
             setShowPopup(false);
-            setConfirmAction(null); // Reset confirm action
+            setConfirmAction(null);
           }}
+        />
+      )}
+
+      {/* Success Message Popup */}
+      {successMessage && (
+        <PopupMessage
+          message={successMessage}
+          onConfirm={() => setSuccessMessage('')} // Hide message on confirm
         />
       )}
     </div>

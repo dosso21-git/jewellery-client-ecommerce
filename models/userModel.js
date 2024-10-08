@@ -27,6 +27,10 @@ var userSchema = new mongoose.Schema({
         type: String,
         default: "user",
     },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
     isBlocked: {
         type: Boolean,
         default: false,
@@ -46,6 +50,10 @@ var userSchema = new mongoose.Schema({
     token: {
         type: String,
     },
+    ipAddresses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserIP',
+    }],
 }, {
     timestamps: true,
 });

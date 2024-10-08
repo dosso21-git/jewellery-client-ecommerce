@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 const cloudinary = require("../config/cloudinary")
+const Rating = require("../models/ratingModel")
 
 const createProduct = async (req, res) => {
     try {
@@ -36,7 +37,7 @@ const getAllProducts = async (req, res) => {
         const product = await Product.find({})
         res.status(200).json(product)
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching dishes', error })
+        res.status(500).json({ message: 'Error fetching Products', error })
     }
 }
 
@@ -46,12 +47,12 @@ const getProductById = async (req, res) => {
         const product = await Product.findById(id)
 
         if (!product) {
-            return res.status(404).json({ message: 'Dish not found' })
+            return res.status(404).json({ message: 'Product not found' })
         }
 
         res.status(200).json(product)
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching dish', error })
+        res.status(500).json({ message: 'Error fetching Product', error })
     }
 }
 
@@ -121,35 +122,60 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-const deleteDeletePicture = async (req, res) => {
-    const { dishId, pictureIndex } = req.params;
+const getMostSellingProducts = async (req, res) => {
+    const limit = parseInt(req.query.limit) || 10;
 
     try {
-        const dish = await Dish.findById(dishId);
-        if (!dish) {
-            return res.status(404).json({ error: 'Dish not found' });
+        const products = await Product.find()
+            .sort({ sold: -1 })
+            .limit(limit);
+
+        return res.status(200).json(products);
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", error });
+    }
+};
+
+const deleteProductPicture = async (req, res) => {
+    const { productId, pictureIndex } = req.params;
+
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
         }
 
-        if (pictureIndex < 0 || pictureIndex >= dish.img.length) {
+        if (pictureIndex < 0 || pictureIndex >= product.images.length) {
             return res.status(400).json({ error: { pictureError: 'Invalid picture index' } });
         }
 
-        const imageUrl = dish.img[pictureIndex];
+        const imageUrl = product.images[pictureIndex];
+        console.log(`Image URL: ${imageUrl}`);
 
-        const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0]; // 'dishes/some-id'
-        console.log(`Attempting to delete Cloudinary image with publicId: ${publicId}`);
+        // Extract the public ID correctly without the version
+        const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
+        console.log(`Attempting to delete Cloudinary image with publicId: "${publicId}"`);
 
         const cloudinaryResponse = await cloudinary.uploader.destroy(publicId);
+        console.log(`Cloudinary Response:`, cloudinaryResponse);
+
         if (cloudinaryResponse.result !== 'ok') {
-            console.error(`Failed to delete image from Cloudinary:`, cloudinaryResponse);
-            return res.status(500).json({ error: 'Failed to delete image from Cloudinary' });
+            // If deletion fails, check existing resources
+            const resources = await cloudinary.api.resources({
+                type: 'upload',
+                prefix: 'products/',
+                max_results: 500
+            });
+            console.log('Existing Resources:', resources);
+
+            return res.status(500).json({
+                error: 'Failed to delete image from Cloudinary',
+                details: cloudinaryResponse
+            });
         }
 
-        console.log(`Image ${publicId} deleted successfully from Cloudinary.`);
-
-        dish.img.splice(pictureIndex, 1);
-
-        await dish.save();
+        product.images.splice(pictureIndex, 1);
+        await product.save();
 
         return res.status(200).json({
             message: 'Picture deleted successfully',
@@ -160,7 +186,6 @@ const deleteDeletePicture = async (req, res) => {
         return res.status(500).json({ error: 'Server Error' });
     }
 };
-
 
 const getProductsByCategory = async (req, res) => {
     try {
@@ -186,4 +211,4 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory };
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, };

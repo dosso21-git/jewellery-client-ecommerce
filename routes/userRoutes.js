@@ -1,14 +1,17 @@
 const express = require('express');
-const { createUser, loginUserCtrl, updatedUser, deleteaUser, getallUser, getaUser, blockUser } = require('../controllers/userController');
-const { protect } = require('../middleware/authMiddleware');
+const { createUser, loginUserCtrl, updatedUser, deleteaUser, getallUser, getaUser, restoreUser, blockUser, unblockUser } = require('../controllers/userController');
+const { protect, getIpAddress, publicApiAccess } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.post('/register', createUser);
-router.post('/login', loginUserCtrl);
-router.get('/getalluser', getallUser)
-router.get('/getuser/:id', getaUser)
-router.put('/update', protect, updatedUser);
-router.delete('/delete/:id', deleteaUser);
-router.delete('/block/:id', blockUser);
+
+router.post('/register', publicApiAccess, createUser);
+router.post('/login', publicApiAccess, loginUserCtrl);
+router.get('/getalluser', publicApiAccess, protect, getallUser)
+router.get('/getuser/:id', publicApiAccess, getaUser)
+router.put('/update', publicApiAccess, protect, updatedUser);
+router.put('/restore/:id', protect, restoreUser);
+router.delete('/delete/:id', protect, deleteaUser);
+router.put('/block/:id', protect, blockUser)
+router.put('/unblock/:id', protect, unblockUser)
 
 module.exports = router;

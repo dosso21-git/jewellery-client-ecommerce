@@ -121,35 +121,46 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-const deleteDeletePicture = async (req, res) => {
-    const { dishId, pictureIndex } = req.params;
+const deleteProductPicture = async (req, res) => {
+    const { productId, pictureIndex } = req.params;
 
     try {
-        const dish = await Dish.findById(dishId);
-        if (!dish) {
-            return res.status(404).json({ error: 'Dish not found' });
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
         }
 
-        if (pictureIndex < 0 || pictureIndex >= dish.img.length) {
+        if (pictureIndex < 0 || pictureIndex >= product.images.length) {
             return res.status(400).json({ error: { pictureError: 'Invalid picture index' } });
         }
 
-        const imageUrl = dish.img[pictureIndex];
+        const imageUrl = product.images[pictureIndex];
+        console.log(`Image URL: ${imageUrl}`);
 
-        const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0]; // 'dishes/some-id'
-        console.log(`Attempting to delete Cloudinary image with publicId: ${publicId}`);
+        // Extract the public ID correctly without the version
+        const publicId = imageUrl.split('/').slice(-2).join('/').split('.')[0];
+        console.log(`Attempting to delete Cloudinary image with publicId: "${publicId}"`);
 
         const cloudinaryResponse = await cloudinary.uploader.destroy(publicId);
+        console.log(`Cloudinary Response:`, cloudinaryResponse);
+
         if (cloudinaryResponse.result !== 'ok') {
-            console.error(`Failed to delete image from Cloudinary:`, cloudinaryResponse);
-            return res.status(500).json({ error: 'Failed to delete image from Cloudinary' });
+            // If deletion fails, check existing resources
+            const resources = await cloudinary.api.resources({
+                type: 'upload',
+                prefix: 'products/',
+                max_results: 500
+            });
+            console.log('Existing Resources:', resources);
+            
+            return res.status(500).json({
+                error: 'Failed to delete image from Cloudinary',
+                details: cloudinaryResponse
+            });
         }
 
-        console.log(`Image ${publicId} deleted successfully from Cloudinary.`);
-
-        dish.img.splice(pictureIndex, 1);
-
-        await dish.save();
+        product.images.splice(pictureIndex, 1);
+        await product.save();
 
         return res.status(200).json({
             message: 'Picture deleted successfully',
@@ -186,4 +197,30 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
-module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory };
+const addRating = async (req, res) => {
+    const { star, comment, productId } = req.body;
+
+    try {
+        const rating = new Rating({
+            star,
+            comment,
+            postedby: req.user._id,
+            product: productId,
+        });
+
+        await rating.save();
+
+        await Product.findByIdAndUpdate(
+            productId,
+            { $push: { ratings: rating._id } },
+            { new: true }
+        );
+
+        res.status(201).json({ message: "Rating added successfully!", rating });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error adding rating.", error });
+    }
+};
+
+module.exports = { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, deleteProductPicture };

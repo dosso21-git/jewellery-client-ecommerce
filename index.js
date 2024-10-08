@@ -5,7 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoute')
 const cors = require('cors');
 const recent_viewRoutes = require('./routes/recent_view')
-
+const order_modelRoutes = require('./routes/order_model')
 dotenv.config();
 connectDB();
 
@@ -18,7 +18,7 @@ app.use(cors());
 app.use('/api/user', userRoutes);
 app.use('/api/user', productRoutes)
 app.use('/api/user', recent_viewRoutes)
-
+app.use('/api/user', order_modelRoutes)
 app.use((req, res) => {
     res.status(404).json({ message: 'You are hitting a wrong API URL' });
 });

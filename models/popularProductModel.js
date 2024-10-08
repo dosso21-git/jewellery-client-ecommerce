@@ -13,5 +13,5 @@ const PopularProductSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-const PopularProduct = mongoose.model("PopularProduct", RecentViewSchema);
+const PopularProduct = mongoose.model("PopularProduct", PopularProductSchema);
 module.exports = PopularProduct;

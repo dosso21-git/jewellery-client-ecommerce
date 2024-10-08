@@ -35,7 +35,7 @@ router.delete('/admin/delete/:id', protect, deleteProduct);
 router.delete('/admin/delete/:productId/image/:pictureIndex', protect, deleteProductPicture); // Not working
 router.put('/admin/update/:id', protect, upload, updateProduct);
 router.post('/product/rate', protect, giveRating);
-router.get('/product/get/toprated', getTopRatedProducts);
+router.get('/product/toprated', getTopRatedProducts);
 router.get('/product/popular/:productId', trackProductView);
 router.get('/product/getpopularproduct', getPopularProducts);
 

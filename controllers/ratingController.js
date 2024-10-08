@@ -36,7 +36,7 @@ const giveRating = async (req, res) => {
             { new: true }
         );
 
-        res.status(201).json(savedRating);
+        res.status(201).json({data:savedRating});
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error." });

@@ -1,6 +1,6 @@
 const Rating = require("../models/ratingModel");
 const Product = require("../models/productModel");
-const Order = require("../models/order_model");
+const Order = require("../models/orderModel");
 
 const giveRating = async (req, res) => {
   try {

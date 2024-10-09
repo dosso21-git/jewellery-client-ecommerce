@@ -1,5 +1,5 @@
 const express = require("express");
-const {   deleteRecentView, createOrUpdateRecentView, getRecentViewsByCount } = require("../controllers/recent_view");
+const {   deleteRecentView, createOrUpdateRecentView, getRecentViewsByCount } = require("../controllers/recentViewController");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();

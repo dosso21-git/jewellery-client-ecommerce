@@ -11,8 +11,14 @@ const getCounts = async (req, res) => {
         const productsCount = await Product.countDocuments();
         const recentViewsCount = await RecentView.countDocuments();
         const usersCount = await User.countDocuments();
+        const products = await Product.find().populate('ratings');
 
-        // Send response with all counts
+        const topRatedProductsCount = products.filter(product => {
+            const totalRating = product.ratings.reduce((sum, rating) => sum + rating.star, 0);
+            const averageRating = totalRating / product.ratings.length || 0;
+            return averageRating >= 4;
+        }).length;
+
         return res.status(200).json({
             message: 'Counts retrieved successfully',
             counts: {
@@ -21,6 +27,7 @@ const getCounts = async (req, res) => {
                 products: productsCount,
                 recentViews: recentViewsCount,
                 users: usersCount,
+                topRatedProducts: topRatedProductsCount,
             },
         });
     } catch (error) {

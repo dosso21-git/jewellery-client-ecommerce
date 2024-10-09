@@ -1,39 +1,73 @@
 const RecentView = require("../models/recentViewModel");
-
+const jwt = require('jsonwebtoken')
 
 // Create Recent View
-exports.createRecentView = async (req, res) => {
+
+exports.createOrUpdateRecentView = async (req, res) => {
     try {
-        const { productId, visitedby } = req.body;
+        const token = req.headers.authorization?.split(' ')[1];
 
-        const recentView = new RecentView({
-            productId,
-            visitedby,
-        });
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "No token provided",
+            });
+        }
 
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id; // Assuming the token contains user id as 'id'
+
+        const { productId } = req.body;
+
+        // Check if a recent view already exists for this user and product
+        let recentView = await RecentView.findOne({ productId, visitedby: userId });
+
+        if (recentView) {
+            // If found, increment the count by 1
+            recentView.count += 1;
+        } else {
+            // If not found, create a new recent view
+            recentView = new RecentView({
+                productId,
+                visitedby: userId,
+                count: 1,
+            });
+        }
+
+        // Save the recent view (whether updated or new)
         await recentView.save();
 
-        // Populate the 'visitedby' field to get the User details
-        const populatedRecentView = await RecentView.findById(recentView._id).populate('visitedby').populate('productId');
-
-        res.status(201).json({
+        res.status(200).json({
             success: true,
-            data: populatedRecentView,
+            data: recentView,
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Unable to create recent view",
+            message: "Unable to create or update recent view",
             error: error.message,
         });
     }
 };
-
 // Get All Recent Views
-exports.getRecentViews = async (req, res) => {
+exports.getRecentViewsByCount = async (req, res) => {
     try {
-        const recentViews = await RecentView.find()
-            .populate("productId")
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "No token provided",
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+
+        // Find recent views for the user and sort by count in descending order
+        const recentViews = await RecentView.find({ visitedby: userId })
+            .populate('productId')
+            .sort({ count: -1 }); // Sort by count in descending order
 
         res.status(200).json({
             success: true,
@@ -48,59 +82,6 @@ exports.getRecentViews = async (req, res) => {
     }
 };
 
-// Get Recent Views by User
-exports.getRecentViewsByUser = async (req, res) => {
-    try {
-        const { userId } = req.params;
-
-        const recentViews = await RecentView.find({ visitedby: userId })
-            .populate("productId", "productName price")
-            .populate("visitedby", "name email");
-
-        res.status(200).json({
-            success: true,
-            data: recentViews,
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Unable to fetch recent views for this user",
-            error: error.message,
-        });
-    }
-};
-
-// Update Recent View
-exports.updateRecentView = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { productId, visitedby } = req.body;
-
-        const updatedRecentView = await RecentView.findByIdAndUpdate(
-            id,
-            { productId, visitedby },
-            { new: true, runValidators: true }
-        );
-
-        if (!updatedRecentView) {
-            return res.status(404).json({
-                success: false,
-                message: "Recent view not found",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            data: updatedRecentView,
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Unable to update recent view",
-            error: error.message,
-        });
-    }
-};
 
 // Delete Recent View
 exports.deleteRecentView = async (req, res) => {

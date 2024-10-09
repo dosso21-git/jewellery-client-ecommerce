@@ -24,6 +24,7 @@ const ProductSchema = new mongoose.Schema(
         },
         offer: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: 'Offers'
         },
         sold: {
             type: Number,

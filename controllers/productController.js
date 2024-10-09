@@ -62,30 +62,24 @@ const getProductById = async (req, res) => {
 
     console.log(product);
 
-    //save receent view activity for this user
-    //if this user is logged in then update the activity
-
     const token = req.headers.authorization?.split(" ")[1];
 
     console.log(token);
 
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const userId = decoded.id; // Assuming the token contains user id as 'id'
+      const userId = decoded.id;
 
       const productId = id;
 
-      // Check if a recent view already exists for this user and product
       var recentView = await RecentView.findOne({
         productId,
         visitedby: userId,
       });
       console.log(recentView);
       if (recentView) {
-        // If found, increment the count by 1
         recentView.count += 1;
       } else {
-        // If not found, create a new recent view
         recentView = new RecentView({
           productId,
           visitedby: userId,
@@ -95,7 +89,6 @@ const getProductById = async (req, res) => {
         console.log(recentView);
       }
 
-      // Save the recent view (whether updated or new)
       await recentView.save();
     }
 

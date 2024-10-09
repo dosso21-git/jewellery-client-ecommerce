@@ -11,6 +11,6 @@ router.put('/admin/update/offers/:id', protect, updateOffer);
 router.delete('/admin/delete/offers/:id', protect, deleteOffer);
 
 router.post('/admin/offers/apply', protect, applyOfferToProduct)
-router.get('/admin/offers/get', publicApiAccess, getProductsWithOffers);
+router.get('/offers/get', publicApiAccess, getProductsWithOffers);
 
 module.exports = router;

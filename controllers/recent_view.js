@@ -1,5 +1,5 @@
 const RecentView = require("../models/recentViewModel");
-
+const jwt = require('jsonwebtoken')
 
 // Create Recent View
 exports.createRecentView = async (req, res) => {
@@ -30,7 +30,7 @@ exports.createRecentView = async (req, res) => {
 
         // Populate the 'visitedby' and 'productId' fields
         const populatedRecentView = await RecentView.findById(recentView._id)
-            .populate('visitedby')
+    
             .populate('productId');
 
         // Send the response with the populated recent view data
@@ -50,9 +50,24 @@ exports.createRecentView = async (req, res) => {
 // Get All Recent Views
 exports.getRecentViews = async (req, res) => {
     try {
-        const recentViews = await RecentView.find()
-            .populate("productId")
+        // Get token from the Authorization header
+        const token = req.headers.authorization?.split(' ')[1]; // Assuming token is passed in the Authorization header
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "No token provided",
+            });
+        }
 
+        // Verify and decode the token to get the user ID
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Use your JWT secret from environment variables
+        const userId = decoded.id; // Assuming the token payload contains the user ID as 'id'
+
+        // Fetch recent views for the logged-in user by userId
+        const recentViews = await RecentView.find({ visitedby: userId })
+            .populate("productId"); // Populating the productId field
+
+        // Return the fetched recent views for the logged-in user
         res.status(200).json({
             success: true,
             data: recentViews,
@@ -67,58 +82,9 @@ exports.getRecentViews = async (req, res) => {
 };
 
 // Get Recent Views by User
-exports.getRecentViewsByUser = async (req, res) => {
-    try {
-        const { userId } = req.params;
 
-        const recentViews = await RecentView.find({ visitedby: userId })
-            .populate("productId", "productName price")
-            .populate("visitedby", "name email");
-
-        res.status(200).json({
-            success: true,
-            data: recentViews,
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Unable to fetch recent views for this user",
-            error: error.message,
-        });
-    }
-};
 
 // Update Recent View
-exports.updateRecentView = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { productId, visitedby } = req.body;
-
-        const updatedRecentView = await RecentView.findByIdAndUpdate(
-            id,
-            { productId, visitedby },
-            { new: true, runValidators: true }
-        );
-
-        if (!updatedRecentView) {
-            return res.status(404).json({
-                success: false,
-                message: "Recent view not found",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            data: updatedRecentView,
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Unable to update recent view",
-            error: error.message,
-        });
-    }
-};
 
 // Delete Recent View
 exports.deleteRecentView = async (req, res) => {

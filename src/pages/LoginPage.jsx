@@ -143,12 +143,12 @@ const LoginPage = () => {
       });
       
       // Assuming the API returns a token
-      const { token } = response.data.token;
+      const  token  = response.data.token;
       
       // Store token in cookies
-      Cookies.set('loginToken', token); // Expires in 7 days
-      
-      console.log("Logged in successfully:", response.data);
+      Cookies.set('loginToken',token); // Expires in 7 days
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      console.log("Logged in successfully:", response.data.token);
       // Redirect or perform other actions after successful login
       navigate('/')
     } catch (err) {

@@ -180,6 +180,7 @@ import TrendingProductsPage from "./pages/TrendingProducts";
 import BestSellingProductsPage from "./pages/BestSellingProducts";
 import MostSellingProducts from "./pages/MostSellingProducts";
 import MostPopularProducts from "./pages/MostPopular";
+import RecentViewProducts from "./pages/RecentViewProducts";
 
 const App = () => {
   React.useEffect(() => {
@@ -202,6 +203,7 @@ const App = () => {
           <Route path="trending" element={<MainLayout><TrendingProductsPage/></MainLayout>} /> 
           <Route path="most-selling" element={<MainLayout><MostSellingProducts/></MainLayout>} /> 
           <Route path="most-popular" element={<MainLayout><MostPopularProducts/></MainLayout>} /> 
+          <Route path="recent-view" element={<MainLayout><RecentViewProducts/></MainLayout>} /> 
           <Route path="best-selling" element={<MainLayout><BestSellingProductsPage/></MainLayout>} /> 
           <Route path="cart" element={<MainLayout><CartPage /></MainLayout>} />
           <Route path="/product-details/:id" element={<MainLayout><ProductDetails /></MainLayout>} />

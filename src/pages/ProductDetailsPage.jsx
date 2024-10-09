@@ -930,6 +930,197 @@
 
 
 
+// import { FaHeart, FaRegHeart } from 'react-icons/fa';
+// import React, { useState, useEffect } from 'react';
+// import { useNavigate, useParams } from 'react-router-dom';
+// import ReactImageMagnify from 'react-image-magnify';
+// import Cookies from 'js-cookie';
+// import CouponPopup from '../components/Popup/CouponPopup';
+// import axios from 'axios';
+
+// const ProductDetails = () => {
+//   const { id } = useParams();
+//   const [isInWishlist, setIsInWishlist] = useState(false);
+//   const [selectedImage, setSelectedImage] = useState('');
+//   const [couponCode, setCouponCode] = useState('');
+//   const [discountedPrice, setDiscountedPrice] = useState(0);
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [productData, setProductData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   const navigate = useNavigate();
+//   const token = Cookies.get('usertoken');
+
+//   useEffect(() => {
+//     const getProductById = async () => {
+//       try {
+//         const result = await axios.get(`/product/get/${id}`);
+//         if (result.data) {
+//           setError('');
+//           setProductData(result.data);
+//           setSelectedImage(result.data.images[0]);
+//           setDiscountedPrice(result.data.price);
+//           setError('');
+//         }
+//       } catch (error) {
+        
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     getProductById();
+//   }, [id]);
+
+//   const redirectFunction = () => {
+//     if (!token) {
+//       navigate('/login');
+//     } else {
+//       navigate('/delivery-address');
+//     }
+//   };
+
+//   const AddToCart = () => {
+//     if (!token) {
+//       navigate('/login');
+//     } else {
+//       navigate('/cart');
+//     }
+//   };
+
+//   const toggleWishlist = () => {
+//     setIsInWishlist(!isInWishlist);
+//     navigate('/wishlist');
+//   };
+
+//   const applyCoupon = () => {
+//     if (couponCode === 'FLAT50') {
+//       setDiscountedPrice(productData.price - 50);
+//       setShowPopup(true);
+//       setTimeout(() => setShowPopup(false), 2000);
+//     } else {
+//       alert('Invalid coupon code');
+//     }
+//   };
+
+//   if (loading) return <p>Loading...</p>;
+//   if (error) return <p>{error}</p>;
+
+//   const discount = ((productData.price - discountedPrice) / productData.price) * 100;
+
+//   return (
+//     <div className="container mx-auto p-4 mt-24">
+//       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//         <div>
+//           <div className="border mb-4 p-4">
+//             <ReactImageMagnify
+//               {...{
+//                 smallImage: {
+//                   alt: 'Product Image',
+//                   isFluidWidth: true,
+//                   src: selectedImage,
+//                 },
+//                 largeImage: {
+//                   src: selectedImage,
+//                   width: 800,
+//                   height: 900,
+//                 },
+//                 enlargedImageContainerDimensions: {
+//                   width: '100%',
+//                   height: '80%',
+//                 },
+//                 enlargedImagePosition: 'beside',
+//               }}
+//               style={{ width: '100%', height: '100%' }}
+//             />
+//           </div>
+//           <div className="flex space-x-2">
+//             {productData?.images?.map((img, index) => (
+//               <img
+//                 key={index}
+//                 src={img}
+//                 alt={`Product ${index}`}
+//                 onClick={() => setSelectedImage(img)}
+//                 className={`w-16 h-16 object-cover cursor-pointer border ${selectedImage === img ? 'border-indigo-600' : 'border-gray-300'}`}
+//               />
+//             ))}
+//           </div>
+//         </div>
+//         <div>
+//           <h1 className="text-2xl font-bold mb-2">{productData.title}</h1>
+//           <p className="text-sm text-gray-600 mb-4">{productData.description}</p>
+//           <div className="flex items-center space-x-2 mb-4">
+//             <span className="text-green-600 font-semibold">{productData.totalrating} ★</span>
+//             <button onClick={toggleWishlist} className="ml-4 text-red-500 hover:text-red-700">
+//               {isInWishlist ? <FaHeart size={24} color="darkred" /> : <FaRegHeart size={24} />}
+//             </button>
+//           </div>
+//           <div className="mb-4">
+//             <span className="text-3xl font-bold text-red-600">₹{discountedPrice}</span>
+//             <span className="line-through text-gray-500 ml-4">₹{productData.price}</span>
+//             <span className="text-green-600 font-semibold ml-2">{Math.round(discount)}% off</span>
+//           </div>
+//           <div className="mb-4">
+//             <input
+//               type="text"
+//               value={couponCode}
+//               onChange={(e) => setCouponCode(e.target.value)}
+//               placeholder="Enter coupon code"
+//               className="border rounded p-2 w-full"
+//             />
+//             <button
+//               onClick={applyCoupon}
+//               className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+//               Apply Coupon
+//             </button>
+//           </div>
+//           {/* Available Offers */}
+//           {productData?.availableOffers && productData?.availableOffers?.length > 0 && (
+//             <div className="mb-4">
+//               <h3 className="text-lg font-semibold">Available offers</h3>
+//               <ul className="list-disc list-inside text-gray-700 space-y-2">
+//                 {productData.availableOffers.map((offer, index) => (
+//                   <li key={index}>{offer}</li>
+//                 ))}
+//               </ul>
+//             </div>
+//           )}
+          
+//           {/* Buttons */}
+//           <div className="flex space-x-4">
+//             <button
+//               onClick={AddToCart}
+//               className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600">
+//               ADD TO CART
+//             </button>
+//             <button
+//               onClick={redirectFunction}
+//               className="w-full py-3 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600">
+//               BUY NOW
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ProductDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -948,23 +1139,24 @@ const ProductDetails = () => {
   const [productData, setProductData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [newRating, setNewRating] = useState(0);
+  const [ratings, setRatings] = useState([]);
 
   const navigate = useNavigate();
-  const token = Cookies.get('usertoken');
+  const token = Cookies.get('loginToken');
 
   useEffect(() => {
     const getProductById = async () => {
       try {
         const result = await axios.get(`/product/get/${id}`);
         if (result.data) {
-          setError('');
           setProductData(result.data);
           setSelectedImage(result.data.images[0]);
           setDiscountedPrice(result.data.price);
-          setError('');
+          setRatings(result.data.ratings || []);
         }
       } catch (error) {
-        
+        // setError('Error fetching product data');
       } finally {
         setLoading(false);
       }
@@ -981,13 +1173,22 @@ const ProductDetails = () => {
     }
   };
 
-  const AddToCart = () => {
+  const AddToCart = (productId,quantity) => {
     if (!token) {
       navigate('/login');
     } else {
-      navigate('/cart');
+      addToCartProduct(productId,quantity)
+      // navigate('/cart');
     }
   };
+
+
+  const addToCartProduct = async (productId,quantity) => {
+        const result =  axios.post('/cart/add',{
+          productId, quantity
+        });
+        console.log('result',result);
+  }
 
   const toggleWishlist = () => {
     setIsInWishlist(!isInWishlist);
@@ -1002,6 +1203,22 @@ const ProductDetails = () => {
     } else {
       alert('Invalid coupon code');
     }
+  };
+
+  const submitRating = async () => {
+    if (newRating < 1 || newRating > 5) {
+      alert('Please provide a rating between 1 and 5.');
+      return;
+    }
+
+    // Here you would typically make an API call to submit the rating
+    // For now, we will just update the state
+    const updatedRatings = [...ratings, { star: newRating, comment: 'Great product!' }]; // Comment can be modified as needed
+    setRatings(updatedRatings);
+    setNewRating(0);
+    
+    // Optionally, send the rating to the server here
+    // await axios.post(`/product/rate/${id}`, { star: newRating });
   };
 
   if (loading) return <p>Loading...</p>;
@@ -1076,8 +1293,39 @@ const ProductDetails = () => {
               Apply Coupon
             </button>
           </div>
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold">Rate this Product</h3>
+            <input
+              type="number"
+              value={newRating}
+              onChange={(e) => setNewRating(Number(e.target.value))}
+              placeholder="Rate (1-5)"
+              min="1"
+              max="5"
+              className="border rounded p-2 w-full mb-2"
+            />
+            <button
+              onClick={submitRating}
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+              Submit Rating
+            </button>
+          </div>
+          {/* Display Existing Ratings */}
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold">Existing Ratings</h3>
+            {ratings.length > 0 ? (
+              ratings.map((rating, index) => (
+                <div key={index} className="flex items-center mb-1">
+                  <span className="text-yellow-500">{rating.star} ★</span>
+                  <p className="ml-2 text-gray-600">{rating.comment}</p>
+                </div>
+              ))
+            ) : (
+              <p>No ratings yet.</p>
+            )}
+          </div>
           {/* Available Offers */}
-          {productData?.availableOffers && productData?.availableOffers?.length > 0 && (
+          {productData?.availableOffers && productData?.availableOffers.length > 0 && (
             <div className="mb-4">
               <h3 className="text-lg font-semibold">Available offers</h3>
               <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -1091,7 +1339,7 @@ const ProductDetails = () => {
           {/* Buttons */}
           <div className="flex space-x-4">
             <button
-              onClick={AddToCart}
+              onClick={ () => AddToCart(productData._id,1)}
               className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600">
               ADD TO CART
             </button>

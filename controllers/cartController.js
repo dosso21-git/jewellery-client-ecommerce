@@ -138,25 +138,65 @@ exports.checkout = async (req, res) => {
   }
 };
 // Get all items in the cart for the logged-in user
-exports.getCartItems = async (req, res) => {
-    try {
+  
+
+// exports.getCartItems = async (req, res) => {
+//     try {
     
-      const userId = req.body.userId;
+//       const userId = req.body.userId;
   
-      const cart = await cartModel.findOne({ userId });
+//       const cart = await cartModel.findOne({ userId });
   
-      if (!cart || cart.items.length === 0) {
-        return res.status(404).json({ message: "No items found in the cart" });
-      }
+//       if (!cart || cart.items.length === 0) {
+//         return res.status(404).json({ message: "No items found in the cart" });
+//       }
   
-      res.status(200).json({
-        success: true,
-        items: cart.items,
-        totalItems: cart.totalItems,
-        totalPrice: cart.totalPrice,
-      });
-    } catch (err) {
-      res.status(500).json({ message: "Server error", error: err.message });
+//       res.status(200).json({
+//         success: true,
+//         items: cart.items,
+//         totalItems: cart.totalItems,
+//         totalPrice: cart.totalPrice,
+//       });
+//     } catch (err) {
+//       res.status(500).json({ message: "Server error", error: err.message });
+//     }
+//   };
+
+
+
+
+
+exports.getCartItems = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+
+    const cart = await cartModel.findOne({ userId }).populate('items.productId');
+
+    if (!cart || cart.items.length === 0) {
+      return res.status(404).json({ message: "No items found in the cart" });
     }
-  };
-  
+
+    // Calculate subtotal, shipping, tax, and total
+    const shippingEstimate = 5.00; // Fixed shipping cost
+    const taxRate = 0.18; // 18% tax rate
+    let subtotal = 0;
+
+    cart.items.forEach(item => {
+      subtotal += item.price * item.quantity; // Calculate subtotal
+    });
+
+    const taxEstimate = subtotal * taxRate; // Calculate tax
+    const orderTotal = subtotal + shippingEstimate + taxEstimate; // Calculate total
+
+    res.status(200).json({
+      success: true,
+      items: cart.items,
+      subtotal: subtotal.toFixed(2), // Format to 2 decimal places
+      shippingEstimate: shippingEstimate.toFixed(2),
+      taxEstimate: taxEstimate.toFixed(2),
+      orderTotal: orderTotal.toFixed(2),
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};

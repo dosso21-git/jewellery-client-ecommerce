@@ -61,6 +61,8 @@ exports.getRecentViewsByCount = async (req, res) => {
             });
         }
 
+        console.log('user token in recent view products',token)
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.id;
 

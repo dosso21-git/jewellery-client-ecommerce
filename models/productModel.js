@@ -23,7 +23,7 @@ const ProductSchema = new mongoose.Schema(
             required: true,
         },
         offer: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
         },
         sold: {
             type: Number,

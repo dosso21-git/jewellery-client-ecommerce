@@ -1,4 +1,4 @@
-const Offer = require("../models/offersModel");
+const Offers = require("../models/offersModel");
 const Product = require("../models/productModel");
 
 const createOffer = async (req, res) => {
@@ -80,20 +80,46 @@ const deleteOffer = async (req, res) => {
     }
 };
 
+const applyOfferToProduct = async (req, res) => {
+    const { offerId } = req.body;
 
-const applyOfferToProduct = async (product) => {
-    const offer = await Offer.findOne({ prodCategory: product.category });
-    if (offer) {
-        const discountAmount = product.price * (offer.discount / 100);
-        return {
-            ...product._doc,
-            discountedPrice: product.price - discountAmount,
-            offer: offer.offer,
-            discountType: offer.discountType,
-        };
+    try {
+        const offer = await Offers.findById(offerId);
+        if (!offer) {
+            return res.status(404).json({ error: "Offer not found" });
+        }
+
+        const updatedProducts = await Product.updateMany(
+            { category: offer.prodCategory },
+            { offer: offer._id },
+            { new: true }
+        );
+
+        res.status(200).json({ message: `${updatedProducts} products updated successfully.` });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-    return product;
+}
+
+
+
+const getProductsWithOffers = async (req, res) => {
+    const { category } = req.query;
+
+    try {
+        const products = await Product.find({ category })
+            .populate('offer', 'offer discount discountType')
+            .exec();
+
+        if (products.length === 0) {
+            return res.status(404).json({ message: "No products found in this category." });
+        }
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 
-module.exports = { createOffer, getAllOffers, getOfferById, deleteOffer, updateOffer, applyOfferToProduct }
+module.exports = { createOffer, getAllOffers, getOfferById, deleteOffer, updateOffer, applyOfferToProduct, getProductsWithOffers }

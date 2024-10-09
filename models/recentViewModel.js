@@ -1,6 +1,6 @@
+
 const mongoose = require("mongoose");
 
-// Define recentViewSchema
 const RecentViewSchema = new mongoose.Schema(
     {
         productId: {
@@ -21,6 +21,5 @@ const RecentViewSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// Export the model
 const RecentView = mongoose.model("RecentView", RecentViewSchema);
 module.exports = RecentView;

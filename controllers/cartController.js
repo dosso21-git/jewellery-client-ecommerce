@@ -13,7 +13,7 @@ exports.addToCart = async (req, res) => {
         message: "No token provided",
       });
     }
-y
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
     const { productId, quantity } = req.body;

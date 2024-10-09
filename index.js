@@ -4,11 +4,11 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoute')
 const cors = require('cors');
-const recent_viewRoutes = require('./routes/recent_view')
-const order_modelRoutes = require('./routes/order_model')
+const recent_viewRoutes = require('./routes/recentViewRoutes')
+const order_modelRoutes = require('./routes/orderRoutes')
 const offerRoutes = require('./routes/offerRoutes')
 const cartroutes = require('./routes/cart')
-const wishlistRoutes = require('./routes/wish_listRoute')
+const wishlistRoutes = require('./routes/wishlistRoutes')
 dotenv.config();
 connectDB();
 

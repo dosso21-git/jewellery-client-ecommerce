@@ -3,7 +3,7 @@ const Product = require("../models/productModel");
 
 const createOffer = async (req, res) => {
     try {
-        const { offer, discount, discountType, prodCategory } = req.body;
+        const { title, offer, discountType, prodCategory } = req.body;
 
         const categoryExists = await Product.findOne({ category: prodCategory });
 
@@ -12,6 +12,7 @@ const createOffer = async (req, res) => {
         }
 
         const newOffer = new Offer({
+            title,
             offer,
             discount,
             discountType,
@@ -49,10 +50,10 @@ const getOfferById = async (req, res) => {
 
 const updateOffer = async (req, res) => {
     try {
-        const { offer, discount, discountType, prodCategory } = req.body;
+        const {title, offer, discountType, prodCategory } = req.body;
         const updatedOffer = await Offer.findByIdAndUpdate(
             req.params.id,
-            { offer, discount, discountType, prodCategory },
+            { title, offer, discountType, prodCategory },
             { new: true }
         );
 
@@ -100,7 +101,6 @@ const applyOfferToProduct = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
-
 
 
 const getProductsWithOffers = async (req, res) => {

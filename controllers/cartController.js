@@ -5,18 +5,7 @@ const cartModel = require("../models/cartModel");
 // Add item to cart
 exports.addToCart = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No token provided",
-      });
-    }
-y
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
-    const { productId, quantity } = req.body;
+    const { productId, quantity ,userId} = req.body;
 
     const product = await productModel.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
@@ -58,18 +47,7 @@ y
 // Remove item from cart
 exports.removeFromCart = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No token provided",
-      });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
-    const { productId } = req.body;
+    const { productId,userId } = req.body;
 
     let cart = await cartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
@@ -93,18 +71,8 @@ exports.removeFromCart = async (req, res) => {
 // Update item quantity in cart
 exports.updateCartItem = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No token provided",
-      });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
-    const { productId, quantity } = req.body;
+  
+    const { productId, quantity,userId } = req.body;
 
     let cart = await cartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
@@ -133,17 +101,8 @@ exports.updateCartItem = async (req, res) => {
 // Delete all items in the cart
 exports.clearCart = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No token provided",
-      });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
+  
+    const userId = req.body.userId
 
     let cart = await cartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
@@ -162,17 +121,8 @@ exports.clearCart = async (req, res) => {
 // Checkout and empty the cart
 exports.checkout = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No token provided",
-      });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
+  
+    const userId = req.body.userId;
 
     let cart = await cartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
@@ -190,17 +140,8 @@ exports.checkout = async (req, res) => {
 // Get all items in the cart for the logged-in user
 exports.getCartItems = async (req, res) => {
     try {
-      const token = req.headers.authorization?.split(" ")[1];
-  
-      if (!token) {
-        return res.status(401).json({
-          success: false,
-          message: "No token provided",
-        });
-      }
-  
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const userId = decoded.id;
+    
+      const userId = req.body.userId;
   
       const cart = await cartModel.findOne({ userId });
   

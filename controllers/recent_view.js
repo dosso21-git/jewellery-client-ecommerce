@@ -2,9 +2,10 @@ const RecentView = require("../models/recentViewModel");
 const jwt = require('jsonwebtoken')
 
 // Create Recent View
-exports.createRecentView = async (req, res) => {
+
+exports.createOrUpdateRecentView = async (req, res) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Assuming token is passed in the Authorization header
+        const token = req.headers.authorization?.split(' ')[1];
 
         if (!token) {
             return res.status(401).json({
@@ -13,45 +14,46 @@ exports.createRecentView = async (req, res) => {
             });
         }
 
-        // Verify and decode the token to get the user ID
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Use your JWT secret from environment variables
-        const userId = decoded.id; // Assuming the token payload contains the user ID as 'id'
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id; // Assuming the token contains user id as 'id'
 
         const { productId } = req.body;
 
-        // Create a new RecentView instance with productId and the userId from the token
-        const recentView = new RecentView({
-            productId,
-            visitedby: userId, // Set the userId as the visitedby field
-        });
+        // Check if a recent view already exists for this user and product
+        let recentView = await RecentView.findOne({ productId, visitedby: userId });
 
-        // Save the recent view
+        if (recentView) {
+            // If found, increment the count by 1
+            recentView.count += 1;
+        } else {
+            // If not found, create a new recent view
+            recentView = new RecentView({
+                productId,
+                visitedby: userId,
+                count: 1,
+            });
+        }
+
+        // Save the recent view (whether updated or new)
         await recentView.save();
 
-        // Populate the 'visitedby' and 'productId' fields
-        const populatedRecentView = await RecentView.findById(recentView._id)
-    
-            .populate('productId');
-
-        // Send the response with the populated recent view data
-        res.status(201).json({
+        res.status(200).json({
             success: true,
-            data: populatedRecentView,
+            data: recentView,
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Unable to create recent view",
+            message: "Unable to create or update recent view",
             error: error.message,
         });
     }
 };
-
 // Get All Recent Views
-exports.getRecentViews = async (req, res) => {
+exports.getRecentViewsByCount = async (req, res) => {
     try {
-        // Get token from the Authorization header
-        const token = req.headers.authorization?.split(' ')[1]; // Assuming token is passed in the Authorization header
+        const token = req.headers.authorization?.split(' ')[1];
+
         if (!token) {
             return res.status(401).json({
                 success: false,
@@ -59,15 +61,14 @@ exports.getRecentViews = async (req, res) => {
             });
         }
 
-        // Verify and decode the token to get the user ID
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Use your JWT secret from environment variables
-        const userId = decoded.id; // Assuming the token payload contains the user ID as 'id'
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
 
-        // Fetch recent views for the logged-in user by userId
+        // Find recent views for the user and sort by count in descending order
         const recentViews = await RecentView.find({ visitedby: userId })
-            .populate("productId"); // Populating the productId field
+            .populate('productId')
+            .sort({ count: -1 }); // Sort by count in descending order
 
-        // Return the fetched recent views for the logged-in user
         res.status(200).json({
             success: true,
             data: recentViews,
@@ -81,10 +82,6 @@ exports.getRecentViews = async (req, res) => {
     }
 };
 
-// Get Recent Views by User
-
-
-// Update Recent View
 
 // Delete Recent View
 exports.deleteRecentView = async (req, res) => {

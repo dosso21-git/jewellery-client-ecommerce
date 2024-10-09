@@ -8,31 +8,33 @@ const cartModel = require("../models/cartModel");
 exports.createOrder = async (req, res) => {
   try {
     // Step 1: Retrieve user from the request (assuming user info is attached via middleware like JWT)
-    const user = req.user;
+    const user = req.body.userId;
+
+    console.log("gjhkjhkjhk",user)
 
     // Step 2: Get the cart items for the user
-    const cart = await cartModel.findOne({ user: user._id });
+    const cart = await cartModel.findOne({ userId : req.body.userId});
 
+    console.log(cart)
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: 'Cart is empty' });
     }
 
     // Step 3: Get the discounted price and discount type from the request body
-    const { discountedPrice, discountType } = req.body;
+    const { discountedprice, discount_type } = req.body;
 
-    if (!discountedPrice || !discountType) {
+    if (!discountedprice || !discount_type) {
       return res.status(400).json({ message: 'Discounted price and type are required' });
     }
 
     // Step 4: Create a new order with cart items and discounted info
     const order = new Order({
-      user: user._id,                 // User ID
-      items: cart.items,              // Cart items
-      totalAmount: cart.totalPrice,   // Total price before discount
-      discountedPrice,                // Discounted price
-      discountType,                   // Discount type (e.g., percentage or flat)
-      status: 'Pending',              // Order status (can be modified as needed)
-      createdAt: new Date()           // Timestamp for when the order was created
+      userId: req.body.userId,         
+      items: cart.items,     
+      totalAmount: cart.totalPrice,
+      discountedprice,           
+      discount_type,                 
+      createdAt: new Date()
     });
 
     // Step 5: Save the order
@@ -50,37 +52,31 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.getAllOrders = async (req, res) => {
-  try {
-    const orders = await Order.find()
-      .populate("userId")
-      .populate("items.productId");
-    return res.status(200).json({ orders });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error fetching orders", error: error.message });
-  }
-};
 
-exports.getOrderById = async (req, res) => {
+exports.getUserOrders = async (req, res) => {
   try {
-    const orderId = req.params.id;
-    const order = await Order.findById(orderId)
-      .populate("userId")
-      .populate("items.productId");
+    // Step 1: Retrieve user from the request (assuming user info is attached via middleware like JWT)
+    const userId = req.body.userId;
 
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+    console.log("Logged-in User ID:", userId);
+
+    // Step 2: Find all orders associated with the logged-in user
+    const orders = await Order.find({ userId });
+
+    // Step 3: Check if the user has any orders
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: 'No orders found for this user' });
     }
 
-    return res.status(200).json({ order });
+    // Step 4: Send response with all orders
+    return res.status(200).json({ message: 'Orders retrieved successfully', orders });
+    
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error fetching order", error: error.message });
+    console.error('Error fetching user orders:', error);
+    return res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Update an order by ID
 exports.updateOrder = async (req, res) => {

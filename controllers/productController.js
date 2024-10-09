@@ -13,7 +13,6 @@ const createProduct = async (req, res) => {
     }
 
     const pictureUrls = req.files.map((file) => file.path);
-
     const newProduct = new Product({
       title: req.body.title,
       description: req.body.description,
@@ -24,7 +23,6 @@ const createProduct = async (req, res) => {
     });
 
     await newProduct.save();
-
     return res.status(201).json({
       message: "Product created successfully",
     });
@@ -61,31 +59,23 @@ const getProductById = async (req, res) => {
     }
 
     console.log(product);
-
-    //save receent view activity for this user
-    //if this user is logged in then update the activity
-
     const token = req.headers.authorization?.split(" ")[1];
 
     console.log(token);
 
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const userId = decoded.id; // Assuming the token contains user id as 'id'
+      const userId = decoded.id;
 
       const productId = id;
-
-      // Check if a recent view already exists for this user and product
       var recentView = await RecentView.findOne({
         productId,
         visitedby: userId,
       });
       console.log(recentView);
       if (recentView) {
-        // If found, increment the count by 1
         recentView.count += 1;
       } else {
-        // If not found, create a new recent view
         recentView = new RecentView({
           productId,
           visitedby: userId,
@@ -177,11 +167,9 @@ const deleteProduct = async (req, res) => {
 
 const getMostSellingProducts = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
-
   try {
     const products = await Product.find().sort({ sold: -1 }).limit(limit);
-
-        return res.status(200).json({data:products});
+    return res.status(200).json({data:products});
     } catch (error) {
         return res.status(500).json({ message: "Server error", error });
     }
@@ -189,7 +177,6 @@ const getMostSellingProducts = async (req, res) => {
 
 const deleteProductPicture = async (req, res) => {
   const { productId, pictureIndex } = req.params;
-
   try {
     const product = await Product.findById(productId);
     if (!product) {

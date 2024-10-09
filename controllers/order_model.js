@@ -7,44 +7,30 @@ exports.createOrder = async (req, res) => {
   try {
     const { userId } = req.user;
     console.log("dernjh", userId);
-    
     const user = await userModel.findOne(userId);
-    const { totalAmount, productId } = req.body; // Destructure productId first from req.body
+    const { totalAmount, productId } = req.body;
 
-    // Check if userId or productId are provided
     if (!userId ) {
       return res.status(400).json({ message: 'User missing' });
     }
-
-    // Find the user and product by their respective IDs
-
     const product = await productModel.findById(productId);
-
-    // Handle if user or product is not found
     if (!user || !product) {
       return res.status(404).json({ message: "User or product not found" });
     }
-
-    // Create a new order
     const newOrder = new Order({
       userId,
       totalAmount,
       productId,
     });
-
-    // Save the order to the database
     await newOrder.save();
-
-    // Return a success response with the created order
     return res.status(201).json({ message: 'Order created successfully', order: newOrder });
     
   } catch (error) {
-    // Catch any error and return an error response
+
     return res.status(500).json({ message: 'Error creating order', error: error.message });
   }
 };
 
-// Get all orders
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find().populate('userId').populate('items.productId');
@@ -54,8 +40,6 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-
-// Get a specific order by ID
 exports.getOrderById = async (req, res) => {
   try {
     const orderId = req.params.id;
@@ -86,7 +70,6 @@ exports.updateOrder = async (req, res) => {
   }
 };
 
-// Delete an order by ID
 exports.deleteOrder = async (req, res) => {
   try {
     const orderId = req.params.id;

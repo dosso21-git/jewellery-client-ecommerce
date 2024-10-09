@@ -9,6 +9,9 @@ const cloudinary = require('../config/cloudinary.js');
 const { giveRating, getTopRatedProducts } = require('../controllers/ratingController.js');
 const { getCounts } = require('../controllers/allDataController.js');
 
+
+
+
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {

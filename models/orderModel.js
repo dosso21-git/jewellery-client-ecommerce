@@ -12,6 +12,10 @@ const orderSchema = new mongoose.Schema({
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
   }],
+  shipping_estimate: { type: Number, required: true}
+,
+tax_estimate: { type: Number, required: true},
+discount : { type: Number, required: true}
 }, { timestamps: true });
 
 // Create model

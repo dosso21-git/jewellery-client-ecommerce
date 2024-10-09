@@ -181,10 +181,10 @@ const getMostSellingProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ sold: -1 }).limit(limit);
 
-    return res.status(200).json(products);
-  } catch (error) {
-    return res.status(500).json({ message: "Server error", error });
-  }
+        return res.status(200).json({data:products});
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", error });
+    }
 };
 
 const deleteProductPicture = async (req, res) => {

@@ -91,18 +91,18 @@ const getTopRatedProducts = async (req, res) => {
 
     topRatedProducts.sort((a, b) => b.totalrating - a.totalrating);
 
-    res.status(200).json({
-      success: true,
-      message: "Top-rated products fetched successfully",
-      products: topRatedProducts,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch top-rated products",
-      error: error.message,
-    });
-  }
+        res.status(200).json({
+            success: true,
+            message: "Top-rated products fetched successfully",
+            data: topRatedProducts,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch top-rated products",
+            error: error.message,
+        });
+    }
 };
 
 module.exports = { giveRating, getTopRatedProducts };

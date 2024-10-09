@@ -3,7 +3,8 @@ const User = require("../models/userModel");
 const UserIP = require("../models/userIpModel");
 
 const protect = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers.authorization
+  console.log('auth heaeder',authHeader)
   if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.split(" ")[1];
     try {

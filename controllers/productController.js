@@ -1,6 +1,8 @@
 const Product = require("../models/productModel");
 const cloudinary = require("../config/cloudinary")
-const PopularProduct = require("../models/popularProductModel")
+const PopularProduct = require("../models/popularProductModel");
+const jwt = require('jsonwebtoken');
+const RecentView = require("../models/recentViewModel");
 
 const createProduct = async (req, res) => {
     try {
@@ -57,6 +59,44 @@ const getProductById = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
+
+        console.log(product);
+
+        //save receent view activity for this user 
+        //if this user is logged in then update the activity
+
+        const token = req.headers.authorization?.split(' ')[1];
+
+        console.log(token)
+
+        if (token) {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id; // Assuming the token contains user id as 'id'
+
+        const productId = id;
+
+        // Check if a recent view already exists for this user and product
+        var recentView = await RecentView.findOne({ productId, visitedby: userId });
+   console.log(recentView)
+        if (recentView) {
+            // If found, increment the count by 1
+            recentView.count += 1;
+        } else {
+            // If not found, create a new recent view
+            recentView = new RecentView({
+                productId,
+                visitedby: userId,
+                count: 1,
+            });
+
+            console.log(recentView)
+
+        }
+
+        // Save the recent view (whether updated or new)
+        await recentView.save();
+
+      }
 
         res.status(200).json(product);
     } catch (error) {

@@ -40,8 +40,6 @@ router.get("/product/toprated", getTopRatedProducts);
 router.get('/product/popular/:productId', trackProductView);
 router.get('/product/getpopularproduct', getPopularProducts);
 
-
-
 // All Data Counts
 router.get('/admin/getdata', protect, getCounts)
 

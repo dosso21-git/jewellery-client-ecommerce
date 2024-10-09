@@ -7,7 +7,6 @@ const router = express.Router();
 // Order routes
 router.post('/orders/create', protect, createOrder);
 router.get('/orders/getall',protect, getUserOrders);
-router.put('/orders/update/:id',protect, updateOrder);
-router.delete('/orders/delete/:id',protect, deleteOrder);
+
 
 module.exports = router;

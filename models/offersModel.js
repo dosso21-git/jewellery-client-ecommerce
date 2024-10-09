@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 var offerSchema = new mongoose.Schema(
     {
-        offer: {
+        title: {
             type: String,
             required: true
         },
-        discount: {
+        offer: {
             type: Number,
-            required: true,
+            required: true
         },
         discountType: {
             type: String,

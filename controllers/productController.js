@@ -181,24 +181,19 @@ const deleteProductPicture = async (req, res) => {
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
-
     if (pictureIndex < 0 || pictureIndex >= product.images.length) {
       return res
         .status(400)
         .json({ error: { pictureError: "Invalid picture index" } });
     }
-
     const imageUrl = product.images[pictureIndex];
     console.log(`Image URL: ${imageUrl}`);
-
     const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
     console.log(
       `Attempting to delete Cloudinary image with publicId: "${publicId}"`
     );
-
     const cloudinaryResponse = await cloudinary.uploader.destroy(publicId);
     console.log(`Cloudinary Response:`, cloudinaryResponse);
-
     if (cloudinaryResponse.result !== "ok") {
       const resources = await cloudinary.api.resources({
         type: "upload",
@@ -206,16 +201,13 @@ const deleteProductPicture = async (req, res) => {
         max_results: 500,
       });
       console.log("Existing Resources:", resources);
-
       return res.status(500).json({
         error: "Failed to delete image from Cloudinary",
         details: cloudinaryResponse,
       });
     }
-
     product.images.splice(pictureIndex, 1);
     await product.save();
-
     return res.status(200).json({
       message: "Picture deleted successfully",
     });
@@ -229,13 +221,11 @@ const getProductsByCategory = async (req, res) => {
   try {
     const category = req.params.category;
     const products = await Product.find({ category });
-
     if (!products || products.length === 0) {
       return res.status(404).json({
         message: "No products found in this category",
       });
     }
-
     res.status(200).json({
       success: true,
       products,
@@ -251,13 +241,11 @@ const getProductsByCategory = async (req, res) => {
 
 const trackProductView = async (req, res) => {
   const { productId } = req.params;
-
   try {
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-
     let popularProduct = await PopularProduct.findOne({ productId });
     if (!popularProduct) {
       popularProduct = new PopularProduct({
@@ -267,9 +255,7 @@ const trackProductView = async (req, res) => {
     } else {
       popularProduct.popularityScore += 1;
     }
-
     await popularProduct.save();
-
     return res.status(200).json({
       message: "Product view tracked successfully",
       popularityScore: popularProduct.popularityScore,
@@ -285,11 +271,9 @@ const getPopularProducts = async (req, res) => {
     const popularProducts = await PopularProduct.find({})
       .sort({ popularityScore: -1 })
       .populate("productId", "title description price images category");
-
     if (!popularProducts || popularProducts.length === 0) {
       return res.status(404).json({ message: "No popular products found" });
     }
-
     return res.status(200).json({
       message: "Popular products retrieved successfully",
       popularProducts,
@@ -299,7 +283,6 @@ const getPopularProducts = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 module.exports = {
   createProduct,
   getAllProducts,
@@ -311,4 +294,4 @@ module.exports = {
   deleteProductPicture,
   trackProductView,
   getPopularProducts,
-};
+}; 

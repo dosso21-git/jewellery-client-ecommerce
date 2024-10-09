@@ -8,6 +8,7 @@ const recent_viewRoutes = require('./routes/recent_view')
 const order_modelRoutes = require('./routes/order_model')
 const offerRoutes = require('./routes/offerRoutes')
 const cartroutes = require('./routes/cart')
+const wishlistRoutes = require('./routes/wish_listRoute')
 dotenv.config();
 connectDB();
 
@@ -23,6 +24,7 @@ app.use('/api/user', recent_viewRoutes)
 app.use('/api/user', order_modelRoutes)
 app.use('/api/user', offerRoutes)
 app.use('/api/user',cartroutes)
+app.use('/api/user',wishlistRoutes)
 app.use((req, res) => {
     res.status(404).json({ message: 'You are hitting a wrong API URL' });
 });

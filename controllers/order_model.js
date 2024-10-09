@@ -1,17 +1,46 @@
+
 const Order = require("../models/order_model");
+const productModel = require("../models/productModel");
+const userModel = require("../models/userModel");
 // Create a new order
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, totalAmount, items } = req.body;
+    const { userId } = req.user;
+    console.log("dernjh", userId);
+    
+    const user = await userModel.findOne(userId);
+    const { totalAmount, productId } = req.body; // Destructure productId first from req.body
+
+    // Check if userId or productId are provided
+    if (!userId ) {
+      return res.status(400).json({ message: 'User missing' });
+    }
+
+    // Find the user and product by their respective IDs
+
+    const product = await productModel.findById(productId);
+
+    // Handle if user or product is not found
+    if (!user || !product) {
+      return res.status(404).json({ message: "User or product not found" });
+    }
+
+    // Create a new order
     const newOrder = new Order({
       userId,
       totalAmount,
-      items,
+      productId,
     });
+
+    // Save the order to the database
     await newOrder.save();
+
+    // Return a success response with the created order
     return res.status(201).json({ message: 'Order created successfully', order: newOrder });
+    
   } catch (error) {
-    return res.status(400).json({ message: 'Error creating order', error: error.message });
+    // Catch any error and return an error response
+    return res.status(500).json({ message: 'Error creating order', error: error.message });
   }
 };
 
@@ -24,6 +53,7 @@ exports.getAllOrders = async (req, res) => {
     return res.status(500).json({ message: 'Error fetching orders', error: error.message });
   }
 };
+
 
 // Get a specific order by ID
 exports.getOrderById = async (req, res) => {

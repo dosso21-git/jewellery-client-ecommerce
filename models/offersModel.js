@@ -8,6 +8,9 @@ var offerSchema = new mongoose.Schema(
         discount: {
             type: Number,
             enum: ['Coupon', 'Offers']
+        },
+        prodCategory:{
+            type: mongoose.Schema.Types.ObjectId
         }
     },
     { timestamps: true }

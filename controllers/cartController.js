@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const productModel = require("../models/productModel");
 const cartModel = require("../models/cartModel");
 
-
 // Add item to cart
 exports.addToCart = async (req, res) => {
   try {
@@ -14,7 +13,7 @@ exports.addToCart = async (req, res) => {
         message: "No token provided",
       });
     }
-
+y
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
     const { productId, quantity } = req.body;
@@ -178,9 +177,6 @@ exports.checkout = async (req, res) => {
     let cart = await cartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
-    // Handle checkout logic (e.g., payment, order creation)
-
-    // After successful checkout, clear the cart
     cart.items = [];
     cart.totalItems = 0;
     cart.totalPrice = 0;
@@ -191,3 +187,35 @@ exports.checkout = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+// Get all items in the cart for the logged-in user
+exports.getCartItems = async (req, res) => {
+    try {
+      const token = req.headers.authorization?.split(" ")[1];
+  
+      if (!token) {
+        return res.status(401).json({
+          success: false,
+          message: "No token provided",
+        });
+      }
+  
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.id;
+  
+      const cart = await cartModel.findOne({ userId });
+  
+      if (!cart || cart.items.length === 0) {
+        return res.status(404).json({ message: "No items found in the cart" });
+      }
+  
+      res.status(200).json({
+        success: true,
+        items: cart.items,
+        totalItems: cart.totalItems,
+        totalPrice: cart.totalPrice,
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Server error", error: err.message });
+    }
+  };
+  

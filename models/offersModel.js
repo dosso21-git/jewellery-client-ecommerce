@@ -3,14 +3,21 @@ const mongoose = require("mongoose");
 var offerSchema = new mongoose.Schema(
     {
         offer: {
-            type: String
+            type: String,
+            required: true
         },
         discount: {
             type: Number,
-            enum: ['Coupon', 'Offers']
+            required: true,
         },
-        prodCategory:{
-            type: mongoose.Schema.Types.ObjectId
+        discountType: {
+            type: String,
+            enum: ['Coupon', 'Offers'],
+            required: true,
+        },
+        prodCategory: {
+            type: String,
+            required: true,
         }
     },
     { timestamps: true }

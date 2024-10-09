@@ -1,5 +1,5 @@
 const express = require('express');
-const { createOffer, getAllOffers, getOfferById, deleteOffer, updateOffer, applyOfferToProduct } = require('../controllers/offerController');
+const { createOffer, getAllOffers, getOfferById, deleteOffer, updateOffer, applyOfferToProduct, getProductsWithOffers } = require('../controllers/offerController');
 const { protect, publicApiAccess } = require('../middleware/authMiddleware')
 
 const router = express.Router();
@@ -10,6 +10,7 @@ router.get('/offers/:id', publicApiAccess, getOfferById);
 router.put('/admin/update/offers/:id', protect, updateOffer);
 router.delete('/admin/delete/offers/:id', protect, deleteOffer);
 
-router.post('/offers/apply/:offerId', applyOfferToProduct);
+router.post('/admin/offers/apply', protect, applyOfferToProduct)
+router.get('/admin/offers/get', publicApiAccess, getProductsWithOffers);
 
 module.exports = router;

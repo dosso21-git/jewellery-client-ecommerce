@@ -3,7 +3,6 @@ const { createUser, loginUserCtrl, updatedUser, deleteaUser, getallUser, getaUse
 const { protect, getIpAddress, publicApiAccess } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-
 router.post('/register', publicApiAccess, createUser);
 router.post('/login', publicApiAccess, loginUserCtrl);
 router.get('/getalluser', publicApiAccess, protect, getallUser)

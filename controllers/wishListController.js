@@ -4,7 +4,6 @@ const userModel = require("../models/userModel");
 // Add product to wishlist
 const addToWishlist = async (req, res) => {
   const { userId } = req.user;
-
   const { productId } = req.body;
   try {
     const user = await userModel.findOne(userId);
@@ -34,7 +33,6 @@ const removeFromWishlist = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     user.wishlist = user.wishlist.filter(
       (item) => item.toString() !== productId
     );

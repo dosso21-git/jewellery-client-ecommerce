@@ -1,93 +1,115 @@
 const Order = require("../models/orderModel");
 const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
+const cartModel = require("../models/cartModel");
+
 
 
 exports.createOrder = async (req, res) => {
   try {
-    const userId = req.user;
+    // Step 1: Retrieve user from the request (assuming user info is attached via middleware like JWT)
+    const user = req.body.userId;
 
-    const user = await userModel.findOne(userId);
-    const { totalAmount, productId } = req.body;
+    console.log("gjhkjhkjhk",user)
 
-    if (!userId) {
-      return res.status(400).json({ message: 'User missing' });
+    // Step 2: Get the cart items for the user
+    const cart = await cartModel.findOne({ userId : req.body.userId});
+
+    console.log(cart)
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({ message: 'Cart is empty' });
     }
 
+    // Step 3: Get the discounted price and discount type from the request body
+    const { discountedprice, discount_type } = req.body;
 
-    const product = await productModel.findById(productId);
-
-    if (!user || !product) {
-      return res.status(404).json({ message: "User or product not found" });
+    if (!discountedprice || !discount_type) {
+      return res.status(400).json({ message: 'Discounted price and type are required' });
     }
 
-    const newOrder = new Order({
-      userId,
-      totalAmount,
-      productId,
+    // Step 4: Create a new order with cart items and discounted info
+    const order = new Order({
+      userId: req.body.userId,         
+      items: cart.items,     
+      totalAmount: cart.totalPrice,
+      discountedprice,           
+      discount_type,                 
+      createdAt: new Date()
     });
 
-    await newOrder.save();
+    // Step 5: Save the order
+    await order.save();
 
-    return res.status(201).json({ message: 'Order created successfully', order: newOrder });
+    // Step 6: Optionally, clear the cart after order creation
+    await cartModel.findOneAndUpdate({ user: user._id }, { items: [] });
+
+    // Step 7: Send response
+    return res.status(201).json({ message: 'Order created successfully', order });
 
   } catch (error) {
-    return res.status(500).json({ message: 'Error creating order', error: error.message });
-  }
-};
-
-// Get all orders
-exports.getAllOrders = async (req, res) => {
-  try {
-    const orders = await Order.find().populate('userId').populate('items.productId');
-    return res.status(200).json({ orders });
-  } catch (error) {
-    return res.status(500).json({ message: 'Error fetching orders', error: error.message });
+    console.error('Error creating order:', error);
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
 
-// Get a specific order by ID
-exports.getOrderById = async (req, res) => {
+exports.getUserOrders = async (req, res) => {
   try {
-    const orderId = req.params.id;
-    const order = await Order.findById(orderId).populate('userId').populate('items.productId');
+    // Step 1: Retrieve user from the request (assuming user info is attached via middleware like JWT)
+    const userId = req.body.userId;
 
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+    console.log("Logged-in User ID:", userId);
+
+    // Step 2: Find all orders associated with the logged-in user
+    const orders = await Order.find({ userId });
+
+    // Step 3: Check if the user has any orders
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: 'No orders found for this user' });
     }
 
-    return res.status(200).json({ order });
+    // Step 4: Send response with all orders
+    return res.status(200).json({ message: 'Orders retrieved successfully', orders });
+    
   } catch (error) {
-    return res.status(500).json({ message: 'Error fetching order', error: error.message });
+    console.error('Error fetching user orders:', error);
+    return res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Update an order by ID
 exports.updateOrder = async (req, res) => {
   try {
     const orderId = req.params.id;
     const updates = req.body;
-    const updatedOrder = await Order.findByIdAndUpdate(orderId, updates, { new: true });
+    const updatedOrder = await Order.findByIdAndUpdate(orderId, updates, {
+      new: true,
+    });
     if (!updatedOrder) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "Order not found" });
     }
-    return res.status(200).json({ message: 'Order updated successfully', order: updatedOrder });
+    return res
+      .status(200)
+      .json({ message: "Order updated successfully", order: updatedOrder });
   } catch (error) {
-    return res.status(400).json({ message: 'Error updating order', error: error.message });
+    return res
+      .status(400)
+      .json({ message: "Error updating order", error: error.message });
   }
 };
 
-// Delete an order by ID
 exports.deleteOrder = async (req, res) => {
   try {
     const orderId = req.params.id;
     const deletedOrder = await Order.findByIdAndDelete(orderId);
     if (!deletedOrder) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "Order not found" });
     }
-    return res.status(200).json({ message: 'Order deleted successfully' });
+    return res.status(200).json({ message: "Order deleted successfully" });
   } catch (error) {
-    return res.status(500).json({ message: 'Error deleting order', error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Error deleting order", error: error.message });
   }
 };

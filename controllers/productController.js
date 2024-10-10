@@ -3,6 +3,12 @@ const cloudinary = require("../config/cloudinary");
 const PopularProduct = require("../models/popularProductModel");
 const jwt = require("jsonwebtoken");
 const RecentView = require("../models/recentViewModel");
+const Order = require("../models/orderModel");
+const Cart = require("../models/cartModel");
+const Wishlist = require("../models/wishListModel");
+const { default: mongoose } = require("mongoose");
+const productModel = require("../models/productModel");
+const Rating = require("../models/ratingModel");
 
 const createProduct = async (req, res) => {
   try {
@@ -133,13 +139,51 @@ const updateProduct = async (req, res) => {
   }
 };
 
+// const deleteProduct = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const deletedProduct = await Product.findById(id);
+//     if (!deletedProduct) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+//     const imagePaths = deletedProduct.images;
+//     for (const imageUrl of imagePaths) {
+//       const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
+//       await cloudinary.uploader.destroy(publicId, (error, result) => {
+//         if (error) {
+//           console.error(
+//             `Failed to delete image ${publicId} from Cloudinary:`,
+//             error
+//           );
+//         } else {
+//           console.log(
+//             `Image ${publicId} deleted successfully from Cloudinary.`
+//           );
+//         }
+//       });
+//     }
+//     await Product.findByIdAndDelete(id);
+//     res.status(200).json({ message: "Product deleted successfully" });
+//   } catch (error) {
+//     console.error("Error deleting product:", error);
+//     res.status(500).json({ message: "Error deleting product", error });
+//   }
+// };
+
 const deleteProduct = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { id } = req.params;
-    const deletedProduct = await Product.findById(id);
+
+    // Find the product in the Product model
+    const deletedProduct = await productModel.findById(id).session(session);
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
+
+    // Delete associated images from Cloudinary
     const imagePaths = deletedProduct.images;
     for (const imageUrl of imagePaths) {
       const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
@@ -156,14 +200,55 @@ const deleteProduct = async (req, res) => {
         }
       });
     }
-    await Product.findByIdAndDelete(id);
-    res.status(200).json({ message: "Product deleted successfully" });
+
+    // Delete product from the Product model
+    await productModel.findByIdAndDelete(id).session(session);
+
+    // Delete product from associated models
+    await Order.updateMany(
+      { "items.productId": id },
+      { $pull: { items: { productId: id } } }
+    ).session(session);
+
+    await Cart.updateMany(
+      { "items.productId": id },
+      { $pull: { items: { productId: id } } }
+    ).session(session);
+
+    await Wishlist.updateMany(
+      { products: id },
+      { $pull: { products: id } }
+    ).session(session);
+  
+    await Rating.updateMany(
+      { product: id },
+      { $pull: { product: id } }
+    ).session(session);
+
+    await RecentView.updateMany(
+      { productId: id },
+      { $pull: { productId: id } }
+    ).session(session);
+
+    await PopularProduct.updateMany(
+      { productId: id },
+      { $pull: { productId: id } }
+    ).session(session);
+
+    // Commit the transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(200).json({ message: "Product and associated data deleted successfully" });
   } catch (error) {
+    // Rollback the transaction in case of any error
+    await session.abortTransaction();
+    session.endSession();
+
     console.error("Error deleting product:", error);
     res.status(500).json({ message: "Error deleting product", error });
   }
 };
-
 const getMostSellingProducts = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   try {

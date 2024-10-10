@@ -576,7 +576,9 @@ const Products = () => {
           ) : error ? (
             <p className="text-center text-red-500">{error}</p> // Show error message
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5">
+            <div 
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5"
+            >
               {/* Card section */}
               {productsData.length > 0 && productsData.map((data) => (
                 <div

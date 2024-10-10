@@ -41,17 +41,21 @@ const AllCategoryProducts = () => {
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div 
+        // className="grid grid-cols-2 md:grid-cols-4 gap-5 place-items-center"
+           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 "
+        >
           {productsData.map((product,index) => (
             <div
               key={index+1}
-              className="cursor-pointer p-4 rounded-2xl bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-primary hover:text-white relative shadow-xl duration-300 group max-w-[300px]"
+              className=" h-[350px] space-y-3 cursor-pointer p-4 rounded-2xl bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-primary hover:text-white relative shadow-xl duration-300 group max-w-[300px]"
               onClick={() => navigate(`/product-details/${product._id}`)} // Navigate to product details
             >
               <img
                 src={product.images[0]} // Use the first image
                 alt={product.title}
-                className="rounded-lg"
+                // className="rounded-lg"
+                 className="object-cover rounded-md h-[150px] w-[200px]"
               />
               <h2 className="text-lg font-semibold mb-2">{product.title}</h2>
               <p className="text-sm text-purple-500">{product.description}</p>

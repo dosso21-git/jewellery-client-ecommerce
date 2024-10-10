@@ -1163,7 +1163,7 @@ const ProductDetails = () => {
       });
       console.log("result", result);
       if (result.data) {
-        setMessage(result.data.message);
+        setMessage("product added to cart successfully");
         setShowAlert(true);
       }
     } catch (err) {

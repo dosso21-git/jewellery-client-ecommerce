@@ -167,7 +167,7 @@ const deleteProduct = async (req, res) => {
 const getMostSellingProducts = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   try {
-    const products = await Product.find().sort({ sold: -1 }).limit(limit);
+    const products = await Product.find().sort({ sold: -1 }).limit(limit).populate('offer');
     return res.status(200).json({ data: products });
   } catch (error) {
     return res.status(500).json({ message: "Server error", error });

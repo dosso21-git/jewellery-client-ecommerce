@@ -883,7 +883,7 @@ const CartPage = () => {
   const [discount, setDiscount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null); // Added for error handling
-const [type,setTpye] = useState('coupon');
+  const [type, setTpye] = useState("coupon");
   const getAllCartData = async () => {
     try {
       const response = await axios.post("/cart/get");
@@ -938,7 +938,7 @@ const [type,setTpye] = useState('coupon');
     if (couponCode === "SAVE10") {
       setDiscount(10);
       setShowPopup(true);
-      setTpye('coupon')
+      setTpye("coupon");
       setTimeout(() => setShowPopup(false), 2000);
     } else if (couponCode === "SAVE20") {
       setDiscount(20);
@@ -948,20 +948,19 @@ const [type,setTpye] = useState('coupon');
     }
   };
 
-  const handleOrder = async (type,orderTotal) => {
-   
+  const handleOrder = async (type, orderTotal) => {
     try {
       const response = await axios.post("/orders/create", {
         discountedprice: subtotal * (discount / 100),
         discount_type: type,
         tax_estimate: taxEstimate,
-        shipping_estimate:shippingEstimate,
+        shipping_estimate: shippingEstimate,
         items: cartData.items,
         totalAmount: orderTotal,
       });
       if (response?.data?.status) {
-        console.log(response.message)
-        getAllCartData()
+        console.log(response.message);
+        getAllCartData();
         alert(response.data.message);
         setCartData(null); // Clear cart after successful order`
       }
@@ -1079,7 +1078,7 @@ const [type,setTpye] = useState('coupon');
           </div>
           {errorMessage && <p className="text-red-500">{errorMessage}</p>}
           <button
-            onClick={()=>handleOrder(type,orderTotal)}
+            onClick={() => handleOrder(type, orderTotal)}
             className="w-full bg-indigo-600 text-white p-2 sm:p-3 rounded-lg font-semibold hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
           >
             Checkout

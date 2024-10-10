@@ -521,7 +521,6 @@ const Home = () => {
           <CategoryProducts />
           <Subscribe />
           <Testimonials />
-          <Footer />
           <Popup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
         </>
       )}

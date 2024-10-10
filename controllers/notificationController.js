@@ -33,9 +33,11 @@ const sendGlobalNotification = async (req, res) => {
 
 const markNotificationAsRead = async (req, res) => {
     try {
-        const { userId, notificationId } = req.params;
+        const userId = req.user
+        const { notificationId } = req.params;
 
         const user = await User.findById(userId);
+        console.log("User:", user);
 
         const notification = user.notifications.find(n => n.notificationId.toString() === notificationId);
 

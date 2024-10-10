@@ -5,6 +5,7 @@ const userModel = require("../models/userModel");
 const addToWishlist = async (req, res) => {
   const { userId } = req.user;
   const { productId } = req.body;
+  console.log("pankaj",productId)
   try {
     const user = await userModel.findOne(userId);
     const product = await productModel.findById(productId);
@@ -17,7 +18,7 @@ const addToWishlist = async (req, res) => {
       await user.save();
       return res.status(200).json({ message: "Product added to wishlist" });
     } else {
-      return res.status(400).json({ message: "Product already in wishlist" });
+      return res.status(200).json({ message: "Product already in wishlist" });
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -1,18 +1,20 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const path = require('path')
+const cloudinary = require('cloudinary').v2;
 const User = require("../models/userModel");
+const Address = require('../models/addressModel')
 // const Product = require("../models/productModel");
 // const Cart = require("../models/cartModel");
 // const Coupon = require("../models/couponModel");
 // const Order = require("../models/orderModel");
 const { generateToken } = require("../config/jwtToken");
-const { use } = require("bcrypt/promises");
 // const sendEmail = require("./emailCtrl");
 
 
 
 const createUser = async (req, res) => {
-  const { email, firstname, lastname, mobile, password, role } = req.body; // Accept role from the request body
+  const { email, firstname, lastname, mobile, password, role } = req.body;
   const saltRounds = 10;
 
   try {
@@ -134,6 +136,42 @@ const loginUserCtrl = async (req, res) => {
   }
 };
 
+// const updatedUser = async (req, res) => {
+//   try {
+//     const userId = req.user;
+
+//     const existingUser = await User.findById(userId);
+//     if (!existingUser) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     const profilePicUrl = req.file ? req.file.path : existingUser.profilepic;
+
+//     const updatedUser = await User.findByIdAndUpdate(
+//       userId,
+//       {
+//         firstname: req.body.firstname || existingUser.firstname,
+//         lastname: req.body.lastname || existingUser.lastname,
+//         email: req.body.email || existingUser.email,
+//         mobile: req.body.mobile || existingUser.mobile,
+//         profilepic: profilePicUrl,
+//       },
+//       { new: true }
+//     );
+
+//     if (updatedUser) {
+//       return res.status(200).json({
+//         message: 'User updated successfully',
+//         user: updatedUser,
+//       });
+//     } else {
+//       return res.status(400).json({ error: 'Failed to update user' });
+//     }
+//   } catch (error) {
+//     return res.status(500).json({ error: 'Server error', details: error.message });
+//   }
+// };
+
 const updatedUser = async (req, res) => {
   try {
     const userId = req.user;
@@ -143,6 +181,18 @@ const updatedUser = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    let profilePicUrl = existingUser.profilepic;
+
+    if (req.file) {
+      if (existingUser.profilepic) {
+        const publicId = existingUser.profilepic.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+      }
+
+      const uploadResponse = await cloudinary.uploader.upload(req.file.path);
+      profilePicUrl = uploadResponse.secure_url;
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
@@ -150,6 +200,7 @@ const updatedUser = async (req, res) => {
         lastname: req.body.lastname || existingUser.lastname,
         email: req.body.email || existingUser.email,
         mobile: req.body.mobile || existingUser.mobile,
+        profilepic: profilePicUrl,
       },
       { new: true }
     );
@@ -235,24 +286,88 @@ const getaUser = async (req, res) => {
 };
 
 
-// save user Address
-const saveAddress = async (req, res, next) => {
-  const { _id } = req.user;
-  validateMongoId(_id);
-
+const addAddress = async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      _id,
-      {
-        address: req?.body?.address,
-      },
-      {
-        new: true,
-      }
-    );
-    res.json(updatedUser);
+    const userId = req.user;
+
+    const { addressLine1, addressLine2, city, state, country, postalCode, phone, isDefault } = req.body;
+
+    const newAddress = new Address({
+      user: userId,
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      country,
+      postalCode,
+      phone,
+      isDefault: isDefault || false,
+    });
+
+    const savedAddress = await newAddress.save();
+
+    await User.findByIdAndUpdate(userId, {
+      $push: { address: savedAddress._id },
+    });
+
+    res.status(201).json({ message: 'Address added successfully', address: savedAddress });
   } catch (error) {
-    throw new Error(error);
+    res.status(500).json({ error: 'Failed to add address', details: error.message });
+  }
+};
+
+const getAllAddresses = async (req, res) => {
+  try {
+    const userId = req.user;
+
+    const addresses = await Address.find({ user: userId });
+
+    res.status(200).json({ message: 'Addresses fetched successfully', addresses });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch addresses', details: error.message });
+  }
+};
+
+const updateAddress = async (req, res) => {
+  try {
+    const addressId = req.params.id;
+    const userId = req.user;
+
+    const updatedAddress = await Address.findOneAndUpdate(
+      { _id: addressId, user: userId },
+      req.body,
+      { new: true }
+    );
+
+    if (!updatedAddress) {
+      return res.status(404).json({ error: 'Address not found or does not belong to user' });
+    }
+
+    res.status(200).json({ message: 'Address updated successfully', address: updatedAddress });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update address', details: error.message });
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  try {
+    const addressId = req.params.id;
+    const userId = req.user;
+
+    const deletedAddress = await Address.findOneAndDelete({ _id: addressId, user: userId });
+
+    if (!deletedAddress) {
+      return res.status(404).json({ error: 'Address not found or does not belong to user' });
+    }
+
+    // Remove the address from the user's address list
+    await User.findByIdAndUpdate(userId, {
+      $pull: { address: addressId },
+    });
+
+    res.status(200).json({ message: 'Address deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete address', details: error.message });
   }
 };
 
@@ -581,7 +696,8 @@ module.exports = {
   getallUser,
   blockUser,
   unblockUser,
-  // saveAddress,
+  addAddress,
+  getAllAddresses, updateAddress, deleteAddress
   // handleRefreshToken,
   // logout,
   // updatePassword,

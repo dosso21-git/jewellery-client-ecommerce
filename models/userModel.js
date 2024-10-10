@@ -19,6 +19,9 @@ var userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    profilepic: {
+        type: String
+    },
     password: {
         type: String,
         required: true,

@@ -7,12 +7,9 @@ import axios from "axios";
 
 const BestSellingProductsPage = () => {
   const navigate = useNavigate(); // Use the useNavigate hook
-
   const [ProductsData, setProductsData] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const handleProductClick = (id) => {
     navigate(`/product-details/${id}`); // Redirect to the product details page
   };
@@ -89,7 +86,6 @@ const BestSellingProductsPage = () => {
               ))}
             </div>
           )}
-          {/* View All Button */}
           <div 
             className="flex justify-center"
             onClick={() => navigate('/all-products')}

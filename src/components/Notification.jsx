@@ -19,6 +19,7 @@ export default function Notification() {
       const response = await axios.get('/getallnotification');
       if (response.data.data) {
         setNotifications(response.data.data); // Set notifications from API response
+        console.log(response.data.data,"asjidikdasjks")
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);

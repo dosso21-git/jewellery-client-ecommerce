@@ -1185,7 +1185,6 @@ const ProductDetails = () => {
       navigate('/login');
     } else {
       addToCartProduct(productId,quantity)
-      setShowAlert(true);
       // navigate('/cart');
     }
   };

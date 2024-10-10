@@ -143,6 +143,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import LoginPage from "./LoginPage";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import ConfirmBoxPopup from "../components/Popup/ConfirmBoxPopup";
 
 const AccountSettings = () => {
   const [activeSection, setActiveSection] = useState("profile");
@@ -166,10 +167,28 @@ const AccountSettings = () => {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleConfirm = () => {
+    console.log('confirm');
     Cookies.remove('loginToken'); // Remove token from cookies
     navigate('/');
+    setIsModalOpen(false);
   };
+
+  const handleCancel = () => {
+    console.log('Cancelled');
+    setIsModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    setIsModalOpen(true);
+    // Cookies.remove('loginToken'); // Remove token from cookies
+    // navigate('/');
+  };
+
 
 
   const handleInputChange = (e) => {
@@ -318,7 +337,21 @@ const AccountSettings = () => {
   };
 
   return (
+    <>
+      {isModalOpen && (
+       <ConfirmBoxPopup 
+       onDeactivate={handleConfirm} 
+       onCancel={handleCancel} 
+       title="Logout ?" 
+       description="Are you sure you want to logout."
+     />     
+      )}
     <div className="flex h-screen mt-36 bg-gray-50 dark:bg-gray-900">
+
+      {/* confirm box */}
+      <div>
+    
+    </div>
   {/* Sidebar Toggle Button for Mobile */}
   <button
     className="absolute top-36 left-4 md:hidden p-2 bg-gray-200 rounded"
@@ -382,6 +415,7 @@ const AccountSettings = () => {
     {renderContent()}
   </div>
 </div>
+</>
 
 
   );

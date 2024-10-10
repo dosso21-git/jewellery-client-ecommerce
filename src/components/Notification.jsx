@@ -191,6 +191,7 @@ import React, { useState, useEffect } from "react";
 import { format, isToday, isYesterday } from "date-fns";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { IoMdNotifications } from "react-icons/io";
+import axios from "axios";
 
 const notificationsData = [
   { id: 1, message: "Check out our new rings!", date: new Date(), type: "rings" },
@@ -216,7 +217,15 @@ export default function Notification() {
 
   useEffect(() => {
     setNotifications(notificationsData); // Replace with actual API response
+    getAllNotifications();
   }, []);
+
+
+  const getAllNotifications = async()=>{
+      const response = axios.get('/getallnotification');
+      console.log('response for all notifications ',response)
+  }
+
 
   const toggleNotification = () => {
     setIsOpen(!isOpen);
@@ -227,6 +236,10 @@ export default function Notification() {
     navigate(`/all-category/${type}`);
     setIsOpen(false); // Close the notification panel after navigation
   };
+
+
+
+
 
   const groupNotificationsByDate = (notifications) => {
     const grouped = {

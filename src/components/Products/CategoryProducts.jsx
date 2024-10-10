@@ -177,12 +177,16 @@ const CategoryProducts = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-6">All Categories</h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div 
+      // className="grid grid-cols-2 md:grid-cols-4 gap-6"
+      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5"
+      
+      >
         {products.map((product) => (
           <div
             key={product._id}
             data-aos="zoom-in"
-            className="cursor-pointer p-4 rounded-2xl bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-primary hover:text-white relative shadow-xl duration-300 group max-w-[300px]"
+            className="place-items-center cursor-pointer p-4 rounded-2xl bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-primary hover:text-white relative shadow-xl duration-300 group max-w-[300px]"
             onClick={() => {
               navigationFunction(product.category); // Navigate based on product category
             }}
@@ -190,7 +194,8 @@ const CategoryProducts = () => {
             <img
               src={product.images[0]} // Use the first image from the array
               alt={product.title}
-              className="rounded-lg hover:scale-x-105"
+              // className="rounded-lg hover:scale-x-105"
+                className="object-cover rounded-md h-[150px] w-[200px]"
             />
             <h2 className="text-lg font-semibold mb-2">{product.title}</h2>
             <p className="text-sm text-purple-500">{product.description}</p>

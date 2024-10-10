@@ -40,15 +40,3 @@ router.put('/address/update/:id', protect, updateAddress);
 router.delete('/address/delete/:id', protect, deleteAddress);
 
 module.exports = router;
-
-
-// {
-//     "addressLine1": "123 Main St",
-//     "addressLine2": "Apt 4B",
-//     "city": "New York City",
-//     "state": "NY",
-//     "country": "USA",
-//     "postalCode": "10001",
-//     "phone": "1234567890",
-//     "isDefault": true
-// }

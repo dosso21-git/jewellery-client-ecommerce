@@ -21,8 +21,6 @@ const Header = () => {
           <FaBell size={20} />
         </button>
       </div>
-
-      {/* Right side */}
       <div className="flex items-center space-x-4">
         <button className="text-gray-300 hover:text-white transition-colors">
           <FaEnvelope size={20} />
@@ -32,7 +30,6 @@ const Header = () => {
         </button>
         <div className="flex items-center space-x-2">
           <FaUserCircle size={30} />
-          
         </div>
       </div>
     </header>

@@ -1,10 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaHome, FaCalendar,  FaFileAlt , FaUser, FaCog, FaArrowLeft, FaEnvelope, FaComment } from 'react-icons/fa';
-import { MdContactPhone } from "react-icons/md";
-import { HiMiniTrophy } from "react-icons/hi2";
-import { FaPhoneVolume } from "react-icons/fa6";
-import { MdGroups2 } from "react-icons/md";
+import {
+  FaHome,
+  FaCalendar,
+  FaFileAlt,
+  FaUser,
+  FaCog,
+  FaArrowLeft,
+  FaEnvelope,
+  FaComment,
+} from 'react-icons/fa';
+import { MdContactPhone } from 'react-icons/md';
+import { HiMiniTrophy } from 'react-icons/hi2';
+import { FaPhoneVolume } from 'react-icons/fa6';
+import { MdGroups2 } from 'react-icons/md';
 import Cookies from 'js-cookie';
 
 interface SidebarProps {
@@ -21,7 +30,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
 
   // Manage dropdown state for activities
@@ -67,7 +76,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const handleMenuClick = () => {
     setSidebarOpen(false);
   };
-  
+
   return (
     <aside
       ref={sidebar}
@@ -102,7 +111,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
           {/* Menu Group */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white ">MENU</h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white ">
+              MENU
+            </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* Menu Item Dashboard */}
@@ -114,32 +125,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 }`}
               >
                 <FaHome className="text-lg text-red-500" />
-                Dashboard 
+                Dashboard
               </NavLink>
 
               {/* Menu Item Calendar */}
               <li>
- 
-
- 
-
-  <NavLink
-    to="/dashboard/calendar"
-    onClick={handleMenuClick}
-    className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${
-      pathname.includes('calendar') && ''
-    }`}
-  >
-    <FaCalendar className="text-lg text-green-400" />
-    Calendar
-  </NavLink>
-
-</li>
-
-
-              {/* Menu Item Counsellor */}
-              
-              {/* Menu Item Profile */}
+                <NavLink
+                  to="/dashboard/calendar"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${
+                    pathname.includes('calendar') && ''
+                  }`}
+                >
+                  <FaCalendar className="text-lg text-green-400" />
+                  Calendar
+                </NavLink>
+              </li>
               <li>
                 <NavLink
                   to="/dashboard/profile"
@@ -153,32 +154,43 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
 
-            
               <li>
                 <NavLink
                   to="/dashboard/products"
                   onClick={handleMenuClick}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('documents') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes('documents') &&
+                    'bg-graydark dark:bg-meta-4'
                   }`}
                 >
-                  < MdGroups2 className="text-xl text-green-400" />
-                Add Products
+                  <MdGroups2 className="text-xl text-green-400" />
+                  All Products
                 </NavLink>
               </li>
-
-              
-             
+              <li>
+                <NavLink
+                  to="/dashboard/create_products"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes('documents') &&
+                    'bg-graydark dark:bg-meta-4'
+                  }`}
+                >
+                  <MdGroups2 className="text-xl text-green-400" />
+                  Add Products
+                </NavLink>
+              </li>
 
               <li>
                 <NavLink
                   to="/dashboard/performance"
                   onClick={handleMenuClick}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('settings') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes('settings') &&
+                    'bg-graydark dark:bg-meta-4'
                   }`}
                 >
-                 <HiMiniTrophy className="text-lg text-orange-400" />
+                  <HiMiniTrophy className="text-lg text-orange-400" />
                   Performance
                 </NavLink>
               </li>
@@ -193,9 +205,24 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <FaFileAlt className="text-lg text-purple-400" />
                   Activities
-                  <span className={`ml-auto ${isActivitiesOpen ? 'rotate-180' : ''}`}>
-                    <svg className="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  <span
+                    className={`ml-auto ${
+                      isActivitiesOpen ? 'rotate-180' : ''
+                    }`}
+                  >
+                    <svg
+                      className="w-4 h-4 transform transition-transform duration-200"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      ></path>
                     </svg>
                   </span>
                 </div>
@@ -206,7 +233,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         to="/dashboard/send-message"
                         onClick={handleMenuClick}
                         className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          pathname.includes('send-message') && 'bg-graydark dark:bg-meta-4'
+                          pathname.includes('send-message') &&
+                          'bg-graydark dark:bg-meta-4'
                         }`}
                       >
                         <FaComment className="text-lg text-blue-500" />
@@ -218,24 +246,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         to="/dashboard/send-email"
                         onClick={handleMenuClick}
                         className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          pathname.includes('send-email') && 'bg-graydark dark:bg-meta-4'
+                          pathname.includes('send-email') &&
+                          'bg-graydark dark:bg-meta-4'
                         }`}
                       >
                         <FaEnvelope className="text-lg text-blue-500" />
                         Send Email
                       </NavLink>
                     </li>
-                    
                   </ul>
                 )}
               </li>
-              <li>
-  
-              </li>
-            
-
+              <li></li>
             </ul>
-           
           </div>
         </nav>
       </div>

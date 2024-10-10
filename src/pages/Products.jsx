@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import SearchBar from '../Components/SearchBar';
-import DishForm from '../Components/DishForm';
 import DishList from '../Components/DishList';
 import PopupMessage from '../Components/PopupMessage';
 
@@ -120,7 +118,7 @@ const MainPage = () => {
   const handleDelete = async (productId) => {
     setLoader(true);
     try {
-      await axios.delete(`user/product/delete/${productId}`);
+      await axios.delete(`user/admin/delete/${productId}`);
       fetchProducts();
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -132,13 +130,9 @@ const MainPage = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-4xl font-bold text-center mb-8">Manage Dishes</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">All Listed Products</h1>
 
-      <SearchBar
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        handleSearch={handleSearch}
-      />
+      
 
       {/* <DishForm
         formData={formData}

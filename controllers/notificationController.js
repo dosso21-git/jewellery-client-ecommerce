@@ -60,7 +60,8 @@ const sendNotificationToUsers = async (req, res) => {
 
 const getAllNotifications = async (req, res) => {
     try {
-        const notifications = await Notification.find();
+        const notifications = await Notification.find().populate('offerId');
+        console.log(notifications);
 
         res.status(200).json(notifications);
     } catch (error) {

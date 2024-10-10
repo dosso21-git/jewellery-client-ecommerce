@@ -1,7 +1,7 @@
 const Offers = require("../models/offersModel");
 const Product = require("../models/productModel");
 const Notification = require('../models/notifcationModel')
-const User = require('../models/userModel')
+
 
 const createOffer = async (req, res) => {
     try {
@@ -81,8 +81,6 @@ const deleteOffer = async (req, res) => {
             { $unset: { offer: "" } }
         );
 
-        const notificationsToDelete = await Notification.find({ offerId: deletedOffer._id });
-
         await Notification.deleteMany({ offerId: deletedOffer._id });
 
         res.status(200).json({ message: "Offer and related notifications deleted successfully" });
@@ -108,7 +106,7 @@ const applyOfferToProduct = async (req, res) => {
         );
 
         const notificationTitle = `New Offer Applied: ${offer.title}`;
-        const notificationMessage = `A new offer has been applied to products in the ${offer.prodCategory} category. Discount: ${offer.offer}%`;
+        const notificationMessage = `A new offer has been applied to products in the ${offer.prodCategory} category. Discount: ${offer.offer}`;
 
         const newNotification = new Notification({
             title: notificationTitle,

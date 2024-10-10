@@ -223,7 +223,7 @@ const getallUser = async (req, res) => {
 
 // Get a single-user
 const getaUser = async (req, res) => {
-  const { id } = req.params;
+  const id = req.user._id
   try {
     const getaUser = await User.findById(id);
     res.json({

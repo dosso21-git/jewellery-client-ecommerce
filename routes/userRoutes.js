@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/register', publicApiAccess, createUser);
 router.post('/login', publicApiAccess, loginUserCtrl);
 router.get('/getalluser', publicApiAccess, protect, getallUser)
-router.get('/getuser/:id', publicApiAccess, getaUser)
+router.get('/getuser', protect, getaUser)
 router.put('/update', publicApiAccess, protect, updatedUser);
 router.put('/restore/:id', protect, restoreUser);
 router.delete('/delete/:id', protect, deleteaUser);

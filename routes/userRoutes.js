@@ -27,7 +27,7 @@ const upload = multer({ storage: storage }).single('image');
 router.post('/register', publicApiAccess, createUser);
 router.post('/login', publicApiAccess, loginUserCtrl);
 router.get('/getalluser', publicApiAccess, protect, getallUser)
-router.get('/getuser', publicApiAccess, getaUser)
+router.get('/getuser', protect, getaUser)
 router.put('/update', publicApiAccess, protect, upload, updatedUser);
 router.put('/restore/:id', protect, restoreUser);
 router.delete('/delete/:id', protect, deleteaUser);

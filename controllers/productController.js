@@ -139,37 +139,6 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// const deleteProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const deletedProduct = await Product.findById(id);
-//     if (!deletedProduct) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-//     const imagePaths = deletedProduct.images;
-//     for (const imageUrl of imagePaths) {
-//       const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
-//       await cloudinary.uploader.destroy(publicId, (error, result) => {
-//         if (error) {
-//           console.error(
-//             `Failed to delete image ${publicId} from Cloudinary:`,
-//             error
-//           );
-//         } else {
-//           console.log(
-//             `Image ${publicId} deleted successfully from Cloudinary.`
-//           );
-//         }
-//       });
-//     }
-//     await Product.findByIdAndDelete(id);
-//     res.status(200).json({ message: "Product deleted successfully" });
-//   } catch (error) {
-//     console.error("Error deleting product:", error);
-//     res.status(500).json({ message: "Error deleting product", error });
-//   }
-// };
-
 const deleteProduct = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -177,13 +146,11 @@ const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find the product in the Product model
     const deletedProduct = await productModel.findById(id).session(session);
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Delete associated images from Cloudinary
     const imagePaths = deletedProduct.images;
     for (const imageUrl of imagePaths) {
       const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
@@ -201,10 +168,8 @@ const deleteProduct = async (req, res) => {
       });
     }
 
-    // Delete product from the Product model
     await productModel.findByIdAndDelete(id).session(session);
 
-    // Delete product from associated models
     await Order.updateMany(
       { "items.productId": id },
       { $pull: { items: { productId: id } } }
@@ -235,13 +200,11 @@ const deleteProduct = async (req, res) => {
       { $pull: { productId: id } }
     ).session(session);
 
-    // Commit the transaction
     await session.commitTransaction();
     session.endSession();
 
     res.status(200).json({ message: "Product and associated data deleted successfully" });
   } catch (error) {
-    // Rollback the transaction in case of any error
     await session.abortTransaction();
     session.endSession();
 

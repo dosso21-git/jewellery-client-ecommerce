@@ -1,5 +1,6 @@
 const Offers = require('../models/offersModel');
 const PopularProduct = require('../models/popularProductModel');
+const productModel = require('../models/productModel');
 const Product = require('../models/productModel');
 const RecentView = require('../models/recentViewModel');
 const User = require('../models/userModel');
@@ -36,5 +37,22 @@ const getCounts = async (req, res) => {
     }
 };
 
-
-module.exports = { getCounts }
+const getallsearch = async (req, res) => {
+    try {
+      const { query } = req.query; 
+      const productResults = await productModel.find({
+        $or: [
+          { title: new RegExp(query, 'i') },
+          { category: new RegExp(query, 'i') },
+          { description: new RegExp(query, 'i') }
+        ]
+      });
+      const result = {
+        products: productResults
+      };
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+module.exports = { getCounts,getallsearch }

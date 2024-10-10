@@ -1192,7 +1192,7 @@ const ProductDetails = () => {
 
   const toggleWishlist = () => {
     setIsInWishlist(!isInWishlist);
-    navigate('/wishlist');
+    // navigate('/wishlist');
   };
 
   const applyCoupon = () => {
@@ -1210,15 +1210,9 @@ const ProductDetails = () => {
       alert('Please provide a rating between 1 and 5.');
       return;
     }
-
-    // Here you would typically make an API call to submit the rating
-    // For now, we will just update the state
     const updatedRatings = [...ratings, { star: newRating, comment: 'Great product!' }]; // Comment can be modified as needed
     setRatings(updatedRatings);
     setNewRating(0);
-    
-    // Optionally, send the rating to the server here
-    // await axios.post(`/product/rate/${id}`, { star: newRating });
   };
 
   if (loading) return <p>Loading...</p>;

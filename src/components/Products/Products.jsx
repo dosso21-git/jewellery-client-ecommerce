@@ -343,11 +343,11 @@ const Products = () => {
                     className="object-cover rounded-md h-[150px] w-[200px]"
                   />
                   <div>
-                    <h3 className="font-semibold">{data.title}</h3>
-                    <p className="text-sm text-gray-600">Price: ${data.price}</p>
+                    <h3 className="font-semibold text-black">{data.title}</h3>
+                    <p className="text-sm text-black">Price: ${data.price}</p>
                     <div className="flex items-center gap-1">
                       <FaStar className="text-yellow-400" />
-                      <span>{data.totalrating || "0"}</span>
+                      <span className="text-black">{data.totalrating || "0"}</span>
                     </div>
                   </div>
                 </div>

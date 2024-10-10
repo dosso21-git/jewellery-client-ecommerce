@@ -7,7 +7,7 @@ const { createProduct, getProductById, deleteProduct, updateProduct, getAllProdu
 const { protect, getIpAddress, publicApiAccess, } = require('../middleware/authMiddleware');
 const cloudinary = require('../config/cloudinary.js');
 const { giveRating, getTopRatedProducts } = require('../controllers/ratingController.js');
-const { getCounts } = require('../controllers/allDataController.js');
+const { getCounts, getallsearch } = require('../controllers/allDataController.js');
 
 
 
@@ -45,6 +45,6 @@ router.get('/product/getpopularproduct', getPopularProducts);
 
 // All Data Counts
 router.get('/admin/getdata', protect, getCounts)
-
+router.get('/admin/getallsearch',getallsearch);
 
 module.exports = router;

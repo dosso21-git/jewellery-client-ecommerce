@@ -68,48 +68,50 @@ const Testimonials = () => {
   };
 
   return (
-    <div className="py-10 mb-10">
-      <div className="container">
-        {/* header section */}
-        <div className="text-center mb-10 max-w-[600px] mx-auto">
-          <p data-aos="fade-up" className="text-sm text-primary">
+    <div className="py-16 mb-12 bg-gray-50 dark:bg-gray-800">
+      <div className="container mx-auto px-4">
+        {/* Header section */}
+        <div className="text-center mb-12 max-w-xl mx-auto">
+          <p data-aos="fade-up" className="text-sm text-blue-600 mb-2">
             What our customers are saying
           </p>
-          <h1 data-aos="fade-up" className="text-3xl font-bold">
+          <h1
+            data-aos="fade-up"
+            className="text-3xl font-extrabold text-gray-800 dark:text-gray-100"
+          >
             Testimonials
           </h1>
-          <p data-aos="fade-up" className="text-xs text-gray-400">
+          <p
+            data-aos="fade-up"
+            className="text-base text-gray-500 dark:text-gray-400 mt-2"
+          >
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit
-            asperiores modi Sit asperiores modi
+            asperiores modi. Sit asperiores modi.
           </p>
         </div>
-
-        {/* Testimonial cards */}
+        {/* Testimonials slider */}
         <div data-aos="zoom-in">
           <Slider {...settings}>
             {TestimonialData.map((data) => (
-              <div className="my-6">
-                <div
-                  key={data.id}
-                  className="flex flex-col gap-4 shadow-lg py-8 px-6 mx-4 rounded-xl dark:bg-gray-800 bg-primary/10 relative"
-                >
-                  <div className="mb-4">
-                    <img
-                      src={data.img}
-                      alt=""
-                      className="rounded-full w-20 h-20"
-                    />
-                  </div>
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="space-y-3">
-                      <p className="text-xs text-gray-500">{data.text}</p>
-                      <h1 className="text-xl font-bold text-black/80 dark:text-light">
-                        {data.name}
-                      </h1>
-                    </div>
-                  </div>
-                  <p className="text-black/20 text-9xl font-serif absolute top-0 right-0">
-                    ,,
+              <div key={data.id} className="my-6 px-4">
+                <div className="flex flex-col items-center gap-4 shadow-lg py-6 px-6 rounded-lg bg-white dark:bg-gray-900 relative">
+                  {/* Image */}
+                  <img
+                    src={data.img}
+                    alt={data.name}
+                    className="rounded-full w-24 h-24 object-cover mb-4 shadow-md"
+                  />
+                  {/* Testimonial Text */}
+                  <p className="text-sm text-gray-700 dark:text-gray-300 text-center">
+                    {data.text}
+                  </p>
+                  {/* Name */}
+                  <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    {data.name}
+                  </h1>
+                  {/* Quote Icon */}
+                  <p className="text-gray-300 text-6xl font-serif absolute top-0 right-5">
+                    “
                   </p>
                 </div>
               </div>

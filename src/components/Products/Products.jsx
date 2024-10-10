@@ -576,7 +576,9 @@ const Products = () => {
           ) : error ? (
             <p className="text-center text-red-500">{error}</p> // Show error message
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5">
+            <div 
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5"
+            >
               {/* Card section */}
               {productsData.length > 0 && productsData.map((data) => (
                 <div
@@ -590,11 +592,11 @@ const Products = () => {
                     className="object-cover rounded-md h-[150px] w-[200px]"
                   />
                   <div>
-                    <h3 className="font-semibold">{data.title}</h3>
-                    <p className="text-sm text-gray-600">Price: ${data.price}</p>
+                    <h3 className="font-semibold text-black">{data.title}</h3>
+                    <p className="text-sm text-black">Price: ${data.price}</p>
                     <div className="flex items-center gap-1">
                       <FaStar className="text-yellow-400" />
-                      <span>{data.totalrating || "0"}</span>
+                      <span className="text-black">{data.totalrating || "0"}</span>
                     </div>
                   </div>
                 </div>

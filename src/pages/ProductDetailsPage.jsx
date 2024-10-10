@@ -13,7 +13,6 @@
 
 //     const [isInWishlist, setIsInWishlist] = useState(false); // State to track wishlist status
 
-
 //     const [selectedImage, setSelectedImage] = useState('https://th.bing.com/th/id/OIP.znS3E-xhiMUwDAwwZiXa8gAAAA?rs=1&pid=ImgDetMain'); // Placeholder for product image URL
 
 //     const productImages = [
@@ -38,7 +37,6 @@
 //         }
 //     }
 
-
 //     const AddToCart = () => {
 //         if (!token) {
 //             navigation('/login')
@@ -47,12 +45,10 @@
 //         }
 //     }
 
-
 //     const toggleWishlist = () => {
 //         setIsInWishlist(!isInWishlist); // Toggle wishlist state
 //         console.log('Toggled wishlist');
 //     };
-
 
 //     return (
 //         <div className="container mx-auto p-4">
@@ -101,8 +97,6 @@
 //                 {/* Right Column: Product Details */}
 //                 <div>
 //                     <h1 className="text-2xl font-bold mb-2">CMF by Nothing Phone 1 (Light Green, 128 GB) (8 GB RAM)</h1>
-
-
 
 //                     <div className="flex items-center space-x-2 mb-4">
 //                         <span className="text-green-600 font-semibold">4.3 ★</span>
@@ -176,14 +170,6 @@
 // };
 
 // export default ProductDetails;
-
-
-
-
-
-
-
-
 
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import React, { useState } from 'react';
@@ -362,11 +348,6 @@
 
 // export default ProductDetails;
 
-
-
-
-
-
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import React, { useState } from 'react';
 // import { useNavigate, useParams } from 'react-router-dom';
@@ -394,8 +375,6 @@
 
 //     const navigation = useNavigate();
 //     const token = Cookies.get('usertoken');
-
-
 
 //     const redirectFunction = () => {
 //        navigation('/delivery-address')
@@ -543,12 +522,6 @@
 // };
 
 // export default ProductDetails;
-
-
-
-
-
-
 
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import React, { useState } from 'react';
@@ -737,18 +710,6 @@
 
 // export default ProductDetails;
 
-
-
-
-
-
-
-
-
-
-
-
-
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import React, { useState, useEffect } from 'react';
 // import { useNavigate, useParams } from 'react-router-dom';
@@ -922,14 +883,6 @@
 
 // export default ProductDetails;
 
-
-
-
-
-
-
-
-
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import React, { useState, useEffect } from 'react';
 // import { useNavigate, useParams } from 'react-router-dom';
@@ -964,7 +917,7 @@
 //           setError('');
 //         }
 //       } catch (error) {
-        
+
 //       } finally {
 //         setLoading(false);
 //       }
@@ -1087,7 +1040,7 @@
 //               </ul>
 //             </div>
 //           )}
-          
+
 //           {/* Buttons */}
 //           <div className="flex space-x-4">
 //             <button
@@ -1109,24 +1062,20 @@
 
 // export default ProductDetails;
 
-
-
-
-
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import ReactImageMagnify from 'react-image-magnify';
-import Cookies from 'js-cookie';
-import CouponPopup from '../components/Popup/CouponPopup';
-import axios from 'axios';
-import { AlertCustomStyles } from '../components/Popup/SuccessAlert';
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import ReactImageMagnify from "react-image-magnify";
+import Cookies from "js-cookie";
+import CouponPopup from "../components/Popup/CouponPopup";
+import axios from "axios";
+import { AlertCustomStyles } from "../components/Popup/SuccessAlert";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [isInWishlist, setIsInWishlist] = useState(false);
-  const [selectedImage, setSelectedImage] = useState('');
-  const [couponCode, setCouponCode] = useState('');
+  const [selectedImage, setSelectedImage] = useState("");
+  const [couponCode, setCouponCode] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [productData, setProductData] = useState([]);
@@ -1136,17 +1085,23 @@ const ProductDetails = () => {
   const [ratings, setRatings] = useState([]);
 
   const navigate = useNavigate();
-  const token = Cookies.get('loginToken');
-
+  const token = Cookies.get("loginToken");
+  const [message, setMessage] = useState("");
 
   const dummyProduct = {
     title: "Dummy Product Title",
     description: "This is a description of the dummy product.",
     price: 100,
-    images: ["https://via.placeholder.com/300", "https://via.placeholder.com/300"],
+    images: [
+      "https://via.placeholder.com/300",
+      "https://via.placeholder.com/300",
+    ],
     totalrating: 4.5,
     ratings: [{ star: 4, comment: "Good!" }],
-    availableOffers: ["10% off on first purchase", "Free shipping on orders over ₹500"],
+    availableOffers: [
+      "10% off on first purchase",
+      "Free shipping on orders over ₹500",
+    ],
   };
 
   useEffect(() => {
@@ -1159,7 +1114,7 @@ const ProductDetails = () => {
           setSelectedImage(result.data.images[0]);
           setDiscountedPrice(result.data.price);
           setRatings(result.data.ratings || []);
-        }else{
+        } else {
           setProductData(dummyProduct); // Use dummy product if no data is returned
         }
       } catch (error) {
@@ -1174,70 +1129,92 @@ const ProductDetails = () => {
 
   const redirectFunction = () => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     } else {
-      navigate('/delivery-address');
+      navigate("/delivery-address");
     }
   };
 
-  const AddToCart = (productId,quantity) => {
+  const AddToCart = (productId, quantity) => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     } else {
-      addToCartProduct(productId,quantity)
+      addToCartProduct(productId, quantity);
+      setMessage("product added to cart successfully");
+      // setShowAlert(true);
       // navigate('/cart');
     }
   };
-
-  const addToCartProduct = async (productId,quantity) => {
-       try{
-        const result =  await axios.post('/cart/add',{
-          productId, quantity
-        });
-        console.log('result',result);
-        if(result.data){
-          setShowAlert(true);
-        }
-      }catch(err){
-          console.log('this is erro in adding to cart',err)
+  const AddToWishlist = (productId) => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      addToWishlistProduct(productId);
+      setMessage("product added to wishlist successfully");
+      // setShowAlert(true);
+      // navigate('/cart');
+    }
+  };
+  const addToCartProduct = async (productId, quantity) => {
+    try {
+      const result = await axios.post("/cart/add", {
+        productId,
+        quantity,
+      });
+      console.log("result", result);
+      if (result.data) {
+        setMessage("product added to cart successfully");
+        setShowAlert(true);
       }
-  }
-
-  const toggleWishlist = () => {
-    setIsInWishlist(!isInWishlist);
-    navigate('/wishlist');
+    } catch (err) {
+      console.log("this is erro in adding to cart", err);
+    }
+  }; 
+  const addToWishlistProduct = async (productId) => {
+    try {
+      const result = await axios.post("/wishlist/create", {
+        productId,
+      });
+      console.log("result", result);
+      if (result.data) {
+        setMessage(result.data.message);
+        setShowAlert(true);
+      }
+    } catch (error) {
+      setMessage(error.data);
+      alert(error.message);
+      console.log("this is error in adding to wishlist", error.message);
+    }
   };
 
   const applyCoupon = () => {
-    if (couponCode === 'FLAT50') {
+    if (couponCode === "FLAT50") {
       setDiscountedPrice(productData.price - 50);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 2000);
     } else {
-      alert('Invalid coupon code');
+      alert("Invalid coupon code");
     }
   };
 
   const submitRating = async () => {
     if (newRating < 1 || newRating > 5) {
-      alert('Please provide a rating between 1 and 5.');
+      alert("Please provide a rating between 1 and 5.");
       return;
     }
-
-    // Here you would typically make an API call to submit the rating
-    // For now, we will just update the state
-    const updatedRatings = [...ratings, { star: newRating, comment: 'Great product!' }]; // Comment can be modified as needed
+    const updatedRatings = [
+      ...ratings,
+      { star: newRating, comment: "Great product!" },
+    ]; // Comment can be modified as needed
     setRatings(updatedRatings);
     setNewRating(0);
-    
-    // Optionally, send the rating to the server here
-    // await axios.post(`/product/rate/${id}`, { star: newRating });
   };
 
   // if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
-  const discount = ((productData.price - discountedPrice) / productData.price) * 100;
+  const discount =
+    ((productData.price - discountedPrice) / productData.price) * 100;
 
   const [showAlert, setShowAlert] = useState(false);
 
@@ -1245,24 +1222,28 @@ const ProductDetails = () => {
     setShowAlert(true);
   };
 
-  useEffect(()=>{
-    handleShowAlert
-  },[])
-
-
-
-
+  useEffect(() => {
+    handleShowAlert;
+  }, []);
   return (
     <div className="container mx-auto p-4 mt-24">
       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
-     <AlertCustomStyles visible={showAlert} setVisible={setShowAlert} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <AlertCustomStyles
+        visible={showAlert}
+        setVisible={setShowAlert}
+        message={message}
+      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {" "}
+        {/* Increased gap between columns */}
         <div>
-          <div className="border mb-4 p-4">
+          <div className="border mb-6 p-4">
+            {" "}
+            {/* Increased margin bottom */}
             <ReactImageMagnify
               {...{
                 smallImage: {
-                  alt: 'Product Image',
+                  alt: "Product Image",
                   isFluidWidth: true,
                   src: selectedImage,
                 },
@@ -1272,42 +1253,76 @@ const ProductDetails = () => {
                   height: 900,
                 },
                 enlargedImageContainerDimensions: {
-                  width: '100%',
-                  height: '80%',
+                  width: "100%",
+                  height: "80%",
                 },
-                enlargedImagePosition: 'beside',
+                enlargedImagePosition: "beside",
               }}
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: "100%", height: "100%" }}
             />
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 overflow-x-auto mb-6">
+            {" "}
+            {/* Increased margin bottom */}
             {productData?.images?.map((img, index) => (
               <img
                 key={index}
                 src={img}
                 alt={`Product ${index}`}
                 onClick={() => setSelectedImage(img)}
-                className={`w-16 h-16 object-cover cursor-pointer border ${selectedImage === img ? 'border-indigo-600' : 'border-gray-300'}`}
+                className={`w-16 h-16 object-cover cursor-pointer border ${
+                  selectedImage === img
+                    ? "border-indigo-600"
+                    : "border-gray-300"
+                }`}
               />
             ))}
           </div>
         </div>
         <div>
-          <h1 className="text-2xl font-bold mb-2">{productData.title}</h1>
-          <p className="text-sm text-gray-600 mb-4">{productData.description}</p>
-          <div className="flex items-center space-x-2 mb-4">
-            <span className="text-green-600 font-semibold">{productData.totalrating} ★</span>
-            <button onClick={toggleWishlist} className="ml-4 text-red-500 hover:text-red-700">
-              {isInWishlist ? <FaHeart size={24} color="darkred" /> : <FaRegHeart size={24} />}
+          <h1 className="text-2xl font-bold mb-4">{productData.title}</h1>{" "}
+          {/* Increased margin bottom */}
+          <p className="text-sm text-gray-600 mb-6">
+            {productData.description}
+          </p>{" "}
+          {/* Increased margin bottom */}
+          <div className="flex items-center space-x-2 mb-6">
+            {" "}
+            {/* Increased margin bottom */}
+            <span className="text-green-600 font-semibold">
+              {productData.totalrating} ★
+            </span>
+            <button
+              onClick={() => AddToWishlist(productData._id)}
+              className="ml-4 text-red-500 hover:text-red-700"
+            >
+              {isInWishlist ? (
+                <FaHeart size={24} color="darkred" />
+              ) : (
+                <FaRegHeart size={24} />
+              )}
             </button>
           </div>
-          <div className="mb-4">
-            <span className="text-3xl font-bold text-red-600">₹{discountedPrice}</span>
-            <span className="line-through text-gray-500 ml-4">₹{productData.price}</span>
-            <span className="text-green-600 font-semibold ml-2">{Math.round(discount)}% off</span>
+          <div className="mb-6">
+            {" "}
+            {/* Increased margin bottom */}
+            <span className="text-3xl font-bold text-red-600">
+              ₹{discountedPrice}
+            </span>
+            <span className="line-through text-gray-500 ml-4">
+              ₹{productData.price}
+            </span>
+            <span className="text-green-600 font-semibold ml-2">
+              {Math.round(discount)}% off
+            </span>
           </div>
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold">Rate this Product</h3>
+          <div className="mb-6">
+            {" "}
+            {/* Increased margin bottom */}
+            <h3 className="text-lg font-semibold mb-2">
+              Rate this Product
+            </h3>{" "}
+            {/* Increased margin bottom */}
             <input
               type="number"
               value={newRating}
@@ -1319,13 +1334,19 @@ const ProductDetails = () => {
             />
             <button
               onClick={submitRating}
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
+            >
               Submit Rating
             </button>
           </div>
           {/* Display Existing Ratings */}
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold">Existing Ratings</h3>
+          <div className="mb-6">
+            {" "}
+            {/* Increased margin bottom */}
+            <h3 className="text-lg font-semibold mb-2">
+              Existing Ratings
+            </h3>{" "}
+            {/* Increased margin bottom */}
             {ratings.length > 0 ? (
               ratings.map((rating, index) => (
                 <div key={index} className="flex items-center mb-1">
@@ -1338,27 +1359,34 @@ const ProductDetails = () => {
             )}
           </div>
           {/* Available Offers */}
-          {productData?.availableOffers && productData?.availableOffers.length > 0 && (
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">Available offers</h3>
-              <ul className="list-disc list-inside text-gray-700 space-y-2">
-                {productData.availableOffers.map((offer, index) => (
-                  <li key={index}>{offer}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          
+          {productData?.availableOffers &&
+            productData.availableOffers.length > 0 && (
+              <div className="mb-6">
+                {" "}
+                {/* Increased margin bottom */}
+                <h3 className="text-lg font-semibold mb-2">
+                  Available Offers
+                </h3>{" "}
+                {/* Increased margin bottom */}
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                  {productData.availableOffers.map((offer, index) => (
+                    <li key={index}>{offer}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           {/* Buttons */}
           <div className="flex space-x-4">
             <button
-              onClick={ () => AddToCart(productData._id,1)}
-              className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600">
+              onClick={() => AddToCart(productData._id, 1)}
+              className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600 transition"
+            >
               ADD TO CART
             </button>
             <button
               onClick={redirectFunction}
-              className="w-full py-3 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600">
+              className="w-full py-3 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600 transition"
+            >
               BUY NOW
             </button>
           </div>

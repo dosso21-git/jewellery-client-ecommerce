@@ -21,7 +21,7 @@ function Icon() {
   );
 }
 
-export function AlertCustomStyles({ visible, setVisible }) {
+export function AlertCustomStyles({ visible, setVisible ,message}) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function AlertCustomStyles({ visible, setVisible }) {
             icon={<Icon />}
             className="rounded-none border-l-4 border-[#2ec946] bg-[#ffffff] font-medium text-[#2ec946] relative h-full"
           >
-           Product added to cart successfully
+        {message}
           </Alert>
         </div>
       )}

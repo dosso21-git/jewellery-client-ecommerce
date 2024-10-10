@@ -324,7 +324,7 @@
 								},
 								{
 									"key": "price",
-									"value": "12000",
+									"value": "13000",
 									"type": "text"
 								},
 								{
@@ -650,7 +650,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/product/popular/6704f7f15978b67cb18d8c82",
+							"raw": "http://localhost:5000/api/user/product/popular/67076fa892801d63af38611e",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -661,7 +661,7 @@
 								"user",
 								"product",
 								"popular",
-								"6704f7f15978b67cb18d8c82"
+								"67076fa892801d63af38611e"
 							]
 						}
 					},
@@ -892,7 +892,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODQ1MzIzNCwiZXhwIjoxNzI4NzEyNDM0fQ.ub7y6lTcDDtOfsFfRSNNyIa2WBozBT_XVCeDASRviyY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODUzNzA5OSwiZXhwIjoxNzI4Nzk2Mjk5fQ.rQRude07vY-lMLM4DMdGeq0ijCjs4fUNqX-_m6uKZQg",
 									"type": "string"
 								}
 							]
@@ -900,7 +900,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/admin/delete/offers/67061fbae238c64507fd4d88",
+							"raw": "http://localhost:5000/api/user/admin/delete/offers/67079b06071032276d93be00",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -912,7 +912,7 @@
 								"admin",
 								"delete",
 								"offers",
-								"67061fbae238c64507fd4d88"
+								"67079b06071032276d93be00"
 							]
 						}
 					},
@@ -969,7 +969,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODQ1MzIzNCwiZXhwIjoxNzI4NzEyNDM0fQ.ub7y6lTcDDtOfsFfRSNNyIa2WBozBT_XVCeDASRviyY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODUzNzA5OSwiZXhwIjoxNzI4Nzk2Mjk5fQ.rQRude07vY-lMLM4DMdGeq0ijCjs4fUNqX-_m6uKZQg",
 									"type": "string"
 								}
 							]
@@ -978,7 +978,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"offerId\": \"67062009e238c64507fd4d8f\"\r\n}",
+							"raw": "{\r\n    \"offerId\": \"6707878c361bbcc58c1a6ac4\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1009,7 +1009,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/admin/offers/get?category=Necklace",
+							"raw": "http://localhost:5000/api/user/offers/get?category=Bracelet",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1018,14 +1018,13 @@
 							"path": [
 								"api",
 								"user",
-								"admin",
 								"offers",
 								"get"
 							],
 							"query": [
 								{
 									"key": "category",
-									"value": "Necklace"
+									"value": "Bracelet"
 								}
 							]
 						}
@@ -1161,7 +1160,20 @@
 					"name": "Get All Notification",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/getallnotification",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"getallnotification"
+							]
+						}
 					},
 					"response": []
 				},
@@ -1169,15 +1181,64 @@
 					"name": "Get Single Notification",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/getsinglenotification/67078ac2dc4cc50f83a58ea7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"getsinglenotification",
+								"67078ac2dc4cc50f83a58ea7"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Send Notification to users",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODUzNzA5OSwiZXhwIjoxNzI4Nzk2Mjk5fQ.rQRude07vY-lMLM4DMdGeq0ijCjs4fUNqX-_m6uKZQg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userIds\": [\"6704d1e3089c720fc2537f5a\", \"6704d1f5089c720fc2537f60\"],\r\n    \"title\": \"Important Update\",\r\n    \"message\": \"This is a notification message for selected users.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/admin/send/notification/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"admin",
+								"send",
+								"notification",
+								"users"
+							]
+						}
 					},
 					"response": []
 				}

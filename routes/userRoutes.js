@@ -34,6 +34,7 @@ router.delete('/delete/:id', protect, deleteaUser);
 router.put('/block/:id', protect, blockUser)
 router.put('/unblock/:id', protect, unblockUser)
 
+//user address routes
 router.post('/add/address', protect, addAddress);
 router.get('/get/address', protect, getAllAddresses);
 router.put('/address/update/:id', protect, updateAddress);

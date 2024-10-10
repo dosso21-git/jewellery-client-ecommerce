@@ -126,8 +126,8 @@ exports.getUserOrders = async (req, res) => {
     const userId = req.body.userId;
     console.log("Logged-in User ID:", userId);
     // Step 2: Find all orders associated with the logged-in user
-    const orders = await Order.find({ userId });
-    // Step 3: Check if the user has any orders
+    const orders = await Order.find({ userId })
+    // Step 3: Check if the user has any order
     if (!orders || orders.length === 0) {
       return res.status(404).json({ message: "No orders found for this user" });
     }

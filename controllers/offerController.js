@@ -85,13 +85,6 @@ const deleteOffer = async (req, res) => {
 
         await Notification.deleteMany({ offerId: deletedOffer._id });
 
-        const notificationIds = notificationsToDelete.map(notification => notification._id);
-
-        await User.updateMany(
-            { "notifications.notificationId": { $in: notificationIds } },
-            { $pull: { notifications: { notificationId: { $in: notificationIds } } } }
-        );
-
         res.status(200).json({ message: "Offer and related notifications deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -125,16 +118,6 @@ const applyOfferToProduct = async (req, res) => {
         });
 
         await newNotification.save();
-
-        const allUsers = await User.find();
-
-        for (const user of allUsers) {
-            user.notifications.push({
-                notificationId: newNotification._id,
-                isRead: false,
-            });
-            await user.save();
-        }
 
         res.status(200).json({ message: `${updatedProducts} products updated successfully and notification sent to users.` });
     } catch (error) {

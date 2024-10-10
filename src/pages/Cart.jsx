@@ -869,8 +869,6 @@ const CartPage = () => {
             </div>
           ))}
         </div>
-
-        {/* Order Summary */}
         <div className="p-4 bg-white dark:bg-gray-800 shadow-md rounded-lg">
           <h3 className="text-xl font-bold mb-4 text-center sm:text-left dark:text-white">Order Summary</h3>
           <div className="flex justify-between mb-2 text-sm sm:text-base dark:text-gray-300">

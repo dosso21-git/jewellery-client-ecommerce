@@ -61,7 +61,6 @@ const sendNotificationToUsers = async (req, res) => {
 const getAllNotifications = async (req, res) => {
     try {
         const notifications = await Notification.find().populate('offerId');
-
         res.status(200).json({data:notifications});
     } catch (error) {
         console.error(error);

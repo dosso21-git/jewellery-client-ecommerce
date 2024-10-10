@@ -22,7 +22,7 @@ const createOffer = async (req, res) => {
 
         await newOffer.save();
 
-        res.status(201).json(newOffer);
+        res.status(201).json({ offer: newOffer });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -31,7 +31,7 @@ const createOffer = async (req, res) => {
 const getAllOffers = async (req, res) => {
     try {
         const offers = await Offers.find();
-        res.status(200).json(offers);
+        res.status(200).json({ offer: offers });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

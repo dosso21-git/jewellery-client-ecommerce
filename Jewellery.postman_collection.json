@@ -302,7 +302,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDM4MjU4ZWYyMTBmNTIzZjNjYjFiYiIsImlhdCI6MTcyODI4NjgzNSwiZXhwIjoxNzI4NTQ2MDM1fQ.3z02HCZWylF1ZACGnCQXUyGzCZG7mrdohKK3CL7hAmk",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODUzNzA5OSwiZXhwIjoxNzI4Nzk2Mjk5fQ.rQRude07vY-lMLM4DMdGeq0ijCjs4fUNqX-_m6uKZQg",
 									"type": "string"
 								}
 							]
@@ -314,7 +314,7 @@
 							"formdata": [
 								{
 									"key": "title",
-									"value": "New Added",
+									"value": "Maang Tika",
 									"type": "text"
 								},
 								{
@@ -329,28 +329,28 @@
 								},
 								{
 									"key": "category",
-									"value": "New Added",
+									"value": "Tika",
 									"type": "text"
 								},
 								{
 									"key": "quantity",
-									"value": "5",
+									"value": "14",
 									"type": "text"
 								},
 								{
 									"key": "pictures",
 									"type": "file",
 									"src": [
-										"/C:/Users/Sanjeev/Downloads/RM2.jpg",
-										"/C:/Users/Sanjeev/Downloads/RM1.jpg",
-										"/C:/Users/Sanjeev/Downloads/RCT.jpg",
-										"/C:/Users/Sanjeev/Downloads/PT2.jpg"
+										"/C:/Users/Sanjeev/Downloads/TIka-3.jpg",
+										"/C:/Users/Sanjeev/Downloads/Tika-2.jpg",
+										"/C:/Users/Sanjeev/Downloads/Tika-1.webp",
+										"/C:/Users/Sanjeev/Downloads/Tika.jpg"
 									]
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/product/create",
+							"raw": "http://localhost:5000/api/user/admin/create",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -358,7 +358,8 @@
 							"port": "5000",
 							"path": [
 								"api",
-								"product",
+								"user",
+								"admin",
 								"create"
 							]
 						}
@@ -843,7 +844,21 @@
 					"name": "Get All Offers",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/get/offers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"get",
+								"offers"
+							]
+						}
 					},
 					"response": []
 				},
@@ -851,20 +866,299 @@
 					"name": "Get Single Offer",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/offers/67061fbae238c64507fd4d88",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"offers",
+								"67061fbae238c64507fd4d88"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Delete Offer",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODQ1MzIzNCwiZXhwIjoxNzI4NzEyNDM0fQ.ub7y6lTcDDtOfsFfRSNNyIa2WBozBT_XVCeDASRviyY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/admin/delete/offers/67061fbae238c64507fd4d88",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"admin",
+								"delete",
+								"offers",
+								"67061fbae238c64507fd4d88"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Update Offer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODQ1MzIzNCwiZXhwIjoxNzI4NzEyNDM0fQ.ub7y6lTcDDtOfsFfRSNNyIa2WBozBT_XVCeDASRviyY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"offer\": \"40% Discount\",\r\n  \"discount\": 40,\r\n  \"discountType\": \"Offers\",\r\n  \"prodCategory\": \"Earrings\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/admin/update/offers/67062009e238c64507fd4d8f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"admin",
+								"update",
+								"offers",
+								"67062009e238c64507fd4d8f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apply Offers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODQ1MzIzNCwiZXhwIjoxNzI4NzEyNDM0fQ.ub7y6lTcDDtOfsFfRSNNyIa2WBozBT_XVCeDASRviyY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"offerId\": \"67062009e238c64507fd4d8f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/admin/offers/apply",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"admin",
+								"offers",
+								"apply"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Offers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/admin/offers/get?category=Necklace",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"admin",
+								"offers",
+								"get"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Necklace"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODQ1MzIzNCwiZXhwIjoxNzI4NzEyNDM0fQ.ub7y6lTcDDtOfsFfRSNNyIa2WBozBT_XVCeDASRviyY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"totalAmount\": 855, \"productId\": \"6703cfbdb282414881db0b81\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/orders/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"orders",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Send",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODUzNzA5OSwiZXhwIjoxNzI4Nzk2Mjk5fQ.rQRude07vY-lMLM4DMdGeq0ijCjs4fUNqX-_m6uKZQg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Important Update\",\r\n  \"message\": \"Our system will be down for maintenance tonight.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/send/notification",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"send",
+								"notification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Read",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDRkMjViMDg5YzcyMGZjMjUzN2Y2YyIsImlhdCI6MTcyODUzNzA5OSwiZXhwIjoxNzI4Nzk2Mjk5fQ.rQRude07vY-lMLM4DMdGeq0ijCjs4fUNqX-_m6uKZQg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/notification/markread/67067595768a5e027b2ff86b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"notification",
+								"markread",
+								"67067595768a5e027b2ff86b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Notification",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -872,7 +1166,15 @@
 					"response": []
 				},
 				{
-					"name": "Apply Offers",
+					"name": "Get Single Notification",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Send Notification to users",
 					"request": {
 						"method": "GET",
 						"header": []

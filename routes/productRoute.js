@@ -10,8 +10,6 @@ const { giveRating, getTopRatedProducts } = require('../controllers/ratingContro
 const { getCounts, getallsearch } = require('../controllers/allDataController.js');
 
 
-
-
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
@@ -45,6 +43,6 @@ router.get('/product/getpopularproduct', getPopularProducts);
 
 // All Data Counts
 router.get('/admin/getdata', protect, getCounts)
-router.get('/admin/getallsearch',getallsearch);
+router.get('/getallsearch',getallsearch);
 
 module.exports = router;

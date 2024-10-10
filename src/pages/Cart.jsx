@@ -94,7 +94,6 @@
 
 // export default CartPage;
 
-
 // import axios from 'axios';
 // import React, { useEffect, useState } from 'react';
 
@@ -121,12 +120,10 @@
 //     setCartItems(cartItems.filter(item => item.id !== id));
 //   };
 
-
 //   const getAllCartData = async() =>{
 //       const response = axios.post('/cart/get');
 //       console.log(response.data)
 //   }
-
 
 //   useEffect(() => {
 //     getAllCartData();
@@ -203,22 +200,6 @@
 
 // export default CartPage;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import axios from 'axios';
 // import React, { useEffect, useState } from 'react';
 
@@ -294,8 +275,8 @@
 //                 </div>
 //               </div>
 //               <div className="flex items-center">
-//                 <button 
-//                   onClick={() => updateQuantity(item._id, item.quantity - 1)} 
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
 //                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-l px-2"
 //                 >
 //                   -
@@ -307,8 +288,8 @@
 //                   onChange={(e) => updateQuantity(item._id, parseInt(e.target.value))}
 //                   className="w-14 border-t border-b border-gray-300 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600"
 //                 />
-//                 <button 
-//                   onClick={() => updateQuantity(item._id, item.quantity + 1)} 
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
 //                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-r px-2"
 //                 >
 //                   +
@@ -348,22 +329,6 @@
 // };
 
 // export default CartPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import axios from 'axios';
 // import React, { useEffect, useState } from 'react';
@@ -461,8 +426,8 @@
 //                 </div>
 //               </div>
 //               <div className="flex items-center">
-//                 <button 
-//                   onClick={() => updateQuantity(item._id, item.quantity - 1)} 
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
 //                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-l px-2"
 //                 >
 //                   -
@@ -474,8 +439,8 @@
 //                   onChange={(e) => updateQuantity(item._id, parseInt(e.target.value))}
 //                   className="w-14 border-t border-b border-gray-300 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600"
 //                 />
-//                 <button 
-//                   onClick={() => updateQuantity(item._id, item.quantity + 1)} 
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
 //                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-r px-2"
 //                 >
 //                   +
@@ -537,20 +502,6 @@
 // };
 
 // export default CartPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import axios from 'axios';
 // import React, { useEffect, useState } from 'react';
@@ -665,8 +616,8 @@
 //                 </div>
 //               </div>
 //               <div className="flex items-center">
-//                 <button 
-//                   onClick={() => updateQuantity(item._id, item.quantity - 1)} 
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
 //                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-l px-2"
 //                 >
 //                   -
@@ -678,8 +629,8 @@
 //                   onChange={(e) => updateQuantity(item._id, parseInt(e.target.value))}
 //                   className="w-14 border-t border-b border-gray-300 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600"
 //                 />
-//                 <button 
-//                   onClick={() => updateQuantity(item._id, item.quantity + 1)} 
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
 //                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-r px-2"
 //                 >
 //                   +
@@ -742,32 +693,206 @@
 
 // export default CartPage;
 
+// import axios from 'axios';
+// import React, { useEffect, useState } from 'react';
+// import CouponPopup from '../components/Popup/CouponPopup';
 
+// const CartPage = () => {
+//   const [cartData, setCartData] = useState(null);
+//   const [couponCode, setCouponCode] = useState('');
+//   const [discount, setDiscount] = useState(0);
+//   const [showPopup, setShowPopup] = useState(false);
 
+//   const getAllCartData = async () => {
+//     try {
+//       const response = await axios.post('/cart/get');
+//       const validItems = response.data.items.filter(item => item.productId !== null);
+//       setCartData({ ...response.data, items: validItems });
+//     } catch (error) {
+//       console.error('Error fetching cart data:', error);
+//     }
+//   };
 
+//   useEffect(() => {
+//     getAllCartData();
+//   }, []);
 
+//   if (!cartData) return <div>Loading...</div>;
 
+//   const { items } = cartData;
 
+//   // Function to calculate totals
+//   const calculateTotals = () => {
+//     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+//     const shippingEstimate = 5.00; // Fixed shipping cost
+//     const taxEstimate = subtotal * 0.18; // 18% tax rate
+//     const orderTotal = subtotal + shippingEstimate + taxEstimate - (subtotal * (discount / 100));
 
+//     return { subtotal, shippingEstimate, taxEstimate, orderTotal };
+//   };
 
+//   // State for totals
+//   const { subtotal, shippingEstimate, taxEstimate, orderTotal } = calculateTotals();
 
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import CouponPopup from '../components/Popup/CouponPopup';
+//   const updateQuantity = (id, quantity) => {
+//     const newCart = items.map(item =>
+//       item._id === id ? { ...item, quantity: Math.max(1, quantity) } : item
+//     );
+//     setCartData({ ...cartData, items: newCart });
+//   };
+
+//   const removeItem = (id) => {
+//     const newItems = items.filter(item => item._id !== id);
+//     setCartData({ ...cartData, items: newItems });
+//   };
+
+//   const applyCoupon = () => {
+//     if (couponCode === 'SAVE10') {
+//       setDiscount(10);
+//       setShowPopup(true);
+//       setTimeout(() => setShowPopup(false), 2000);
+//     } else if (couponCode === 'SAVE20') {
+//       setDiscount(20);
+//     } else {
+//       alert('Invalid coupon code');
+//       setDiscount(0);
+//     }
+//   };
+// const handleOrder = async(req,res)=>{
+//   try {
+//     const response = await axios.post('/orders/create', {
+//       discountedprice: discount,
+//       discounted_type: couponCode,
+//       items:cart.items,
+//       total_amount: cart.total_amount
+//      });
+//     res.status(200).json(response.data);
+//   } catch (error) {
+//     console.error('Error creating order:', error);
+//     res.status(500).json({ message: 'Error creating order' });
+//   }
+// }
+//   return (
+//     <div className="container mx-auto p-4 dark:bg-gray-900 mt-32">
+//       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
+//       <h2 className="text-2xl font-bold mb-4 text-center dark:text-white">Shopping Cart</h2>
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//         {/* Cart Items */}
+//         <div className="col-span-2">
+//           {items.map((item) => (
+//             <div key={item._id} className="flex flex-wrap justify-between items-center p-4 mb-4 bg-white dark:bg-gray-800 shadow-md rounded-lg relative">
+//               <button
+//                 onClick={() => removeItem(item._id)}
+//                 className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white"
+//               >
+//                 &times;
+//               </button>
+//               <div className="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
+//                 <img
+//                   src={item?.productId?.images[0]}
+//                   alt={item.productId.title}
+//                   className="w-16 h-16 object-cover rounded-md"
+//                 />
+//                 <div className="ml-4 text-sm sm:text-base">
+//                   <h3 className="text-base font-medium dark:text-white">{item.productId.title}</h3>
+//                   <p className="text-gray-500 dark:text-gray-400">{item.productId.category}</p>
+//                   <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">In stock: {item.productId.quantity}</p>
+//                 </div>
+//               </div>
+//               <div className="flex items-center">
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
+//                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-l px-2"
+//                 >
+//                   -
+//                 </button>
+//                 <input
+//                   type="number"
+//                   value={item.quantity}
+//                   min="1"
+//                   onChange={(e) => updateQuantity(item._id, parseInt(e.target.value))}
+//                   className="w-14 border-t border-b border-gray-300 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600"
+//                 />
+//                 <button
+//                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
+//                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-r px-2"
+//                 >
+//                   +
+//                 </button>
+//                 <p className="text-lg sm:text-xl font-semibold dark:text-white">₹{item.price}</p>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//         <div className="p-4 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+//           <h3 className="text-xl font-bold mb-4 text-center sm:text-left dark:text-white">Order Summary</h3>
+//           <div className="flex justify-between mb-2 text-sm sm:text-base dark:text-gray-300">
+//             <span>Subtotal</span>
+//             <span>₹{subtotal.toFixed(2)}</span>
+//           </div>
+//           <div className="flex justify-between mb-2 text-sm sm:text-base dark:text-gray-300">
+//             <span>Shipping estimate</span>
+//             <span>₹{shippingEstimate.toFixed(2)}</span>
+//           </div>
+//           <div className="flex justify-between mb-4 text-sm sm:text-base dark:text-gray-300">
+//             <span>Tax estimate</span>
+//             <span>₹{taxEstimate.toFixed(2)}</span>
+//           </div>
+//           <div className="flex justify-between mb-4 text-sm sm:text-base dark:text-gray-300">
+//             <span>Discount</span>
+//             <span>-₹{(subtotal * (discount / 100)).toFixed(2)}</span>
+//           </div>
+//           <div className="flex justify-between font-bold text-base sm:text-lg mb-6 dark:text-white">
+//             <span>Order total</span>
+//             <span>₹{(subtotal + shippingEstimate + taxEstimate - (subtotal * (discount / 100))).toFixed(2)}</span>
+//           </div>
+//           <div className="flex mb-4">
+//             <input
+//               type="text"
+//               value={couponCode}
+//               onChange={(e) => setCouponCode(e.target.value)}
+//               placeholder="Enter coupon code"
+//               className="border rounded-l-md p-2 w-full dark:bg-gray-700 dark:text-white"
+//             />
+//             <button
+//               onClick={applyCoupon}
+//               className="bg-indigo-600 text-white p-2 rounded-r-md hover:bg-indigo-700"
+//             >
+//               Apply
+//             </button>
+//           </div>
+
+//           <button onClick={handleOrder} className="w-full bg-indigo-600 text-white p-2 sm:p-3 rounded-lg font-semibold hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">
+//             Checkout
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CartPage;
+
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import CouponPopup from "../components/Popup/CouponPopup";
 
 const CartPage = () => {
   const [cartData, setCartData] = useState(null);
-  const [couponCode, setCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState(null); // Added for error handling
+const [type,setTpye] = useState('coupon');
   const getAllCartData = async () => {
     try {
-      const response = await axios.post('/cart/get');
-      const validItems = response.data.items.filter(item => item.productId !== null);
+      const response = await axios.post("/cart/get");
+      const validItems = response.data.items.filter(
+        (item) => item.productId !== null
+      );
       setCartData({ ...response.data, items: validItems });
     } catch (error) {
-      console.error('Error fetching cart data:', error);
+      console.error("Error fetching cart data:", error);
     }
   };
 
@@ -781,51 +906,85 @@ const CartPage = () => {
 
   // Function to calculate totals
   const calculateTotals = () => {
-    const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const shippingEstimate = 5.00; // Fixed shipping cost
+    const subtotal = items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+    const shippingEstimate = 5.0; // Fixed shipping cost
     const taxEstimate = subtotal * 0.18; // 18% tax rate
-    const orderTotal = subtotal + shippingEstimate + taxEstimate - (subtotal * (discount / 100));
+    const orderTotal =
+      subtotal + shippingEstimate + taxEstimate - subtotal * (discount / 100);
 
     return { subtotal, shippingEstimate, taxEstimate, orderTotal };
   };
 
   // State for totals
-  const { subtotal, shippingEstimate, taxEstimate, orderTotal } = calculateTotals();
+  const { subtotal, shippingEstimate, taxEstimate, orderTotal } =
+    calculateTotals();
 
   const updateQuantity = (id, quantity) => {
-    const newCart = items.map(item =>
+    const newCart = items.map((item) =>
       item._id === id ? { ...item, quantity: Math.max(1, quantity) } : item
     );
     setCartData({ ...cartData, items: newCart });
   };
 
   const removeItem = (id) => {
-    const newItems = items.filter(item => item._id !== id);
+    const newItems = items.filter((item) => item._id !== id);
     setCartData({ ...cartData, items: newItems });
   };
 
   const applyCoupon = () => {
-    if (couponCode === 'SAVE10') {
+    if (couponCode === "SAVE10") {
       setDiscount(10);
       setShowPopup(true);
+      setTpye('coupon')
       setTimeout(() => setShowPopup(false), 2000);
-    } else if (couponCode === 'SAVE20') {
+    } else if (couponCode === "SAVE20") {
       setDiscount(20);
     } else {
-      alert('Invalid coupon code');
+      alert("Invalid coupon code");
       setDiscount(0);
+    }
+  };
+
+  const handleOrder = async (type,orderTotal) => {
+   
+    try {
+      const response = await axios.post("/orders/create", {
+        discountedprice: subtotal * (discount / 100),
+        discount_type: type,
+        tax_estimate: taxEstimate,
+        shipping_estimate:shippingEstimate,
+        items: cartData.items,
+        totalAmount: orderTotal,
+      });
+      if (response?.data?.status) {
+        console.log(response.message)
+        getAllCartData()
+        alert(response.data.message);
+        setCartData(null); // Clear cart after successful order`
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      setErrorMessage("Error creating order");
     }
   };
 
   return (
     <div className="container mx-auto p-4 dark:bg-gray-900 mt-32">
       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
-      <h2 className="text-2xl font-bold mb-4 text-center dark:text-white">Shopping Cart</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center dark:text-white">
+        Shopping Cart
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Cart Items */}
         <div className="col-span-2">
           {items.map((item) => (
-            <div key={item._id} className="flex flex-wrap justify-between items-center p-4 mb-4 bg-white dark:bg-gray-800 shadow-md rounded-lg relative">
+            <div
+              key={item._id}
+              className="flex flex-wrap justify-between items-center p-4 mb-4 bg-white dark:bg-gray-800 shadow-md rounded-lg relative"
+            >
               <button
                 onClick={() => removeItem(item._id)}
                 className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white"
@@ -839,14 +998,20 @@ const CartPage = () => {
                   className="w-16 h-16 object-cover rounded-md"
                 />
                 <div className="ml-4 text-sm sm:text-base">
-                  <h3 className="text-base font-medium dark:text-white">{item.productId.title}</h3>
-                  <p className="text-gray-500 dark:text-gray-400">{item.productId.category}</p>
-                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">In stock: {item.productId.quantity}</p>
+                  <h3 className="text-base font-medium dark:text-white">
+                    {item.productId.title}
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {item.productId.category}
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                    In stock: {item.productId.quantity}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center">
-                <button 
-                  onClick={() => updateQuantity(item._id, item.quantity - 1)} 
+                <button
+                  onClick={() => updateQuantity(item._id, item.quantity - 1)}
                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-l px-2"
                 >
                   -
@@ -855,22 +1020,28 @@ const CartPage = () => {
                   type="number"
                   value={item.quantity}
                   min="1"
-                  onChange={(e) => updateQuantity(item._id, parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateQuantity(item._id, parseInt(e.target.value))
+                  }
                   className="w-14 border-t border-b border-gray-300 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 />
-                <button 
-                  onClick={() => updateQuantity(item._id, item.quantity + 1)} 
+                <button
+                  onClick={() => updateQuantity(item._id, item.quantity + 1)}
                   className="bg-gray-300 hover:bg-gray-400 text-lg font-bold rounded-r px-2"
                 >
                   +
                 </button>
-                <p className="text-lg sm:text-xl font-semibold dark:text-white">₹{item.price}</p>
+                <p className="text-lg sm:text-xl font-semibold dark:text-white">
+                  ₹{item.price}
+                </p>
               </div>
             </div>
           ))}
         </div>
         <div className="p-4 bg-white dark:bg-gray-800 shadow-md rounded-lg">
-          <h3 className="text-xl font-bold mb-4 text-center sm:text-left dark:text-white">Order Summary</h3>
+          <h3 className="text-xl font-bold mb-4 text-center sm:text-left dark:text-white">
+            Order Summary
+          </h3>
           <div className="flex justify-between mb-2 text-sm sm:text-base dark:text-gray-300">
             <span>Subtotal</span>
             <span>₹{subtotal.toFixed(2)}</span>
@@ -889,10 +1060,8 @@ const CartPage = () => {
           </div>
           <div className="flex justify-between font-bold text-base sm:text-lg mb-6 dark:text-white">
             <span>Order total</span>
-            <span>₹{(subtotal + shippingEstimate + taxEstimate - (subtotal * (discount / 100))).toFixed(2)}</span>
+            <span>₹{orderTotal.toFixed(2)}</span>
           </div>
-
-          {/* Coupon Code Section */}
           <div className="flex mb-4">
             <input
               type="text"
@@ -908,8 +1077,11 @@ const CartPage = () => {
               Apply
             </button>
           </div>
-
-          <button className="w-full bg-indigo-600 text-white p-2 sm:p-3 rounded-lg font-semibold hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+          <button
+            onClick={()=>handleOrder(type,orderTotal)}
+            className="w-full bg-indigo-600 text-white p-2 sm:p-3 rounded-lg font-semibold hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
+          >
             Checkout
           </button>
         </div>

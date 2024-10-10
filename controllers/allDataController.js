@@ -43,7 +43,8 @@ const getallsearch = async (req, res) => {
       const productResults = await productModel.find({
         $or: [
           { title: new RegExp(query, 'i') },
-          { category: new RegExp(query, 'i') }
+          { category: new RegExp(query, 'i') },
+          { description: new RegExp(query, 'i') }
         ]
       });
       const result = {

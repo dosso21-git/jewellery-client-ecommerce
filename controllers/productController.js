@@ -41,7 +41,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const product = await Product.find({});
-    res.status(200).json({data:product});
+    res.status(200).json({ data: product });
   } catch (error) {
     res.status(500).json({ message: "Error fetching Products", error });
   }
@@ -219,7 +219,7 @@ const deleteProduct = async (req, res) => {
       { products: id },
       { $pull: { products: id } }
     ).session(session);
-  
+
     await Rating.updateMany(
       { product: id },
       { $pull: { product: id } }
@@ -252,7 +252,7 @@ const deleteProduct = async (req, res) => {
 const getMostSellingProducts = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   try {
-    const products = await Product.find().sort({ sold: -1 }).limit(limit);
+    const products = await Product.find().sort({ sold: -1 }).limit(limit).populate('offer');
     return res.status(200).json({ data: products });
   } catch (error) {
     return res.status(500).json({ message: "Server error", error });
@@ -356,7 +356,7 @@ const getPopularProducts = async (req, res) => {
   try {
     const popularProducts = await PopularProduct.find({})
       .sort({ popularityScore: -1 })
-      .populate("productId", "title description price images category");
+      .populate("productId");
     if (!popularProducts || popularProducts.length === 0) {
       return res.status(404).json({ message: "No popular products found" });
     }

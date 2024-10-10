@@ -14,6 +14,11 @@ const notificationSchema = new mongoose.Schema({
         ref: 'User',
         default: [],
     },
+    offerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Offers',
+        required: false,
+    },
     isGlobal: {
         type: Boolean,
         default: true,
@@ -28,6 +33,4 @@ const notificationSchema = new mongoose.Schema({
     },
 });
 
-const Notification = mongoose.model('Notification', notificationSchema);
-
-module.exports = Notification;
+module.exports = mongoose.model('Notification', notificationSchema);

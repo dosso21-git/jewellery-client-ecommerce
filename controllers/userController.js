@@ -328,14 +328,41 @@ const getAllAddresses = async (req, res) => {
   }
 };
 
+// const updateAddress = async (req, res) => {
+//   try {
+//     const addressId = req.params.id;
+//     const userId = req.user;
+
+//     const updatedAddress = await Address.findOneAndUpdate(
+//       { _id: addressId, user: userId },
+//       req.body,
+//       { new: true }
+//     );
+
+//     if (!updatedAddress) {
+//       return res.status(404).json({ error: 'Address not found or does not belong to user' });
+//     }
+
+//     res.status(200).json({ message: 'Address updated successfully', address: updatedAddress });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to update address', details: error.message });
+//   }
+// };
+
+
 const updateAddress = async (req, res) => {
   try {
-    const addressId = req.params.id;
-    const userId = req.user;
+    const { id, isDefault, ...addressData } = req.body;
+    const userId = req.user; // Ensure req.user has the correct user ID
 
+    if (isDefault) {
+      await Address.updateMany({ user: userId, isDefault: true }, { isDefault: false });
+    }
+
+    // Update the address for the current user
     const updatedAddress = await Address.findOneAndUpdate(
-      { _id: addressId, user: userId },
-      req.body,
+      { _id: id, user: userId }, // Ensure both _id and user match
+      { ...addressData, isDefault },
       { new: true }
     );
 
@@ -348,6 +375,7 @@ const updateAddress = async (req, res) => {
     res.status(500).json({ error: 'Failed to update address', details: error.message });
   }
 };
+
 
 const deleteAddress = async (req, res) => {
   try {

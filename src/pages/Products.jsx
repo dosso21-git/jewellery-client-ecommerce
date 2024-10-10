@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-import DishList from '../Components/DishList';
-import PopupMessage from '../Components/PopupMessage';
-=======
 import PopupMessage from './PopupMessage';
 import { FaEdit, FaTrashAlt, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
->>>>>>> 1255ae35cee12f12718693444282aa532793ce00
 
 
 const MainPage = () => {
@@ -25,10 +20,7 @@ const MainPage = () => {
   const [searchInput, setSearchInput] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
-<<<<<<< HEAD
-=======
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
->>>>>>> 1255ae35cee12f12718693444282aa532793ce00
 
   useEffect(() => {
     fetchProducts();
@@ -72,17 +64,11 @@ const MainPage = () => {
 
     try {
       if (editingProduct) {
-<<<<<<< HEAD
-        await axios.put(`user/product/update/${editingProduct._id}`, formDataObj);
-      } else {
-        await axios.post('user/product/create', formDataObj);
-=======
         await confirmUpdate(editingProduct._id, formDataObj);
         setSuccessMessage('Product updated successfully!'); // Set success message
       } else {
         await axios.post('user/admin/create', formDataObj);
         setSuccessMessage('Product created successfully!'); // Set success message
->>>>>>> 1255ae35cee12f12718693444282aa532793ce00
       }
       fetchProducts();
       setFormData({
@@ -102,8 +88,6 @@ const MainPage = () => {
   const handleEdit = (product) => {
     setFormData(product);
     setEditingProduct(product);
-<<<<<<< HEAD
-=======
     setFormData({
       title: product.title || '',
       description: product.description || '',
@@ -142,7 +126,6 @@ const MainPage = () => {
     } finally {
       setLoader(false);
     }
->>>>>>> 1255ae35cee12f12718693444282aa532793ce00
   };
 
   const handleSearch = async () => {
@@ -168,51 +151,6 @@ const MainPage = () => {
     });
   };
 
-<<<<<<< HEAD
-  const ConfirmDelete = (productId) => {
-    setConfirmAction(() => () => handleDelete(productId));
-    setShowPopup(true);
-  };
-
-  const handleDelete = async (productId) => {
-    setLoader(true);
-    try {
-      await axios.delete(`user/admin/delete/${productId}`);
-      fetchProducts();
-    } catch (error) {
-      console.error('Error deleting product:', error);
-    } finally {
-      setShowPopup(false);
-      setLoader(false);
-    }
-  };
-
-  return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-4xl font-bold text-center mb-8">All Listed Products</h1>
-
-      
-
-      {/* <DishForm
-        formData={formData}
-        handleInputChange={handleInputChange}
-        handleFileChange={handleFileChange}
-        handleSubmit={handleSubmit}
-        editingProduct={editingProduct}
-      /> */}
-
-      {loader ? (
-        <p className="text-center">Loading...</p>
-      ) : (
-        <DishList
-          products={products}
-          currentImageIndices={currentImageIndices}
-          handleEdit={handleEdit}
-          handleImageChange={handleImageChange}
-          ConfirmDelete={ConfirmDelete}
-        />
-      )}
-=======
   return (
     <div className="container mx-auto p-8">
       <div className="mb-4 relative">
@@ -323,20 +261,15 @@ const MainPage = () => {
           );
         })}
       </div>
->>>>>>> 1255ae35cee12f12718693444282aa532793ce00
 
       {showPopup && (
         <PopupMessage
           message="Are you sure you want to delete this dish?"
           onConfirm={confirmAction}
-<<<<<<< HEAD
-          onCancel={() => setShowPopup(false)}
-=======
           onCancel={() => {
             setShowPopup(false);
             setConfirmAction(null);
           }}
->>>>>>> 1255ae35cee12f12718693444282aa532793ce00
         />
       )}
 

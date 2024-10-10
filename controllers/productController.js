@@ -35,7 +35,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const product = await Product.find({});
-    res.status(200).json(product);
+    res.status(200).json({data:product});
   } catch (error) {
     res.status(500).json({ message: "Error fetching Products", error });
   }
@@ -220,6 +220,7 @@ const deleteProductPicture = async (req, res) => {
 const getProductsByCategory = async (req, res) => {
   try {
     const category = req.params.category;
+    console.log(category)
     const products = await Product.find({ category });
     if (!products || products.length === 0) {
       return res.status(404).json({

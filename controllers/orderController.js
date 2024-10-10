@@ -3,45 +3,120 @@ const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
 const cartModel = require("../models/cartModel");
 
+// exports.createOrder = async (req, res) => {
+//   try {
+//     // Step 1: Retrieve user from the request (assuming user info is attached via middleware like JWT)
+//     const user = req.body.userId;
+
+//     // Step 2: Get the cart items for the user
+//     const cart = await cartModel.findOne({ userId: req.body.userId });
+//     console.log(cart);
+
+//     if (!cart || cart.items.length === 0) {
+//       return res.status(400).json({ message: "Cart is empty" });
+//     }
+//     // Step 3: Get the discounted price and discount type from the request body
+//     const { discountedprice, discount_type } = req.body;
+//     if (!discountedprice || !discount_type) {
+//       return res
+//         .status(400)
+//         .json({ message: "Discounted price and type are required" });
+//     }
+//     console.log({
+//       userId: req.body.userId,
+//       items: cart.items,
+//       totalAmount: cart.totalPrice,
+//       discountedprice,
+//       discount_type,
+//       createdAt: new Date(),
+//     });
+
+//     // Step 4: Create a new order with cart items and discounted info
+//     const order = new Order({
+//       userId: req.body.userId,
+//       items: cart.items,
+//       totalAmount: cart.totalPrice,
+//       discountedprice,
+//       discount_type,
+//       createdAt: new Date(),
+//     });
+
+//     // Step 5: Save the order
+//     await order.save();
+//     // Step 6: Optionally, clear the cart after order creation
+//     await cartModel.findOneAndUpdate({ user: user._id }, { items: [] });
+//     // Step 7: Send response
+//     return res
+//       .status(201)
+//       .json({ message: "Order created successfully", order });
+//   } catch (error) {
+//     console.error("Error creating order:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 
 exports.createOrder = async (req, res) => {
   try {
-    // Step 1: Retrieve user from the request (assuming user info is attached via middleware like JWT)
-    const user = req.body.userId;
-    console.log("gjhkjhkjhk",user)
+    // Step 1: Retrieve user and order details from the request
+    const { userId, discountedprice, discount_type, tax_estimate, shipping_estimate } = req.body;
 
-    // Step 2: Get the cart items for the user
-    const cart = await cartModel.findOne({ userId : req.body.userId});
-    console.log(cart)
+    // Step 2: Validate required fields
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    if (!discountedprice || typeof discountedprice !== 'number' || discountedprice <= 0) {
+      return res.status(400).json({ message: "Valid discounted price is required" });
+    }
+
+    const validDiscountTypes = ["offer", "coupon"];
+    if (!validDiscountTypes.includes(discount_type)) {
+      return res.status(400).json({ message: "Invalid discount type" });
+    }
+
+    // if (!discount || typeof discount !== 'number' || discount < 0) {
+    //   return res.status(400).json({ message: "Valid discount is required" });
+    // }
+
+    if (!tax_estimate || typeof tax_estimate !== 'number' || tax_estimate < 0) {
+      return res.status(400).json({ message: "Valid tax estimate is required" });
+    }
+
+    if (!shipping_estimate || typeof shipping_estimate !== 'number' || shipping_estimate < 0) {
+      return res.status(400).json({ message: "Valid shipping estimate is required" });
+    }
+
+    // Step 3: Get the cart items for the user
+    const cart = await cartModel.findOne({ userId });
     if (!cart || cart.items.length === 0) {
-      return res.status(400).json({ message: 'Cart is empty' });
-    }
-    // Step 3: Get the discounted price and discount type from the request body
-    const { discountedprice, discount_type } = req.body;
-    if (!discountedprice || !discount_type) {
-      return res.status(400).json({ message: 'Discounted price and type are required' });
+      return res.status(400).json({ message: "Cart is empty or not found" });
     }
 
-    // Step 4: Create a new order with cart items and discounted info
-    const order = new Order({
-      userId: req.body.userId,   
+    // Step 4: Create the order object
+    const orderData = {
+      userId,
       items: cart.items,
       totalAmount: cart.totalPrice,
-      discountedprice,   
-      discount_type,                
-      createdAt: new Date()
-    });
+      discountedprice,
+      discount_type,
+      tax_estimate,
+      shipping_estimate,
+      createdAt: new Date(),
+    };
 
-    // Step 5: Save the order
+    // Step 5: Create and save the new order
+    const order = new Order(orderData);
     await order.save();
-    // Step 6: Optionally, clear the cart after order creation
-    await cartModel.findOneAndUpdate({ user: user._id }, { items: [] });
-    // Step 7: Send response
-    return res.status(201).json({ message: 'Order created successfully', order });
+
+    // Step 6: Clear the cart after order creation
+    await cartModel.findOneAndUpdate({ userId }, { items: [] });
+
+    // Step 7: Send success response
+    return res.status(201).json({ message: "Order created successfully", order ,status: 200 });
   } catch (error) {
-    console.error('Error creating order:', error);
-    return res.status(500).json({ message: 'Server error' });
+    console.error("Error creating order:", error.message);
+    return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -54,13 +129,15 @@ exports.getUserOrders = async (req, res) => {
     const orders = await Order.find({ userId });
     // Step 3: Check if the user has any orders
     if (!orders || orders.length === 0) {
-      return res.status(404).json({ message: 'No orders found for this user' });
+      return res.status(404).json({ message: "No orders found for this user" });
     }
     // Step 4: Send response with all orders
-    return res.status(200).json({ message: 'Orders retrieved successfully', orders });
+    return res
+      .status(200)
+      .json({ message: "Orders retrieved successfully", orders });
   } catch (error) {
-    console.error('Error fetching user orders:', error);
-    return res.status(500).json({ message: 'Server error' });
+    console.error("Error fetching user orders:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 // Update an order by ID

@@ -1,4 +1,5 @@
-import React from 'react'; 
+import axios from 'axios';
+import React, { useEffect } from 'react'; 
 import { useNavigate, useParams } from 'react-router-dom';
 
 const products = [
@@ -31,6 +32,34 @@ const navigation = useNavigate()
 
 const {type} = useParams();
 console.log('category from params',type)
+
+
+
+useEffect(() => {
+  // Set search term
+  // setSearchTerm(search || "");
+
+  const getData = async () => {
+    // setLoading(true);
+    let category = type
+    try {
+      const result = await axios.get(`/product/category/${category}`);
+      if (result.data) {
+        // setProductData(result.data.products); // Set product data from the response
+      } else {
+        // setProductData([]); // Fallback to empty array if no products found
+      }
+    } catch (error) {
+      console.error('Error fetching product data', error);
+      // setProductData([]); // Handle error by resetting product data
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  getData();
+}, [location]);
+
 
   return (
     <div className="container mx-auto p-4 m-32">

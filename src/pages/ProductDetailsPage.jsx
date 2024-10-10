@@ -1113,14 +1113,6 @@
 
 
 
-
-
-
-
-
-
-
-
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -1128,6 +1120,7 @@ import ReactImageMagnify from 'react-image-magnify';
 import Cookies from 'js-cookie';
 import CouponPopup from '../components/Popup/CouponPopup';
 import axios from 'axios';
+import { AlertCustomStyles } from '../components/Popup/SuccessAlert';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -1145,7 +1138,19 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const token = Cookies.get('loginToken');
 
+
+  const dummyProduct = {
+    title: "Dummy Product Title",
+    description: "This is a description of the dummy product.",
+    price: 100,
+    images: ["https://via.placeholder.com/300", "https://via.placeholder.com/300"],
+    totalrating: 4.5,
+    ratings: [{ star: 4, comment: "Good!" }],
+    availableOffers: ["10% off on first purchase", "Free shipping on orders over ₹500"],
+  };
+
   useEffect(() => {
+    // setProductData(dummyProduct);
     const getProductById = async () => {
       try {
         const result = await axios.get(`/product/get/${id}`);
@@ -1154,6 +1159,8 @@ const ProductDetails = () => {
           setSelectedImage(result.data.images[0]);
           setDiscountedPrice(result.data.price);
           setRatings(result.data.ratings || []);
+        }else{
+          setProductData(dummyProduct); // Use dummy product if no data is returned
         }
       } catch (error) {
         // setError('Error fetching product data');
@@ -1178,16 +1185,23 @@ const ProductDetails = () => {
       navigate('/login');
     } else {
       addToCartProduct(productId,quantity)
+      setShowAlert(true);
       // navigate('/cart');
     }
   };
 
-
   const addToCartProduct = async (productId,quantity) => {
-        const result =  axios.post('/cart/add',{
+       try{
+        const result =  await axios.post('/cart/add',{
           productId, quantity
         });
         console.log('result',result);
+        if(result.data){
+          setShowAlert(true);
+        }
+      }catch(err){
+          console.log('this is erro in adding to cart',err)
+      }
   }
 
   const toggleWishlist = () => {
@@ -1221,14 +1235,28 @@ const ProductDetails = () => {
     // await axios.post(`/product/rate/${id}`, { star: newRating });
   };
 
-  if (loading) return <p>Loading...</p>;
+  // if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   const discount = ((productData.price - discountedPrice) / productData.price) * 100;
 
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
+
+  useEffect(()=>{
+    handleShowAlert
+  },[])
+
+
+
+
   return (
     <div className="container mx-auto p-4 mt-24">
       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
+     <AlertCustomStyles visible={showAlert} setVisible={setShowAlert} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <div className="border mb-4 p-4">
@@ -1278,20 +1306,6 @@ const ProductDetails = () => {
             <span className="text-3xl font-bold text-red-600">₹{discountedPrice}</span>
             <span className="line-through text-gray-500 ml-4">₹{productData.price}</span>
             <span className="text-green-600 font-semibold ml-2">{Math.round(discount)}% off</span>
-          </div>
-          <div className="mb-4">
-            <input
-              type="text"
-              value={couponCode}
-              onChange={(e) => setCouponCode(e.target.value)}
-              placeholder="Enter coupon code"
-              className="border rounded p-2 w-full"
-            />
-            <button
-              onClick={applyCoupon}
-              className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-              Apply Coupon
-            </button>
           </div>
           <div className="mb-4">
             <h3 className="text-lg font-semibold">Rate this Product</h3>

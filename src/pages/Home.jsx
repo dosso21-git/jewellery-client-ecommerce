@@ -524,7 +524,7 @@ const Home = () => {
         </div>
       )}
 
-      {!searchTerm && (
+      {(!searchTerm || !sortTerm)&& (
         <>
           <Hero handleOrderPopup={handleOrderPopup} />
           <Products/>

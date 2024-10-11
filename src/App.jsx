@@ -24,6 +24,7 @@ import MostSellingProducts from "./pages/MostSellingProducts";
 import MostPopularProducts from "./pages/MostPopular";
 import RecentViewProducts from "./pages/RecentViewProducts";
 import About from "./pages/AboutPage";
+import ContactUs from './pages/ContactUs'
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -60,7 +61,7 @@ const App = () => {
               <Route path="/most-popular" element={<MostPopularProducts />} />
               <Route path="/recent-view" element={<RecentViewProducts />} />
               <Route path="/best-selling" element={<BestSellingProductsPage />} />
-              <Route path="/contact" element={<ContactUs />} />
+            
 
               {/* Protected Routes */}
               <Route
@@ -110,6 +111,7 @@ const App = () => {
             </Route>
             <Route path="/" element={<MainLayout showSearchBar={false} />}>
               <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<ContactUs />} />
             </Route>
           </Routes>
         </Router>

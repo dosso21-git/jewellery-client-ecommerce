@@ -117,7 +117,6 @@
 
 
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link
 import footerLogo from "../../assets/logo.png";
 import Banner from "../../assets/website/footer-pattern.jpg";
 import {
@@ -128,6 +127,7 @@ import {
   FaMobileAlt,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+
 
 const BannerImg = {
   backgroundImage: `url(${Banner})`,

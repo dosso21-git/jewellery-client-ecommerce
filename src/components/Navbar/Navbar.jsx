@@ -372,7 +372,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-1">
               <img src={Logo} alt="Logo" className="w-8 sm:w-10" />
-              <div className="hidden sm:hidden justify-center">
+              <div className="hidden sm:flex justify-center">
                 <span className="sm:text-2xl">Jewellery-Shop</span> {/* Hide on mobile */}
               </div>
             </Link>

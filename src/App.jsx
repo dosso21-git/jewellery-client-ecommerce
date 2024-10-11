@@ -24,12 +24,9 @@ import MostSellingProducts from "./pages/MostSellingProducts";
 import MostPopularProducts from "./pages/MostPopular";
 import RecentViewProducts from "./pages/RecentViewProducts";
 import About from "./pages/AboutPage";
-<<<<<<< HEAD
 import ArticlesGrid from "./pages/blogPage";
 import ArticleDetails from "./pages/ArticleDetails";
-=======
 import ContactUs from './pages/ContactUs'
->>>>>>> b6597f454e6e2950287ca8d59c1e178a33827fab
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {

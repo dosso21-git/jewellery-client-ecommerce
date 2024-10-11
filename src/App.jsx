@@ -181,6 +181,7 @@ import BestSellingProductsPage from "./pages/BestSellingProducts";
 import MostSellingProducts from "./pages/MostSellingProducts";
 import MostPopularProducts from "./pages/MostPopular";
 import RecentViewProducts from "./pages/RecentViewProducts";
+import About from "./pages/AboutPage";
 
 const App = () => {
   React.useEffect(() => {
@@ -213,6 +214,7 @@ const App = () => {
           <Route path="/all-products" element={<MainLayout><AllProductsPage /></MainLayout>} />
           <Route path="order-summary" element={<MainLayout><OrderSummary /></MainLayout>} />
           <Route path='account' element={<MainLayout><AccountSettings /></MainLayout>} />
+          <Route path='about' element={<MainLayout showSearchBar={false}><About /></MainLayout>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>

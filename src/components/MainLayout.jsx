@@ -4,11 +4,11 @@ import Navbar from './Navbar/Navbar';
 import SearchBar from './Navbar/SearchBar';
 import Footer from './Footer/Footer';
 
-const MainLayout = () => {
+const MainLayout = ({ showSearchBar = true }) => {
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 mt-14">
       <Navbar />
-      <SearchBar />
+      {showSearchBar && <SearchBar />}
       <Outlet />
       <Footer />
     </div>
@@ -16,3 +16,7 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
+
+
+
+

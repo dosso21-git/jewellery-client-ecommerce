@@ -1,160 +1,5 @@
 
 
-// import React from "react";
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import Navbar from "./components/Navbar/Navbar";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
-// // Import your page components
-// import Home from './pages/Home';
-// import TopRated from "./pages/TopRated";
-// import CartPage from "./pages/Cart";
-// import ProductDetails from "./pages/ProductDetailsPage";
-// import LoginPage from "./pages/LoginPage";
-// import RegisterPage from "./pages/RegisterPage";
-// import WishlistPage from "./pages/WishListPage";
-// import DeliveryAddress from "./pages/DeliveryAddress";
-// import AllCategoryProducts from "./pages/AllCategoryProductsPage";
-// import SearchBar from "./components/Navbar/SearchBar";
-// import AllProductsPage from "./pages/AllProductsPage";
-// import ScrollToTop from "./components/ScrollToTop";
-// import OrderSummary from "./pages/OrderSummaryPage";
-// import AccountSettings from "./pages/AccountSettings";
-// import Cookies from "js-cookie";
-
-// const App = () => {
-//   const token = Cookies.set('loginToken'); 
-//   const handleSearch = (term) => {
-//     alert('term')
-//     // setSearchTerm(term);
-//     // navigate("/"); // Redirect to Home page
-//   };
-
-//   React.useEffect(() => {
-//     AOS.init({
-//       offset: 100,
-//       duration: 200,
-//       easing: "ease-in-sine",
-//       delay: 100,
-//     });
-//     AOS.refresh();
-//   }, []);
-
-//   return (
-//     <Router>
-//       <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 mt-14">
-//         <Navbar onSearch={handleSearch}/>
-//         <SearchBar/>
-//         <ScrollToTop/>
-//         <Routes>
-//           <Route path="/" element={<Home />} />
-//           <Route path ='top-rated' element={<TopRated/>} />
-//           <Route path ='cart' element={<CartPage/>} />
-//           <Route path="/product-details/:id" element={<ProductDetails/>} />
-//           <Route path="/wishlist" element={<WishlistPage/>} />
-//           <Route path="/delivery-address" element={<DeliveryAddress/>} />
-//           <Route path="/all-category/:type" element={<AllCategoryProducts/>} />
-//           <Route path="/all-products" element={<AllProductsPage/>} />
-//           <Route path="order-summary" element={<OrderSummary/>} />
-//           <Route path='account' element={<AccountSettings/>} />
-//           {/* Add other routes as needed */}
-//           <Route path="/login" element={<LoginPage/>} />
-//           <Route path="/register" element={<RegisterPage/>} />
-//           {/* Example: <Route path="/top-rated" element={<TopRated />} /> */}
-//         </Routes>
-
-//         {/* Always render shared components here, if you want them visible on every page */}
-
-//       </div>
-//     </Router>
-//   );
-// };
-
-// export default App;
-
-
-
-
-
-
-
-
-
-// // src/App.js
-// import React from "react";
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import Navbar from "./components/Navbar/Navbar";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
-// import { AppProvider } from './context/AppContext'; // Import the provider
-// import Home from './pages/Home';
-// import TopRated from "./pages/TopRated";
-// import CartPage from "./pages/Cart";
-// import ProductDetails from "./pages/ProductDetailsPage";
-// import LoginPage from "./pages/LoginPage";
-// import RegisterPage from "./pages/RegisterPage";
-// import WishlistPage from "./pages/WishListPage";
-// import DeliveryAddress from "./pages/DeliveryAddress";
-// import AllCategoryProducts from "./pages/AllCategoryProductsPage";
-// import SearchBar from "./components/Navbar/SearchBar";
-// import AllProductsPage from "./pages/AllProductsPage";
-// import ScrollToTop from "./components/ScrollToTop";
-// import OrderSummary from "./pages/OrderSummaryPage";
-// import AccountSettings from "./pages/AccountSettings";
-
-// const App = () => {
-//   const handleSearch = (term) => {
-//     alert(term);
-//     // Handle search logic here
-//   };
-
-//   React.useEffect(() => {
-//     AOS.init({
-//       offset: 100,
-//       duration: 200,
-//       easing: "ease-in-sine",
-//       delay: 100,
-//     });
-//     AOS.refresh();
-//   }, []);
-
-//   return (
-//     <AppProvider>
-//       <Router>
-//         <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 mt-14">
-//           <Navbar onSearch={handleSearch} />
-//           <SearchBar />
-//           <ScrollToTop />
-//           <Routes>
-//             <Route path="/" element={<Home />} />
-//             <Route path='top-rated' element={<TopRated />} />
-//             <Route path='cart' element={<CartPage />} />
-//             <Route path="/product-details/:id" element={<ProductDetails />} />
-//             <Route path="/wishlist" element={<WishlistPage />} />
-//             <Route path="/delivery-address" element={<DeliveryAddress />} />
-//             <Route path="/all-category/:type" element={<AllCategoryProducts />} />
-//             <Route path="/all-products" element={<AllProductsPage />} />
-//             <Route path="order-summary" element={<OrderSummary />} />
-//             <Route path='account' element={<AccountSettings />} />
-//             <Route path="/login" element={<LoginPage />} />
-//             <Route path="/register" element={<RegisterPage />} />
-//           </Routes>
-//         </div>
-//       </Router>
-//     </AppProvider>
-//   );
-// };
-
-// export default App;
-
-
-
-
-
-
-
-
-
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AOS from "aos";
@@ -180,6 +25,7 @@ import BestSellingProductsPage from "./pages/BestSellingProducts";
 import MostSellingProducts from "./pages/MostSellingProducts";
 import MostPopularProducts from "./pages/MostPopular";
 import RecentViewProducts from "./pages/RecentViewProducts";
+import About from "./pages/AboutPage";
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -262,6 +108,9 @@ const App = () => {
               <Route path="/all-category/:type" element={<AllCategoryProducts />} />
               <Route path="/all-products" element={<AllProductsPage />} />
             </Route>
+            <Route path="/" element={<MainLayout showSearchBar={false} />}>
+              <Route path="/about" element={<About />} />
+            </Route>
           </Routes>
         </Router>
       </ErrorBoundary>
@@ -270,3 +119,9 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
+
+

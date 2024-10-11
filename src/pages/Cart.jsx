@@ -1,14 +1,11 @@
-
 //todayimport { useEffect, useState } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CouponPopup from "../components/Popup/CouponPopup";
 
-
-import React from 'react';
-import Lottie from 'lottie-react';
-import successAnimation from './cartAnimation/CartAnimation.json'; // Replace with your animation file
-
+import React from "react";
+import Lottie from "lottie-react";
+import successAnimation from "./cartAnimation/CartAnimation.json"; // Replace with your animation file
 
 const CartPage = () => {
   const [cartData, setCartData] = useState(null);
@@ -49,18 +46,23 @@ const CartPage = () => {
     getAddresses();
   }, []);
 
-  if (!cartData) return(
-   <div>
-        <div
-         className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black "
-         >
-            <div className=" p-6 rounded-lg shadow-lg text-center">
-                <Lottie animationData={successAnimation} loop={true} style={{ width: 250, height: 250 }} />
-                <h2 className="mt-4 text-lg font-semibold text-white">Your Cart is Empty</h2>
-            </div>
+  if (!cartData)
+    return (
+      <div>
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black ">
+          <div className=" p-6 rounded-lg shadow-lg text-center">
+            <Lottie
+              animationData={successAnimation}
+              loop={true}
+              style={{ width: 250, height: 250 }}
+            />
+            <h2 className="mt-4 text-lg font-semibold text-white">
+              Your Cart is Empty
+            </h2>
+          </div>
         </div>
-  </div>
-  )
+      </div>
+    );
 
   const { items } = cartData;
 
@@ -89,9 +91,14 @@ const CartPage = () => {
     setCartData({ ...cartData, items: newCart });
   };
 
-  const removeItem = (id) => {
-    const newItems = items.filter((item) => item._id !== id);
-    setCartData({ ...cartData, items: newItems });
+  const removeItem = async(id) => {
+    try {
+      await axios.post('/cart/remove',{
+        productId: id,
+      })
+      const newItems = items.filter((item) => item._id !== id);
+      setCartData({ ...cartData, items: newItems });
+    } catch (error) {}
   };
 
   const applyCoupon = () => {
@@ -137,7 +144,7 @@ const CartPage = () => {
 
   return (
     <div className="container mx-auto p-4 dark:bg-gray-900 mt-32">
-      {showPopup &&  <CouponPopup onClose={() => setShowPopup(false)} />}
+      {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
       <h2 className="text-2xl font-bold mb-4 text-center dark:text-white">
         Shopping Cart
       </h2>

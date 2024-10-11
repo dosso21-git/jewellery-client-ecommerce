@@ -26,19 +26,19 @@ const ArticlesGrid = () => {
   const articles = [
     {
       id: 1,
-      imageSrc: 'https://via.placeholder.com/400x400',
+      imageSrc: '/ai-generated-8659741_640.jpg', // Remove '/public'
       title: 'How to Style Silver Jewellery',
       description: 'Did you know that in Australia the jewellery industry is worth almost $3 billion annually? That\'s a lot of sparkles...'
     },
     {
       id: 2,
-      imageSrc: 'https://via.placeholder.com/400x400',
+      imageSrc: '/gold-necklace-with-necklace-earrings_752325-8523.avif',
       title: '7 Online Jewellery Shopping Mistakes to Avoid',
       description: 'Like so many other products, jewellery sales are increasingly moving online rather than taking place in a traditional brick-and-mortar store...'
     },
     {
       id: 3,
-      imageSrc: 'https://via.placeholder.com/400x400',
+      imageSrc: '/images.jpg',
       title: 'Are Gold Rings Worth the Investment?',
       description: 'Gold rings have been a much sought-after jewellery accessory for millennia, with some of the oldest rings in gold found...'
     }

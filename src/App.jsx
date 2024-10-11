@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AOS from "aos";
@@ -26,8 +24,12 @@ import MostSellingProducts from "./pages/MostSellingProducts";
 import MostPopularProducts from "./pages/MostPopular";
 import RecentViewProducts from "./pages/RecentViewProducts";
 import About from "./pages/AboutPage";
+<<<<<<< HEAD
 import ArticlesGrid from "./pages/blogPage";
 import ArticleDetails from "./pages/ArticleDetails";
+=======
+import ContactUs from './pages/ContactUs'
+>>>>>>> b6597f454e6e2950287ca8d59c1e178a33827fab
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -64,6 +66,7 @@ const App = () => {
               <Route path="/most-popular" element={<MostPopularProducts />} />
               <Route path="/recent-view" element={<RecentViewProducts />} />
               <Route path="/best-selling" element={<BestSellingProductsPage />} />
+            
 
               {/* Protected Routes */}
               <Route
@@ -112,8 +115,12 @@ const App = () => {
             </Route>
             <Route path="/" element={<MainLayout showSearchBar={false} />}>
               <Route path="/about" element={<About />} />
+<<<<<<< HEAD
               <Route path="/blog" element={<ArticlesGrid />} />
               <Route path="/blog/:id" element={<ArticleDetails />} />
+=======
+              <Route path="/contact" element={<ContactUs />} />
+>>>>>>> b6597f454e6e2950287ca8d59c1e178a33827fab
             </Route>
           </Routes>
         </Router>
@@ -123,9 +130,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-
-

@@ -5,7 +5,7 @@
 //   const [addresses, setAddresses] = useState([]);
 //   const [isEditing, setIsEditing] = useState(false);
 //   const [currentAddress, setCurrentAddress] = useState({ id: "", street: "", city: "", zip: "" });
-  
+
 //   // Fetch all addresses
 //   const getAddresses = async () => {
 //     try {
@@ -124,15 +124,6 @@
 // };
 
 // export default AddAddress;
-
-
-
-
-
-
-
-
-
 
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
@@ -358,7 +349,7 @@ const AddAddress = () => {
       const response = await axios.post("/add/address", currentAddress);
       setAddresses([...addresses, response.data.address]);
       resetForm();
-      alert("successfully added address")
+      alert("successfully added address");
     } catch (error) {
       console.error("Error adding address:", error);
       alert("Error adding address. Please try again.");
@@ -366,12 +357,21 @@ const AddAddress = () => {
   };
 
   // Update address
-  const updateAddress = async () => {
+  const updateAddress = async (id) => {
+ 
     try {
-      const response = await axios.put(`/address/update/${currentAddress.id}`, currentAddress);
+      const response = await axios.put(`/address/update`, {
+        id,
+        ...currentAddress,
+      });
 
-      setAddresses(addresses.map((addr) => (addr.id === currentAddress.id ? response.data.address : addr)));
+      setAddresses(
+        addresses.map((addr) =>
+          addr.id === currentAddress.id ? response.data.address : addr
+        )
+      );
       resetForm();
+      alert('updated successfully')
     } catch (error) {
       console.error("Error updating address:", error);
       alert("Error updating address. Please try again.");
@@ -380,15 +380,21 @@ const AddAddress = () => {
 
   // Delete address
   const deleteAddress = async (id) => {
+    alert(id);
     try {
-      await axios.delete(`/address/delete/${id}`);
-      setAddresses(addresses.filter((addr) => addr.id !== id));
+      const response = await axios.delete("/address/delete", {
+        data: { id }, // Correctly passing `id` in the request body
+      });
+
+      if (response.ok) {
+        setAddresses(addresses.filter((addr) => addr._id !== id));
+      }
+      getAddresses();
     } catch (error) {
       console.error("Error deleting address:", error);
       alert("Error deleting address. Please try again.");
     }
   };
-
   const resetForm = () => {
     setCurrentAddress({
       id: "",
@@ -425,20 +431,31 @@ const AddAddress = () => {
         <h3 className="text-lg font-semibold">Addresses</h3>
         <div className="mt-4">
           {addresses.map((address) => (
-            <div key={address.id} className="flex justify-between items-center p-2 border-b">
+            <div
+              key={address._id}
+              className="flex justify-between items-center p-2 border-b"
+            >
               <div>
                 <p>
-                  {address.addressLine1}, {address.addressLine2}, {address.city}, {address.state}, {address.country},{" "}
-                  {address.postalCode}
+                  {address.addressLine1}, {address.addressLine2}, {address.city}
+                  , {address.state}, {address.country}, {address.postalCode}
                 </p>
-                <p>Phone: {address.phone}</p>
-                {address.isDefault && <span className="text-green-500">Default Address</span>}
+              
+                {address.isDefault && (
+                  <span className="text-green-500">Default Address</span>
+                )}
               </div>
               <div>
-                <button onClick={() => handleEdit(address)} className="text-blue-500">
+                <button
+                  onClick={() => handleEdit(address)}
+                  className="text-blue-500"
+                >
                   Edit
                 </button>
-                <button onClick={() => deleteAddress(address.id)} className="text-red-500 ml-2">
+                <button
+                  onClick={() => deleteAddress(address._id)}
+                  className="text-red-500 ml-2"
+                >
                   Delete
                 </button>
               </div>
@@ -446,7 +463,9 @@ const AddAddress = () => {
           ))}
         </div>
         <div className="mt-6">
-          <h4 className="text-lg font-semibold">{isEditing ? "Edit Address" : "Add Address"}</h4>
+          <h4 className="text-lg font-semibold">
+            {isEditing ? "Edit Address" : "Add Address"}
+          </h4>
           <input
             type="text"
             name="addressLine1"
@@ -508,13 +527,20 @@ const AddAddress = () => {
               type="checkbox"
               name="isDefault"
               checked={currentAddress.isDefault}
-              onChange={() => setCurrentAddress((prev) => ({ ...prev, isDefault: !prev.isDefault }))}
+              onChange={() =>
+                setCurrentAddress((prev) => ({
+                  ...prev,
+                  isDefault: !prev.isDefault,
+                }))
+              }
               className="mr-2"
             />
             Set as default address
           </label>
           <button
-            onClick={isEditing ? updateAddress : addAddress}
+            onClick={
+              isEditing ? () => updateAddress(currentAddress._id) : addAddress
+            }
             className="bg-blue-500 text-white rounded p-2 mt-4"
           >
             {isEditing ? "Update Address" : "Add Address"}

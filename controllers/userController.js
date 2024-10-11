@@ -417,9 +417,15 @@ const unblockUser = async (req, res) => {
 const updatePassword = async (req, res) => {
   const id = req.user;
   const { password } = req.body;
+  const saltRounds = 10;
+
   const user = await User.findById(id);
+
+  const salt = await bcrypt.genSalt(saltRounds);
+  const passwordHash = await bcrypt.hash(password, salt);
+
   if (password) {
-    user.password = password;
+    user.password = passwordHash;
     const updatedPassword = await user.save();
     res.json(updatedPassword);
   } else {
@@ -428,20 +434,4 @@ const updatePassword = async (req, res) => {
 };
 
 
-module.exports = {
-  createUser,
-  loginAdmin,
-  loginUserCtrl,
-  updatedUser,
-  deleteaUser,
-  restoreUser,
-  getaUser,
-  getallUser,
-  blockUser,
-  unblockUser,
-  addAddress,
-  getAllAddresses,
-  updateAddress,
-  deleteAddress,
-  updatePassword
-};
+module.exports = { createUser, loginAdmin, loginUserCtrl, updatedUser, deleteaUser, restoreUser, getaUser, getallUser, blockUser, unblockUser, addAddress, getAllAddresses, updateAddress, deleteAddress, updatePassword };

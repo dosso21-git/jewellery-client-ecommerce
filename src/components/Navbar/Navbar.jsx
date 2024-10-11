@@ -326,13 +326,13 @@ import { MdAccountCircle } from "react-icons/md";
 import Cookies from "js-cookie";
 import { FaCaretDown, FaBars, FaTimes } from "react-icons/fa";
 import DarkMode from "./DarkMode";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Notification from "../Notification";
 
 const Menu = [
   { id: 1, name: "Home", link: "/" },
   { id: 2, name: "Top Rated", link: "/top-rated" },
-  { id: 3, name: "Earrings", link: "/#" },
+  { id: 3, name: "Earrings", link: "/" },
 ];
 
 const DropdownLinks = [
@@ -350,7 +350,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const [token, setToken] = useState('')
 
-  useEffect(()=>{
+  useEffect(() => {
     const token = Cookies.get('loginToken');
     setToken(token)
   }, [])
@@ -370,24 +370,24 @@ const Navbar = () => {
         <div className="container flex justify-between items-center">
           {/* <div className="hidden sm:flex justify-center"> */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center gap-1">
+            <Link to="/" className="flex items-center gap-1">
               <img src={Logo} alt="Logo" className="w-8 sm:w-10" />
-              <div className="hidden sm:flex justify-center">
+              <div className="hidden sm:hidden justify-center">
                 <span className="sm:text-2xl">Jewellery-Shop</span> {/* Hide on mobile */}
               </div>
-            </a>
+            </Link>
           </div>
 
           <div className="hidden sm:flex justify-center">
             <ul className="flex items-center gap-4">
               {Menu.map((data) => (
                 <li key={data.id}>
-                  <a
-                    href={data.link}
+                  <Link
+                    to={data.link}
                     className="inline-block px-4 hover:text-primary duration-200"
                   >
                     {data.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li className="group relative cursor-pointer">
@@ -401,12 +401,9 @@ const Navbar = () => {
                   <ul>
                     {DropdownLinks.map((data) => (
                       <li key={data.id}>
-                        <a
-                          href={data.link}
-                          className="inline-block w-full rounded-md p-2 hover:bg-primary/20"
-                        >
+                        <Link to={data.link} className="inline-block w-full rounded-md p-2 hover:bg-primary/20">
                           {data.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -458,12 +455,12 @@ const Navbar = () => {
         <ul className="flex flex-col items-center gap-4">
           {Menu.map((data) => (
             <li key={data.id}>
-              <a
-                href={data.link}
+              <Link
+                to={data.link}
                 className="inline-block px-4 hover:text-primary duration-200"
               >
                 {data.name}
-              </a>
+              </Link>
             </li>
           ))}
           <li className="group relative cursor-pointer">
@@ -477,12 +474,12 @@ const Navbar = () => {
               <ul>
                 {DropdownLinks.map((data) => (
                   <li key={data.id}>
-                    <a
-                      href={data.link}
+                    <Link
+                      to={data.link}
                       className="inline-block w-full rounded-md p-2 hover:bg-primary/20"
                     >
                       {data.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

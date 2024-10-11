@@ -8,6 +8,7 @@ import {
   FaLocationArrow,
   FaMobileAlt,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const BannerImg = {
   backgroundImage: `url(${Banner})`,
@@ -21,19 +22,19 @@ const BannerImg = {
 const FooterLinks = [
   {
     title: "Home",
-    link: "/home",
+    link: "/",
   },
   {
     title: "About",
-    link: "/#about",
+    link: "/about",
   },
   {
     title: "Contact",
-    link: "/#contact",
+    link: "/contact",
   },
   {
     title: "Blog",
-    link: "/#blog",
+    link: "/blog",
   },
 ];
 
@@ -61,7 +62,9 @@ const Footer = () => {
               <ul className="flex flex-col gap-3">
                 {FooterLinks.map((link) => (
                   <li key={link.title} className="text-gray-300 hover:text-primary transition duration-300 cursor-pointer">
-                    <span>{link.title}</span>
+                    <Link to={link.link}>
+                      {link.title}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -73,7 +76,9 @@ const Footer = () => {
               <ul className="flex flex-col gap-3">
                 {FooterLinks.map((link) => (
                   <li key={link.title} className="text-gray-300 hover:text-primary transition duration-300 cursor-pointer">
-                    <span>{link.title}</span>
+                    <Link to={link.link}>
+                      {link.title}
+                    </Link>
                   </li>
                 ))}
               </ul>

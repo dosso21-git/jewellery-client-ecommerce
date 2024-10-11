@@ -115,12 +115,9 @@ const App = () => {
             </Route>
             <Route path="/" element={<MainLayout showSearchBar={false} />}>
               <Route path="/about" element={<About />} />
-<<<<<<< HEAD
               <Route path="/blog" element={<ArticlesGrid />} />
               <Route path="/blog/:id" element={<ArticleDetails />} />
-=======
               <Route path="/contact" element={<ContactUs />} />
->>>>>>> b6597f454e6e2950287ca8d59c1e178a33827fab
             </Route>
           </Routes>
         </Router>

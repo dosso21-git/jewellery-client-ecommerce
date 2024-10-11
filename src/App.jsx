@@ -64,7 +64,7 @@
 //         </Routes>
 
 //         {/* Always render shared components here, if you want them visible on every page */}
-       
+
 //       </div>
 //     </Router>
 //   );
@@ -155,12 +155,11 @@
 
 
 
-
-// src/App.js
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Cookies from "js-cookie";
 import { AppProvider } from './context/AppContext';
 import Home from './pages/Home';
 import TopRated from "./pages/TopRated";
@@ -183,6 +182,15 @@ import MostPopularProducts from "./pages/MostPopular";
 import RecentViewProducts from "./pages/RecentViewProducts";
 import About from "./pages/AboutPage";
 
+// Create a ProtectedRoute component
+const ProtectedRoute = ({ children }) => {
+  const token = Cookies.get('loginToken');
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
+
 const App = () => {
   React.useEffect(() => {
     AOS.init({
@@ -196,6 +204,7 @@ const App = () => {
 
   return (
     <AppProvider>
+<<<<<<< HEAD
        <ErrorBoundary>
        <Router>
         <Routes>
@@ -219,6 +228,70 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </Router>
+=======
+      <ErrorBoundary>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/" element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path="/top-rated" element={<TopRated />} />
+              <Route path="/trending" element={<TrendingProductsPage />} />
+              <Route path="/most-selling" element={<MostSellingProducts />} />
+              <Route path="/most-popular" element={<MostPopularProducts />} />
+              <Route path="/recent-view" element={<RecentViewProducts />} />
+              <Route path="/best-selling" element={<BestSellingProductsPage />} />
+
+              {/* Protected Routes */}
+              <Route
+                path="/cart"
+                element={
+                  <ProtectedRoute>
+                    <CartPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wishlist"
+                element={
+                  <ProtectedRoute>
+                    <WishlistPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/delivery-address"
+                element={
+                  <ProtectedRoute>
+                    <DeliveryAddress />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/order-summary"
+                element={
+                  <ProtectedRoute>
+                    <OrderSummary />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <AccountSettings />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route path="/product-details/:id" element={<ProductDetails />} />
+              <Route path="/all-category/:type" element={<AllCategoryProducts />} />
+              <Route path="/all-products" element={<AllProductsPage />} />
+            </Route>
+          </Routes>
+        </Router>
+>>>>>>> 4b45d1bf2c329e0a7f05999cd183e10d4310a415
       </ErrorBoundary>
     </AppProvider>
   );

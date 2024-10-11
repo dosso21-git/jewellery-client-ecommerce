@@ -156,8 +156,12 @@ const FooterLinks = [
     link: "/blog",
   },
   {
-    title: "Terms&Condition",
-    link: "/terms&condition",
+    title: "Privacy-Policy",
+    link: "/privacy-policy",
+  },
+  {
+    title: "Terms & Conditions",
+    link: "/terms&conditon",
   },
 ];
 

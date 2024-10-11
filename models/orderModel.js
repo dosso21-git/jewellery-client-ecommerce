@@ -9,12 +9,17 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     totalAmount: { type: Number, required: true },
-    discountedprice: { type: Number, required: true },
-    discount_type: { type: String, required: true },
+    discountedprice: { type: Number },
+    discount_type: { type: String},
     status: {
       type: String,
       enum: ["pending", "completed", "canceled"],
       default: "pending",
+    },
+    address:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+      required: true,
     },
     items: [
       {

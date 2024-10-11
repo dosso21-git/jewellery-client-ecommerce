@@ -2,6 +2,7 @@ const Order = require("../models/orderModel");
 const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
 const cartModel = require("../models/cartModel");
+const addressModel = require("../models/addressModel");
 
 // exports.createOrder = async (req, res) => {
 //   try {
@@ -56,28 +57,85 @@ const cartModel = require("../models/cartModel");
 // };
 
 
+// exports.createOrder = async (req, res) => {
+//   try {
+//     // Step 1: Retrieve user and order details from the request
+//     const { userId, discountedprice, discount_type, tax_estimate, shipping_estimate , address} = req.body;
+
+//     // Step 2: Validate required fields
+//     if (!userId) {
+//       return res.status(400).json({ message: "User ID is required" });
+//     }
+
+//     if (!discountedprice || typeof discountedprice !== 'number' || discountedprice <= 0) {
+//       return res.status(400).json({ message: "Valid discounted price is required" });
+//     }
+
+//     const validDiscountTypes = ["offer", "coupon"];
+//     if (!validDiscountTypes.includes(discount_type)) {
+//       return res.status(400).json({ message: "Invalid discount type" });
+//     }
+
+//     // if (!discount || typeof discount !== 'number' || discount < 0) {
+//     //   return res.status(400).json({ message: "Valid discount is required" });
+//     // }
+
+//     if (!tax_estimate || typeof tax_estimate !== 'number' || tax_estimate < 0) {
+//       return res.status(400).json({ message: "Valid tax estimate is required" });
+//     }
+
+//     if (!shipping_estimate || typeof shipping_estimate !== 'number' || shipping_estimate < 0) {
+//       return res.status(400).json({ message: "Valid shipping estimate is required" });
+//     }
+
+//     // Step 3: Get the cart items for the user
+//     const cart = await cartModel.findOne({ userId });
+//     if (!cart || cart.items.length === 0) {
+//       return res.status(400).json({ message: "Cart is empty or not found" });
+//     }
+
+//     // Step 4: Create the order object
+//     const orderData = {
+//       userId,
+//       items: cart.items,
+//       totalAmount: cart.totalPrice,
+//       discountedprice,
+//       discount_type,
+//       tax_estimate,
+//       shipping_estimate,
+//       address,
+//       createdAt: new Date(),
+//     };
+
+//     // Step 5: Create and save the new order
+//     const order = new Order(orderData);
+//     await order.save();
+
+//     // Step 6: Clear the cart after order creation
+//     await cartModel.findOneAndUpdate({ userId }, { items: [] });
+
+//     // Step 7: Send success response
+//     return res.status(201).json({ message: "Order created successfully", order ,status: 200 });
+//   } catch (error) {
+//     console.error("Error creating order:", error.message);
+//     return res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
 exports.createOrder = async (req, res) => {
   try {
     // Step 1: Retrieve user and order details from the request
-    const { userId, discountedprice, discount_type, tax_estimate, shipping_estimate } = req.body;
+    const { userId, discountedprice, discount_type, tax_estimate, shipping_estimate, address: addressId } = req.body;
 
     // Step 2: Validate required fields
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
 
-    if (!discountedprice || typeof discountedprice !== 'number' || discountedprice <= 0) {
-      return res.status(400).json({ message: "Valid discounted price is required" });
-    }
 
     const validDiscountTypes = ["offer", "coupon"];
     if (!validDiscountTypes.includes(discount_type)) {
       return res.status(400).json({ message: "Invalid discount type" });
     }
-
-    // if (!discount || typeof discount !== 'number' || discount < 0) {
-    //   return res.status(400).json({ message: "Valid discount is required" });
-    // }
 
     if (!tax_estimate || typeof tax_estimate !== 'number' || tax_estimate < 0) {
       return res.status(400).json({ message: "Valid tax estimate is required" });
@@ -93,7 +151,13 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: "Cart is empty or not found" });
     }
 
-    // Step 4: Create the order object
+    // Step 4: Fetch the complete address using the address ID
+    const address = await addressModel.findById(addressId);
+    if (!address) {
+      return res.status(400).json({ message: "Address not found" });
+    }
+
+    // Step 5: Create the order object, including the complete address
     const orderData = {
       userId,
       items: cart.items,
@@ -102,18 +166,19 @@ exports.createOrder = async (req, res) => {
       discount_type,
       tax_estimate,
       shipping_estimate,
+      address,  // Store the complete address object
       createdAt: new Date(),
     };
 
-    // Step 5: Create and save the new order
+    // Step 6: Create and save the new order
     const order = new Order(orderData);
     await order.save();
 
-    // Step 6: Clear the cart after order creation
+    // Step 7: Clear the cart after order creation
     await cartModel.findOneAndUpdate({ userId }, { items: [] });
 
-    // Step 7: Send success response
-    return res.status(201).json({ message: "Order created successfully", order ,status: 200 });
+    // Step 8: Send success response
+    return res.status(201).json({ message: "Order created successfully", order, status: 200 });
   } catch (error) {
     console.error("Error creating order:", error.message);
     return res.status(500).json({ message: "Server error", error: error.message });

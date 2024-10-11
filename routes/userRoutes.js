@@ -37,7 +37,7 @@ router.put('/unblock/:id', protect, unblockUser)
 //user address routes
 router.post('/add/address', protect, addAddress);
 router.get('/get/address', protect, getAllAddresses);
-router.put('/address/update/:id', protect, updateAddress);
-router.delete('/address/delete/:id', protect, deleteAddress);
+router.put('/address/update', protect, updateAddress);
+router.delete('/address/delete', protect, deleteAddress);
 
 module.exports = router;

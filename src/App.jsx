@@ -27,6 +27,7 @@ import About from "./pages/AboutPage";
 import ArticlesGrid from "./pages/blogPage";
 import ArticleDetails from "./pages/ArticleDetails";
 import ContactUs from './pages/ContactUs'
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -115,6 +116,7 @@ const App = () => {
               <Route path="/blog" element={<ArticlesGrid />} />
               <Route path="/blog/:id" element={<ArticleDetails />} />
               <Route path="/contact" element={<ContactUs />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             </Route>
           </Routes>
         </Router>

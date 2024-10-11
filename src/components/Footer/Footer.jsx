@@ -155,6 +155,10 @@ const FooterLinks = [
     title: "Blog",
     link: "/blog",
   },
+  {
+    title: "Privacy-Policy",
+    link: "/privacy-policy",
+  },
 ];
 
 const Footer = () => {

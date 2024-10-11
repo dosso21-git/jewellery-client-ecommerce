@@ -333,14 +333,5 @@ const getPopularProducts = async (req, res) => {
   }
 };
 module.exports = {
-  createProduct,
-  getAllProducts,
-  getProductById,
-  deleteProduct,
-  updateProduct,
-  getProductsByCategory,
-  getMostSellingProducts,
-  deleteProductPicture,
-  trackProductView,
-  getPopularProducts,
+  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts,
 }; 

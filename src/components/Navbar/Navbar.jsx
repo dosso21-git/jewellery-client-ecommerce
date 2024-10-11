@@ -318,11 +318,12 @@
 
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../assets/logo.png";
 import { IoMdSearch } from "react-icons/io";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdAccountCircle } from "react-icons/md";
+import Cookies from "js-cookie";
 import { FaCaretDown, FaBars, FaTimes } from "react-icons/fa";
 import DarkMode from "./DarkMode";
 import { useNavigate } from "react-router-dom";
@@ -336,18 +337,30 @@ const Menu = [
 
 const DropdownLinks = [
   { id: 1, name: "Trending Products", link: "/trending" },
-  { id: 2, name: "Most Popular", link: "/most-popular" }, 
+  { id: 2, name: "Most Popular", link: "/most-popular" },
   { id: 2, name: "Most Selling", link: "/most-selling" },
   { id: 2, name: "Recent View", link: "/recent-view" },
   { id: 3, name: "Top Rated", link: "/top-rated" },
 ];
 
+
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const [token, setToken] = useState('')
+
+  useEffect(()=>{
+    const token = Cookies.get('loginToken');
+    setToken(token)
+  }, [])
 
   const handleOrderPopup = () => {
-    navigate('/cart'); // Redirect to the cart page
+    if (token) {
+      navigate('/cart');
+    } else {
+      navigate('/login')
+    }
   };
 
   return (
@@ -355,12 +368,12 @@ const Navbar = () => {
       {/* upper Navbar */}
       <div className="bg-primary/40 py-2">
         <div className="container flex justify-between items-center">
-        {/* <div className="hidden sm:flex justify-center"> */}
+          {/* <div className="hidden sm:flex justify-center"> */}
           <div className="flex items-center">
             <a href="#" className="flex items-center gap-1">
               <img src={Logo} alt="Logo" className="w-8 sm:w-10" />
               <div className="hidden sm:flex justify-center">
-              <span className="sm:text-2xl">Jewellery-Shop</span> {/* Hide on mobile */}
+                <span className="sm:text-2xl">Jewellery-Shop</span> {/* Hide on mobile */}
               </div>
             </a>
           </div>
@@ -413,7 +426,9 @@ const Navbar = () => {
           <div className="flex items-center gap-10">
             <button
               onClick={() => {
-                navigate('/account');
+                token ?
+                  navigate('/account') :
+                  navigate('/login')
               }}
               className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white py-1 px-3 rounded-full flex items-center gap-2 group"
             >

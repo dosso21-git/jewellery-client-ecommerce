@@ -10,6 +10,7 @@ const offerRoutes = require('./routes/offerRoutes')
 const cartroutes = require('./routes/cart')
 const wishlistRoutes = require('./routes/wishlistRoutes')
 const notificationRoutes = require('./routes/notificationRoutes')
+const uploadProductsRoutes = require('./routes/uploadProductsRoute');
 
 dotenv.config();
 connectDB();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/user', userRoutes);
+app.use('/api/user', uploadProductsRoutes);
 app.use('/api/user', productRoutes)
 app.use('/api/user', recent_viewRoutes)
 app.use('/api/user', order_modelRoutes)

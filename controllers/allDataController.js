@@ -37,22 +37,68 @@ const getCounts = async (req, res) => {
     }
 };
 
+// const getallsearch = async (req, res) => {
+//     try {
+//       const { query ,sort} = req.query; 
+//       console.log('query and sort',query,sort)
+//       const productResults = await productModel.find({
+//         $or: [
+//           { title: new RegExp(query, 'i') },
+//           { category: new RegExp(query, 'i') },
+//           { description: new RegExp(query, 'i') }
+//         ]
+//       });
+//       const result = {
+//         products: productResults
+//       };
+//       res.status(200).json(result);
+//     } catch (error) {
+//       res.status(500).json({ error: error.message });
+//     }
+//   };
+
+
+
+
+
+
+
+
+
+
 const getallsearch = async (req, res) => {
-    try {
-      const { query } = req.query; 
-      const productResults = await productModel.find({
-        $or: [
-          { title: new RegExp(query, 'i') },
-          { category: new RegExp(query, 'i') },
-          { description: new RegExp(query, 'i') }
-        ]
-      });
-      const result = {
-        products: productResults
-      };
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+  try {
+    const { query, sort } = req.query; 
+    console.log('query and sort', query, sort);
+
+    // Build the search criteria
+    const searchCriteria = {
+      $or: [
+        { title: new RegExp(query, 'i') },
+        { category: new RegExp(query, 'i') },
+        { description: new RegExp(query, 'i') }
+      ]
+    };
+
+    // Determine the sort order based on the sort parameter
+    let sortOrder = {price:1};
+    if (sort === 'price_low_high') {
+      sortOrder.price = 1; // Ascending
+    } else if (sort === 'price_high_low') {
+      sortOrder.price = -1; // Descending
     }
-  };
+
+    // Fetch the product results with sorting
+    const productResults = await productModel.find(searchCriteria).sort(sortOrder);
+
+    const result = {
+      products: productResults
+    };
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = { getCounts,getallsearch }

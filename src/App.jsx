@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate, } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Cookies from "js-cookie";
@@ -33,6 +28,7 @@ import ArticlesGrid from "./pages/blogPage";
 import ArticleDetails from "./pages/ArticleDetails";
 import ContactUs from './pages/ContactUs'
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndCondition";
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -127,6 +123,7 @@ const App = () => {
               <Route path="/blog/:id" element={<ArticleDetails />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms&conditon" element={<TermsAndConditions />} />
             </Route>
           </Routes>
         </Router>

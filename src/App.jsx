@@ -1,10 +1,15 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Cookies from "js-cookie";
-import { AppProvider } from './context/AppContext';
-import Home from './pages/Home';
+import { AppProvider } from "./context/AppContext";
+import Home from "./pages/Home";
 import TopRated from "./pages/TopRated";
 import CartPage from "./pages/Cart";
 import ProductDetails from "./pages/ProductDetailsPage";
@@ -16,7 +21,7 @@ import AllCategoryProducts from "./pages/AllCategoryProductsPage";
 import AllProductsPage from "./pages/AllProductsPage";
 import OrderSummary from "./pages/OrderSummaryPage";
 import AccountSettings from "./pages/AccountSettings";
-import MainLayout from './components/MainLayout';
+import MainLayout from "./components/MainLayout";
 import ErrorBoundary from "./components/ErrorBoundary";
 import TrendingProductsPage from "./pages/TrendingProducts";
 import BestSellingProductsPage from "./pages/BestSellingProducts";
@@ -31,7 +36,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
-  const token = Cookies.get('loginToken');
+  const token = Cookies.get("loginToken");
   if (!token) {
     return <Navigate to="/login" />;
   }
@@ -63,8 +68,10 @@ const App = () => {
               <Route path="/most-selling" element={<MostSellingProducts />} />
               <Route path="/most-popular" element={<MostPopularProducts />} />
               <Route path="/recent-view" element={<RecentViewProducts />} />
-              <Route path="/best-selling" element={<BestSellingProductsPage />} />
-            
+              <Route
+                path="/best-selling"
+                element={<BestSellingProductsPage />}
+              />
 
               {/* Protected Routes */}
               <Route
@@ -108,7 +115,10 @@ const App = () => {
                 }
               />
               <Route path="/product-details/:id" element={<ProductDetails />} />
-              <Route path="/all-category/:type" element={<AllCategoryProducts />} />
+              <Route
+                path="/all-category/:type"
+                element={<AllCategoryProducts />}
+              />
               <Route path="/all-products" element={<AllProductsPage />} />
             </Route>
             <Route path="/" element={<MainLayout showSearchBar={false} />}>

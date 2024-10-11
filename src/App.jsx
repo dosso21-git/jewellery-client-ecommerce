@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate, } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Cookies from "js-cookie";

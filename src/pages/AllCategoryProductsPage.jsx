@@ -1,5 +1,3 @@
-
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'; 
 import { useNavigate, useParams } from 'react-router-dom';
@@ -58,7 +56,7 @@ const AllCategoryProducts = () => {
                  className="object-cover rounded-md h-[150px] w-[200px]"
               />
               <h2 className="text-lg font-semibold mb-2">{product.title}</h2>
-              <p className="text-sm text-purple-500">{product.description}</p>
+              <p className="text-sm text-purple-500 truncate-text">{product.description}</p>
             </div>
           ))}
         </div>

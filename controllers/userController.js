@@ -288,7 +288,7 @@ const getaUser = async (req, res) => {
       getaUser,
     });
   } catch (error) {
-    throw new Error(error);
+    console.log('eerrr',error)
   }
 };
 

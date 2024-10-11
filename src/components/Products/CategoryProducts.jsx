@@ -105,8 +105,6 @@
 
 
 
-
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -123,37 +121,24 @@ const CategoryProducts = () => {
     getAllProducts();
   }, []);
 
-  // const getAllProducts = async () => {
-  //   try {
-  //     const response = await axios.get('/product/getall');
-  //     // console.log('response in category', response.data.data);
-  //     setProducts(response.data.data); // Store fetched products in state
-  //   } catch (err) {
-  //     console.log('Error fetching products:', err);
-  //   }
-  // };
-
-
-
-
   const getAllProducts = async () => {
     try {
       const response = await axios.get('/product/getall');
-  
+
       // Check if response.data.data exists and is an array
       if (Array.isArray(response.data.data) && response.data.data.length > 0) {
         // Additional validation for each product item (if needed)
-        const validProducts = response.data.data.filter(product => 
-          product && 
-          product._id && 
-          product.title && 
-          product.images && 
-          Array.isArray(product.images) && 
-          product.images.length > 0 && 
-          typeof product.price === 'number' && 
+        const validProducts = response.data.data.filter(product =>
+          product &&
+          product._id &&
+          product.title &&
+          product.images &&
+          Array.isArray(product.images) &&
+          product.images.length > 0 &&
+          typeof product.price === 'number' &&
           typeof product.totalrating === 'number'
         );
-  
+
         if (validProducts.length > 0) {
           setProducts(validProducts); // Update the state with valid product data
         } else {
@@ -166,25 +151,21 @@ const CategoryProducts = () => {
       }
     } catch (error) {
       console.error("Error fetching products:", error);
-      setError("Failed to fetch products."); // Set error message
       setProducts([]); // Optionally set to empty array on error
-    } finally {
-      setLoading(false);
     }
   };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-6">All Categories</h1>
-      <div 
-      // className="grid grid-cols-2 md:grid-cols-4 gap-6"
-      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5"
-      
+      <div
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
       >
         {products.map((product) => (
           <div
             key={product._id}
             data-aos="zoom-in"
-            className="place-items-center cursor-pointer p-4 rounded-2xl bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-primary hover:text-white relative shadow-xl duration-300 group max-w-[300px]"
+            className="group relative flex flex-col items-center justify-center cursor-pointer p-4 rounded-lg bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-primary hover:text-white shadow-lg transition duration-300 ease-in-out"
             onClick={() => {
               navigationFunction(product.category); // Navigate based on product category
             }}
@@ -192,11 +173,11 @@ const CategoryProducts = () => {
             <img
               src={product.images[0]} // Use the first image from the array
               alt={product.title}
-              // className="rounded-lg hover:scale-x-105"
-                className="object-cover rounded-md h-[150px] w-[200px]"
+              className="object-cover rounded-lg h-40 w-40 md:h-48 md:w-48 transition-transform duration-300 group-hover:scale-105"
             />
-            <h2 className="text-lg font-semibold mb-2">{product.title}</h2>
-            <p className="text-sm text-purple-500">{product.description}</p>
+            <h2 className="text-lg font-semibold mt-2 mb-1 text-center">{product.title}</h2>
+            {/* <p className="text-sm dark:text-gray-300 text-center">{product.description}</p> */}
+           
           </div>
         ))}
       </div>

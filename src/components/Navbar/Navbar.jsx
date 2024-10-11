@@ -357,7 +357,7 @@ const Navbar = () => {
         <div className="container flex justify-between items-center">
         {/* <div className="hidden sm:flex justify-center"> */}
           <div className="flex items-center">
-            <a href="#" className="flex items-center gap-1">
+            <a href="/" className="flex items-center gap-1">
               <img src={Logo} alt="Logo" className="w-8 sm:w-10" />
               <div className="hidden sm:flex justify-center">
               <span className="sm:text-2xl">Jewellery-Shop</span> {/* Hide on mobile */}

@@ -442,6 +442,7 @@ import CategoryProducts from "../components/Products/CategoryProducts";
 const Home = () => {
   const [orderPopup, setOrderPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortTerm,setSortTerm]= useState('');
   const [productData, setProductData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -454,16 +455,23 @@ const Home = () => {
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const search = query.get('search');
-
+    const search = query.get('search') || "";
+    const sort = query.get('sort') || "";
+  
     // Set search term
-    setSearchTerm(search || "");
-
+    setSearchTerm(search);
+    setSortTerm(sort)
+  
     const getData = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
-        const result = await axios.get(`/getallsearch?query=${search || ''}`);
+        const result = await axios.get(`/getallsearch?query=${search}&sort=${sort}`, {
+          headers: {
+            'Cache-Control': 'no-cache'
+          },
+        });
         if (result.data.products) {
+          // window.location.reload()
           setProductData(result.data.products); // Set product data from the response
         } else {
           setProductData([]); // Fallback to empty array if no products found
@@ -475,13 +483,17 @@ const Home = () => {
         setLoading(false);
       }
     };
-
+  
     getData();
-  }, [location]);
+  }, [location]); // Dependency on location.search instead of location
+  
+
+
+
 
   return (
     <div>
-      {searchTerm && (
+      {(searchTerm || sortTerm) && (
         <div className="search-results mt-32">
           <h2 className="text-center text-xl">Search Results:</h2>
           <div className="container mx-auto p-4">
@@ -500,7 +512,7 @@ const Home = () => {
                     />
                     <h2 className="text-lg font-semibold mb-2">{product.title}</h2>
                     <p className="text-sm text-purple-500">{product.description}</p>
-                    <p className="text-lg font-bold">${product.price}</p>
+                    <p className="text-lg font-bold">₹{product.price}</p>
                   </div>
                 )
               )}

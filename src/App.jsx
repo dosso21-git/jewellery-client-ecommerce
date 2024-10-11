@@ -258,7 +258,6 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-
               <Route path="/product-details/:id" element={<ProductDetails />} />
               <Route path="/all-category/:type" element={<AllCategoryProducts />} />
               <Route path="/all-products" element={<AllProductsPage />} />

@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/wishlist/create",protect, addToWishlist);
 router.get("/wishlist/get",protect, getWishlist);
-router.delete("/wishlist/delete/:id",protect,removeFromWishlist);
+router.delete("/wishlist/delete/:productId",protect,removeFromWishlist);
 
 module.exports = router;

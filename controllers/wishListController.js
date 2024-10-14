@@ -28,7 +28,9 @@ const addToWishlist = async (req, res) => {
 // Remove product from wishlist
 const removeFromWishlist = async (req, res) => {
     const { userId } = req.user;
-  const {  productId } = req.body;
+  const {  productId } = req.params;
+  
+  console.log(productId);
   try {
     const user = await userModel.findOne(userId);
     if (!user) {

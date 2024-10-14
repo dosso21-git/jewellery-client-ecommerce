@@ -1831,7 +1831,7 @@ const ProductDetails = () => {
         setShowAlert(true);
       }
     } catch (error) {
-      setMessage("khareed le pehle");
+      setMessage( "Error adding to wishlist");
       setShowAlert(true);
       console.log("Error submitting rating:", error.message);
     }
@@ -1905,7 +1905,7 @@ const ProductDetails = () => {
               placeholder="Write your comment here"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-black"
             />
             <input
               type="number"
@@ -1914,7 +1914,7 @@ const ProductDetails = () => {
               placeholder="Star rating"
               value={star}
               onChange={(e) => setStar(Number(e.target.value))}
-              className="w-20 p-2 border rounded"
+              className="w-20 p-2 border rounded text-black"
             />
           </div>
           <button

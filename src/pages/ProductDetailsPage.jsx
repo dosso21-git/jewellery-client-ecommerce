@@ -1726,14 +1726,11 @@ import Cookies from "js-cookie";
 import CouponPopup from "../components/Popup/CouponPopup";
 import axios from "axios";
 import { AlertCustomStyles } from "../components/Popup/SuccessAlert";
-<<<<<<< HEAD
 import ProductMagnifier from "./ProductMagnifier"; // Import the magnifier component
 import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
 import { useDispatch } from "react-redux";
-=======
 import ProductMagnifier from "./ProductMagnifier";
 import ProductRatings from "../components/GetReviewSection";
->>>>>>> 0079a2aad4b5c3ea900713db567d329c2d0b4784
 
 const ProductDetails = () => {
 
@@ -1761,20 +1758,17 @@ const dispatch = useDispatch();
       try {
         const result = await axios.get(`/product/get/${id}`);
         if (result.data.data) {
-<<<<<<< HEAD
           setProductData(result.data.data);
           setSelectedImage(result.data.data.images[0]);
           setDiscountedPrice(result.data.data.price);
           setRatings(result.data.data.ratings || []);
           dispatch(addToCart(result?.data?.totalItems)); 
          
-=======
           const { data } = result.data;
           setProductData(data);
           setSelectedImage(data.images[0]);
           setDiscountedPrice(data.price);
           setIsInWishlist(data.isInWishlist || false);
->>>>>>> 0079a2aad4b5c3ea900713db567d329c2d0b4784
         }
       } catch (error) {
         setError("Error fetching product data");
@@ -1794,7 +1788,6 @@ const dispatch = useDispatch();
     }
   };
 
-<<<<<<< HEAD
    const AddToCart = (productId, quantity) => {
         if (!token) {
           navigate("/login");
@@ -1848,7 +1841,6 @@ const dispatch = useDispatch();
         }
       };
     
-=======
   const AddToCart = (productId, quantity) => {
     if (!token) {
       navigate("/login");
@@ -1910,7 +1902,6 @@ const dispatch = useDispatch();
       console.log("Error submitting rating:", error.message);
     }
   };
->>>>>>> 0079a2aad4b5c3ea900713db567d329c2d0b4784
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;

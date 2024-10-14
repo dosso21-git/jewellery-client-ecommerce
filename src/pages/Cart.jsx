@@ -105,7 +105,6 @@ const CartPage = () => {
       console.log('catch block',error)
     }
   };
-
   const applyCoupon = () => {
     if (couponCode === "SAVE10") {
       setDiscount(10);

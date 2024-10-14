@@ -45,6 +45,10 @@ const FooterLinks = [
     title: "Terms & Conditions",
     link: "/terms&conditon",
   },
+  {
+    title: "Refund Policy",
+    link: "/refund_policy",
+  },
 ];
 
 const Footer = () => {

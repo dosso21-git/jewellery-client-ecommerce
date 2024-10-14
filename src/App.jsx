@@ -34,6 +34,7 @@ import ArticleDetails from "./pages/ArticleDetails";
 import ContactUs from "./pages/ContactUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndCondition";
+import Refund_policy from "./pages/Refund_policy";
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -129,6 +130,7 @@ const App = () => {
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms&conditon" element={<TermsAndConditions />} />
+              <Route path="/refund_policy" element={<Refund_policy />} />
             </Route>
           </Routes>
         </Router>

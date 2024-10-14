@@ -35,7 +35,7 @@ router.put('/admin/update', protect, isAdmin, upload, updatedUser);
 // Public
 router.post('/register', publicApiAccess, createUser);
 router.post('/login', publicApiAccess, loginUserCtrl);
-router.get('/getalluser', publicApiAccess, protect, getallUser)
+router.get('/getalluser', publicApiAccess, getallUser)
 router.get('/getuser', protect, getaUser)
 router.put('/update', publicApiAccess, protect, upload, updatedUser);
 router.put('/restore/:id', protect, restoreUser);

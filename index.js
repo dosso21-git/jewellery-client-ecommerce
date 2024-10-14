@@ -11,6 +11,7 @@ const cartroutes = require('./routes/cart')
 const wishlistRoutes = require('./routes/wishlistRoutes')
 const notificationRoutes = require('./routes/notificationRoutes')
 const uploadProductsRoutes = require('./routes/uploadProductsRoute');
+const bannerRoutes = require('./routes/bannerRoutes')
 
 dotenv.config();
 connectDB();
@@ -30,6 +31,7 @@ app.use('/api/user', offerRoutes)
 app.use('/api/user', cartroutes)
 app.use('/api/user', wishlistRoutes)
 app.use('/api/user', notificationRoutes)
+app.use('/api/user', bannerRoutes)
 
 app.use((req, res) => {
     res.status(404).json({ message: 'You are hitting a wrong API URL' });

@@ -24,6 +24,8 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage }).array('pictures', 10);
 
+
+
 // Admin
 router.post('/admin/create', protect, isAdmin, upload, createProduct);
 router.delete('/admin/delete/:id', protect, isAdmin, deleteProduct);

@@ -1,11 +1,12 @@
 const jwt = require("jsonwebtoken");
 const productModel = require("../models/productModel");
 const cartModel = require("../models/cartModel");
+const userModel = require("../models/userModel");
 
 // Add item to cart
 exports.addToCart = async (req, res) => {
   try {
-    const { productId, quantity ,userId} = req.body;
+    const { productId, quantity, userId } = req.body;
 
     const product = await productModel.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
@@ -30,7 +31,6 @@ exports.addToCart = async (req, res) => {
         price: product.price,
       });
     }
-
     cart.totalItems = cart.items.length;
     cart.totalPrice = cart.items.reduce(
       (acc, item) => acc + item.price * item.quantity,
@@ -45,25 +45,58 @@ exports.addToCart = async (req, res) => {
 };
 
 // Remove item from cart
+// exports.removeFromCart = async (req, res) => {
+//   try {
+//     const {userId} = req.body
+//     const {productId } = req.params;
+//     console.log(productId);
+//     const user = await cartModel.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     console.log(user)
+//     user.cartModel = user.cartModel.filter(
+//       (item) => item !== productId
+//     );
+//     await user.save();
+//     return res.status(200).json({ message: "Product removed from cart" });
+//   } catch (err) {
+//     res.status(500).json({ message: "Server error", error: err.message });
+//   }
+// };
+
+
 exports.removeFromCart = async (req, res) => {
   try {
-    const { productId,userId } = req.body;
+    const { userId } = req.body; // Assuming userId is passed in the request body
+    const { productId } = req.params; // Assuming productId is passed in the request parameters
+console.log(userId)
+    // Log the productId for debugging
+    console.log('Removing product ID:', productId);
+    
+    // Find the user by userId
+    const user = await cartModel.findOne({userId});
+    
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    let cart = await cartModel.findOne({ userId });
-    if (!cart) return res.status(404).json({ message: "Cart not found" });
-
-    cart.items = cart.items.filter(
-      (item) => item.productId.toString() !== productId
-    );
-    cart.totalItems = cart.items.length;
-    cart.totalPrice = cart.items.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-
-    await cart.save();
-    res.status(200).json(cart);
+    // Log the user object for debugging
+    console.log('User found:', user);
+    
+    // Remove the productId from the cart array
+    user.items = user.items.filter(item => item.toString() !== productId); // Ensure type conversion for ObjectId
+    user.totalItems = user.items.length; // Update totalItems
+    user.totalPrice = user.items.reduce((total, item) => total + (item.price * item.quantity), 0); // Recalculate totalPrice
+    
+    // Save the updated user object
+    await user.save();
+    // Respond with a success message
+    return res.status(200).json({ message: "Product removed from cart" });
   } catch (err) {
+    // Log the error for debugging
+    console.error('Error removing product from cart:', err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
@@ -71,8 +104,7 @@ exports.removeFromCart = async (req, res) => {
 // Update item quantity in cart
 exports.updateCartItem = async (req, res) => {
   try {
-  
-    const { productId, quantity,userId } = req.body;
+    const { productId, quantity, userId } = req.body;
 
     let cart = await cartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
@@ -97,12 +129,10 @@ exports.updateCartItem = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-
 // Delete all items in the cart
 exports.clearCart = async (req, res) => {
   try {
-  
-    const userId = req.body.userId
+    const userId = req.body.userId;
 
     let cart = await cartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
@@ -117,11 +147,9 @@ exports.clearCart = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-
 // Checkout and empty the cart
 exports.checkout = async (req, res) => {
   try {
-  
     const userId = req.body.userId;
 
     let cart = await cartModel.findOne({ userId });
@@ -130,7 +158,6 @@ exports.checkout = async (req, res) => {
     cart.items = [];
     cart.totalItems = 0;
     cart.totalPrice = 0;
-
     await cart.save();
     res.status(200).json({ message: "Checkout successful and cart cleared" });
   } catch (err) {
@@ -138,19 +165,18 @@ exports.checkout = async (req, res) => {
   }
 };
 // Get all items in the cart for the logged-in user
-  
 
 // exports.getCartItems = async (req, res) => {
 //     try {
-    
+
 //       const userId = req.body.userId;
-  
+
 //       const cart = await cartModel.findOne({ userId });
-  
+
 //       if (!cart || cart.items.length === 0) {
 //         return res.status(404).json({ message: "No items found in the cart" });
 //       }
-  
+
 //       res.status(200).json({
 //         success: true,
 //         items: cart.items,
@@ -162,26 +188,24 @@ exports.checkout = async (req, res) => {
 //     }
 //   };
 
-
-
-
-
 exports.getCartItems = async (req, res) => {
   try {
     const userId = req.body.userId;
 
-    const cart = await cartModel.findOne({ userId }).populate('items.productId');
+    const cart = await cartModel
+      .findOne({ userId })
+      .populate("items.productId");
 
     if (!cart || cart.items.length === 0) {
       return res.status(404).json({ message: "No items found in the cart" });
     }
 
     // Calculate subtotal, shipping, tax, and total
-    const shippingEstimate = 5.00; // Fixed shipping cost
+    const shippingEstimate = 5.0; // Fixed shipping cost
     const taxRate = 0.18; // 18% tax rate
     let subtotal = 0;
 
-    cart.items.forEach(item => {
+    cart.items.forEach((item) => {
       subtotal += item.price * item.quantity; // Calculate subtotal
     });
 
@@ -200,12 +224,6 @@ exports.getCartItems = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-
-
-
-
-
-
 
 // exports.getCartItems = async (req, res) => {
 //   try {

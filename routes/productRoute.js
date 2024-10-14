@@ -49,6 +49,7 @@ router.get("/most-selling", getMostSellingProducts);
 
 // With Login
 router.post('/product/rate', protect, publicApiAccess, giveRating);
+router.get('/product/rate/:id', publicApiAccess, getProductById);
 router.get("/product/toprated", publicApiAccess, getTopRatedProducts);
 router.get('/product/popular/:productId', publicApiAccess, trackProductView);
 router.get('/product/getpopularproduct', publicApiAccess, getPopularProducts);

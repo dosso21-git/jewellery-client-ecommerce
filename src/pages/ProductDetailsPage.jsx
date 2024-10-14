@@ -1937,8 +1937,9 @@ const ProductDetails = () => {
               BUY NOW
             </button>
           </div>
-          <ProductRatings productId={productData._id} />
+      
         </div>
+        <ProductRatings productId={productData._id} />
       </div>
     </div>
   );

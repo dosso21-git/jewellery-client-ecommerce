@@ -1831,7 +1831,7 @@ const ProductDetails = () => {
         setShowAlert(true);
       }
     } catch (error) {
-      setMessage( "Error adding to wishlist");
+      setMessage("Error adding to wishlist");
       setShowAlert(true);
       console.log("Error submitting rating:", error.message);
     }
@@ -1848,7 +1848,6 @@ const ProductDetails = () => {
         setVisible={setShowAlert}
         message={message}
       />
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24">
         <div>
           <div className="border mb-6 p-4">
@@ -1937,7 +1936,6 @@ const ProductDetails = () => {
               BUY NOW
             </button>
           </div>
-      
         </div>
         <ProductRatings productId={productData._id} />
       </div>

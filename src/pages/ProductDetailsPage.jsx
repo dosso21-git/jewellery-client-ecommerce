@@ -1827,11 +1827,11 @@ const ProductDetails = () => {
         star,
       });
       if (result.data) {
-        setMessage("Rating submitted successfully");
+        setMessage(result.data.message);
         setShowAlert(true);
       }
     } catch (error) {
-      setMessage("Error submitting rating");
+      setMessage("khareed le pehle");
       setShowAlert(true);
       console.log("Error submitting rating:", error.message);
     }

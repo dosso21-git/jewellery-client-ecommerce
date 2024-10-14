@@ -1646,7 +1646,7 @@ const ProductDetails = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="container mx-auto p-4 mt-24">
+    <div className="container p-4">
       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
       <AlertCustomStyles
         visible={showAlert}
@@ -1654,7 +1654,7 @@ const ProductDetails = () => {
         message={message}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24">
         <div>
           <div className="border mb-6 p-4">
             <div className="relative overflow-hidden">

@@ -9,6 +9,7 @@ const Wishlist = require("../models/wishListModel");
 const { default: mongoose } = require("mongoose");
 const productModel = require("../models/productModel");
 const Rating = require("../models/ratingModel");
+const cartModel = require('../models/cartModel');
 
 const createProduct = async (req, res) => {
   try {
@@ -50,7 +51,6 @@ const getAllProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-
     const product = await Product.findById(id).populate({
       path: "ratings",
       select: "star comment postedby",
@@ -60,6 +60,17 @@ const getProductById = async (req, res) => {
       },
     });
 
+
+    //if user login then send its cart length
+    // const token = req.headers.authorization?.split(" ")[1];
+
+    // console.log(token);
+
+    // if (token) {
+    //   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //   const userId = decoded.id;
+
+
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -68,7 +79,7 @@ const getProductById = async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
 
     console.log(token);
-
+let cart ;
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decoded.id;
@@ -91,10 +102,16 @@ const getProductById = async (req, res) => {
         console.log(recentView);
       }
 
+
+
+       cart = await cartModel
+      .findOne({ userId })
+      .populate("items.productId");
+
       await recentView.save();
     }
 
-    res.status(200).json({ data: product });
+    res.status(200).json({ data: product ,totalItems:cart?.items?.length});
   } catch (error) {
     res.status(500).json({ message: "Error fetching Product", error });
   }

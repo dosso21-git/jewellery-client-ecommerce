@@ -51,10 +51,10 @@ const giveRating = async (req, res) => {
         { totalrating: averageRating.toFixed(1) },
         { new: true }
       );
-      res.status(201).json({ data: savedRating });
+      res.status(201).json({ message:"Rated Successfully",data: savedRating });
     } else {
       return res
-        .status(400)
+        .status(200)
         .json({ message: "Please buy first to rate this product" });
     }
   } catch (error) {
@@ -105,4 +105,28 @@ const getTopRatedProducts = async (req, res) => {
     }
 };
 
-module.exports = { giveRating, getTopRatedProducts };
+const getRatingsByProductId = async (req, res) => {
+  try {
+      const { productId } = req.params;
+
+      // Find ratings for the given product ID and populate the 'postedby' field with the user's name
+      const ratings = await Rating.find({ product: productId })
+          .populate({
+              path: "postedby",
+              select: "name", // Assuming the User model has a 'name' field
+          })
+          .exec();
+
+      // Check if any ratings were found
+      if (!ratings || ratings.length === 0) {
+          return res.status(404).json({ message: "No ratings found for this product." });
+      }
+
+      // Return the ratings in the response
+      res.status(200).json(ratings);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+module.exports = { giveRating, getTopRatedProducts ,getRatingsByProductId };

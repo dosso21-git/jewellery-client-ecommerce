@@ -332,6 +332,34 @@ const getPopularProducts = async (req, res) => {
     return res.status(500).json({ message: "Internal server error  hai" });
   }
 };
+
+const checkStock = async (req, res) => {
+  const { status } = req.query;
+  let query;
+
+  try {
+    switch (status) {
+      case 'in':
+        query = { quantity: { $gt: 0 } };
+        break;
+      case 'out':
+        query = { quantity: 0 };
+        break;
+      case 'near':
+        const threshold = 5;
+        query = { quantity: { $gt: 0, $lte: threshold } };
+        break;
+      default:
+        return res.status(400).json({ message: 'Invalid status parameter. Use "in", "out", or "near".' });
+    }
+
+    const products = await Product.find(query);
+    res.status(200).json({ data: products });
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving stock items', error });
+  }
+};
+
 module.exports = {
-  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts,
+  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock
 }; 

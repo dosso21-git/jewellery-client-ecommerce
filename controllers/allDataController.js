@@ -68,7 +68,7 @@ const getCounts = async (req, res) => {
 
 const getallsearch = async (req, res) => {
   try {
-    const { query, sort } = req.query; 
+    const { query, sort } = req.query;
     console.log('query and sort', query, sort);
 
     // Build the search criteria
@@ -81,7 +81,7 @@ const getallsearch = async (req, res) => {
     };
 
     // Determine the sort order based on the sort parameter
-    let sortOrder = {price : 1};
+    let sortOrder = { price: 1 };
     if (sort === 'price_low_high') {
       sortOrder.price = 1; // Ascending
     } else if (sort === 'price_high_low') {
@@ -101,4 +101,4 @@ const getallsearch = async (req, res) => {
 };
 
 
-module.exports = { getCounts,getallsearch }
+module.exports = { getCounts, getallsearch }

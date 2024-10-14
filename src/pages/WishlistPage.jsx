@@ -130,69 +130,72 @@
 // }
 
 // export default WishlistPage
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-   
-
     fetchWishlist();
-  }, []); 
+  }, []);
   const fetchWishlist = async () => {
     try {
-      const response = await axios.get('/wishlist/get');
+      const response = await axios.get("/wishlist/get");
       setWishlist(response.data);
     } catch (error) {
-      console.error('Error fetching wishlist:', error);
+      console.error("Error fetching wishlist:", error);
     }
   };
 
   const removeWishlist = async (id) => {
-
     try {
       const response = await axios.delete(`/wishlist/delete/${id}`);
       if (response.data.message) {
-      
         // setWishlist(wishlist.filter(item => item._id!== id));
-        fetchWishlist()
+        fetchWishlist();
       } else {
-        console.error('Error removing from wishlist:', response.data);
+        console.error("Error removing from wishlist:", response.data);
       }
     } catch (error) {
-      alert("theek kar")
+      alert("theek kar");
     }
-  }
+  };
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-center mb-6 mt-6">My Wishlist</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {Array.isArray(wishlist) && wishlist.length > 0 ? (
-        wishlist.map(item => (
-            <div key={item._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                    src={item.images[0]} 
-                    alt={item.title} 
-                    className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                    <h2 className="text-lg font-semibold">{item.title}</h2>
-                    <p className="text-gray-600">{item.description}</p>
-                    <p className="text-xl font-bold mt-2">₹{item.price.toFixed(2)}</p>
-                    <p className="text-gray-500">Rating: {item.totalrating} ⭐</p>
-                    <button onClick={() => removeWishlist(item._id)} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
-                        Remove from Wishlist
-                    </button>
-                </div>
+        {Array.isArray(wishlist) && wishlist.length > 0 ? (
+          wishlist.map((item) => (
+            <div
+              key={item._id}
+              className="bg-white rounded-lg shadow-md overflow-hidden"
+            >
+              <img
+                src={item.images[0]}
+                alt={item.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h2 className="text-lg font-semibold">{item.title}</h2>
+                <p className="text-gray-600">{item.description}</p>
+                <p className="text-xl font-bold mt-2">
+                  ₹{item.price.toFixed(2)}
+                </p>
+                <p className="text-gray-500">Rating: {item.totalrating} ⭐</p>
+                <button
+                  onClick={() => removeWishlist(item._id)}
+                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+                >
+                  Remove from Wishlist
+                </button>
+              </div>
             </div>
-        ))
-    ) : (
-        <p className="text-gray-500">Your wishlist is empty.</p> // Fallback message
-    )}
-</div>
-
+          ))
+        ) : (
+          <p className="text-gray-500">Your wishlist is empty.</p> // Fallback message
+        )}
+      </div>
     </div>
   );
 };

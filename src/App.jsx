@@ -100,22 +100,8 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/order-summary"
-                element={
-                  <ProtectedRoute>
-                    <OrderSummary />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/account"
-                element={
-                  <ProtectedRoute>
-                    <AccountSettings />
-                  </ProtectedRoute>
-                }
-              />
+            
+            
               <Route path="/product-details/:id" element={<ProductDetails />} />
               <Route
                 path="/all-category/:type"
@@ -124,6 +110,15 @@ const App = () => {
               <Route path="/all-products" element={<AllProductsPage />} />
             </Route>
             <Route path="/" element={<MainLayout showSearchBar={false} />}>
+            <Route path="/order-summary" element={ <ProtectedRoute> <OrderSummary /></ProtectedRoute> } />
+            <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <AccountSettings />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/about" element={<About />} />
               <Route path="/blog" element={<ArticlesGrid />} />
               <Route path="/blog/:id" element={<ArticleDetails />} />

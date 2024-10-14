@@ -508,6 +508,9 @@ import DarkMode from "./DarkMode";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Notification from "../Notification";
 
+import { useSelector } from 'react-redux';
+
+
 const Menu = [
   { id: 1, name: "Home", link: "/" },
   { id: 2, name: "Top Rated", link: "/top-rated" },
@@ -524,6 +527,11 @@ const DropdownLinks = [
 ];
 
 const Navbar = () => {
+
+  const cartItems = useSelector(state => state.cart);
+  console.log('cartitmes',cartItems.length)
+
+  // alert(cartItems)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -634,6 +642,7 @@ const Navbar = () => {
               onClick={handleOrderPopup}
               className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white py-1 px-3 rounded-full flex items-center gap-2 group"
             >
+               <span>{cartItems.length}</span>
               <FaCartShopping className="text-lg sm:text-xl" />
             </button>
 

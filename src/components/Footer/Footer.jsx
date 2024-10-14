@@ -56,7 +56,7 @@ const Footer = () => {
           <div className="flex flex-col items-start gap-4">
             <div className="flex items-center gap-3">
               <img src={footerLogo} alt="Shopsy Logo" className="max-w-[50px]" />
-              <h1 className="text-3xl font-bold">Shopsy</h1>
+              <h1 className="text-3xl font-bold">iridescentgems</h1>
             </div>
             <p className="text-gray-300">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum in beatae ea recusandae blanditiis veritatis.

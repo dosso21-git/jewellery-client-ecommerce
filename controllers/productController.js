@@ -212,6 +212,7 @@ const deleteProduct = async (req, res) => {
     res.status(500).json({ message: "Error deleting product", error });
   }
 };
+
 const getMostSellingProducts = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   try {

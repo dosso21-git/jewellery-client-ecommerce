@@ -20,6 +20,8 @@ const getCounts = async (req, res) => {
       return averageRating >= 4;
     }).length;
 
+    const mostSellingProductsCount = products.filter(product => product.sold > 10).length;
+
     return res.status(200).json({
       message: 'Counts retrieved successfully',
       counts: {
@@ -29,6 +31,7 @@ const getCounts = async (req, res) => {
         recentViews: recentViewsCount,
         users: usersCount,
         topRatedProducts: topRatedProductsCount,
+        mostSellingProducts: mostSellingProductsCount
       },
     });
   } catch (error) {

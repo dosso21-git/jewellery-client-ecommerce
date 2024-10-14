@@ -91,14 +91,34 @@ const CartPage = () => {
     setCartData({ ...cartData, items: newCart });
   };
 
-  const removeItem = async(id) => {
+  const removeItem = async (productId) => {
+    alert(productId)
     try {
-      await axios.post('/cart/remove',{
-        productId: id,
-      })
-      const newItems = items.filter((item) => item._id !== id);
-      setCartData({ ...cartData, items: newItems });
-    } catch (error) {}
+      // Assuming userId is available (you may have it stored in state or fetched from a user context)
+      const userId = cartData.userId; 
+  
+      // Make the request to the backend to remove the item from the cart
+      await axios.post('/cart/remove', {
+        userId,
+        productId, // Pass productId here
+      });
+  
+      // Update the local cart state after successful removal
+      const newItems = cartData.items.filter(item => item.productId !== productId);
+      
+      // Update cartData with the filtered items
+      setCartData({
+        ...cartData,
+        items: newItems,
+        totalItems: newItems.length,
+        totalPrice: newItems.reduce(
+          (acc, item) => acc + item.price * item.quantity, 
+          0
+        )
+      });
+    } catch (error) {
+      console.error("Failed to remove item from cart:", error);
+    }
   };
 
   const applyCoupon = () => {

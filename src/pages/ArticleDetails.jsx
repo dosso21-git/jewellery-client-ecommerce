@@ -1,12 +1,11 @@
 import React from 'react';
-import { useParams } from 'react-router-dom'; // Use React Router's useParams
-
+import { useParams } from 'react-router-dom';
 const ArticleDetails = () => {
-  const { id } = useParams(); // Get the article ID from the route
+  const { id } = useParams();
   const articles = [
     {
       id: 1,
-      imageSrc: '/ai-generated-8659741_640.jpg', // Remove '/public'
+      imageSrc: '/ai-generated-8659741_640.jpg',
       title: 'How to Style Silver Jewellery',
       preDescription: 'Silver jewellery has long been an elegant choice for both casual and formal occasions. Understanding how to match silver with your outfits can elevate your fashion game significantly.',
       description: 'Silver jewellery offers a timeless charm that can be paired with almost any outfit. Whether it\'s a simple silver necklace or an intricate bracelet, the right styling is essential for making a statement. Layering multiple silver necklaces or pairing them with contrasting metals like gold can create a modern, chic look. Additionally, silver pieces with gemstones or intricate designs add a unique flair to your overall attire. Don\'t be afraid to mix and match textures and designs to create a personalized look. Consider the occasion, your outfit, and your mood when selecting your pieces. Silver jewellery works for both casual and formal occasions, making it a versatile addition to your collection.',
@@ -29,8 +28,6 @@ const ArticleDetails = () => {
       subDescription: 'Pro tip: When buying gold rings for investment purposes, always check for hallmarks that indicate gold purity. Additionally, request a certificate of authenticity from the seller to confirm that you are purchasing a genuine gold item. Another key consideration is the craftsmanship and design, which can influence the ring\'s resale value. Some pieces may also carry additional value due to historical significance or sentimental worth. Gold rings often hold both financial and emotional value, making them a versatile investment for future generations. Keep track of gold market fluctuations to ensure you are buying at the right time.'
     }
   ];
-  
-
   // Find the article based on the ID
   const article = articles.find((article) => article.id === Number(id));
 

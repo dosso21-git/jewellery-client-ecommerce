@@ -1,6 +1,10 @@
-
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate, } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Cookies from "js-cookie";
@@ -27,7 +31,7 @@ import RecentViewProducts from "./pages/RecentViewProducts";
 import About from "./pages/AboutPage";
 import ArticlesGrid from "./pages/blogPage";
 import ArticleDetails from "./pages/ArticleDetails";
-import ContactUs from './pages/ContactUs'
+import ContactUs from "./pages/ContactUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndCondition";
 
@@ -134,4 +138,3 @@ const App = () => {
 };
 
 export default App;
-

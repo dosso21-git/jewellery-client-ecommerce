@@ -66,40 +66,111 @@ exports.addToCart = async (req, res) => {
 // };
 
 
+
+
+
+// exports.removeFromCart = async (req, res) => {
+//   try {
+//     const { userId } = req.body; // Assuming userId is passed in the request body
+//     const { productId } = req.params; // Assuming productId is passed in the request parameters
+    
+//     console.log('User ID:', userId);
+//     console.log('Removing product ID:', productId);
+    
+//     // Find the user by userId
+//     const user = await cartModel.findOne({ userId });
+    
+//     // Check if user exists
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // Log the user object for debugging
+//     console.log('User found:', user.items);
+    
+//     // Remove the productId from the cart array
+//     user.items = user.items.filter(item => item !== productId);
+//     console.log('this is itmes',user.items)
+//     // If there are no items left in the cart, delete the cart
+//     if (user.items.length == 1) {
+//       console.log('this is me ')
+//       await cartModel.deleteOne({ userId });
+//       return res.status(200).json({ message: "Cart is empty and has been deleted" });
+//     }
+
+//     // Update totalItems and totalPrice if there are still items in the cart
+//     user.totalItems = user.items.length; // Update totalItems
+//     user.totalPrice = user.items.reduce((total, item) => total + (item.price * item.quantity), 0); // Recalculate totalPrice
+    
+//     // Save the updated user object
+//     await user.save();
+    
+//     // Respond with a success message
+//     return res.status(200).json({ message: "Product removed from cart" });
+//   } catch (err) {
+//     // Log the error for debugging
+//     console.error('Error removing product from cart:', err);
+//     res.status(500).json({ message: "Server error", error: err.message });
+//   }
+// };
+
+
+
+
 exports.removeFromCart = async (req, res) => {
   try {
-    const { userId } = req.body; // Assuming userId is passed in the request body
-    const { productId } = req.params; // Assuming productId is passed in the request parameters
-console.log(userId)
-    // Log the productId for debugging
+    const { userId } = req.body; // User ID from the request body
+    const { productId } = req.params; // Product ID from the request parameters
+    
+    console.log('User ID:', userId);
     console.log('Removing product ID:', productId);
     
-    // Find the user by userId
-    const user = await cartModel.findOne({userId});
+    // Find the cart by userId
+    const userCart = await cartModel.findOne({ userId });
     
-    // Check if user exists
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    // Check if the cart exists
+    if (!userCart) {
+      return res.status(404).json({ message: "User not found or cart is empty" });
     }
 
-    // Log the user object for debugging
-    console.log('User found:', user);
+    // Log the current items for debugging
+    console.log('Current items in cart:', userCart.items);
     
-    // Remove the productId from the cart array
-    user.items = user.items.filter(item => item.toString() !== productId); // Ensure type conversion for ObjectId
-    user.totalItems = user.items.length; // Update totalItems
-    user.totalPrice = user.items.reduce((total, item) => total + (item.price * item.quantity), 0); // Recalculate totalPrice
+    // Find the index of the item to remove
+    const itemIndex = userCart.items.findIndex(item => item.productId == productId);
+    console.log('item index',itemIndex)
+    // If the item is found, remove it
+    if (itemIndex !== -1) {
+      userCart.items.splice(itemIndex, 1);
+      console.log('Item removed, updated items:', userCart.items);
+    } else {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    // If there are no items left in the cart, delete the cart
+    if (userCart.items.length == 0) {
+      await cartModel.deleteOne({ userId });
+      return res.status(200).json({ message: "Cart is empty and has been deleted" });
+    }
+
+    // Update totalItems and totalPrice
+    userCart.totalItems = userCart.items.length; // Update totalItems
+    userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0); // Recalculate totalPrice
     
-    // Save the updated user object
-    await user.save();
+    console.log('last user cart data is here ',userCart)
+    // Save the updated cart object
+    await userCart.save();
+    
     // Respond with a success message
-    return res.status(200).json({ message: "Product removed from cart" });
+    return res.status(200).json({ message: "Product removed from cart",status : 200 });
   } catch (err) {
     // Log the error for debugging
     console.error('Error removing product from cart:', err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+
 
 // Update item quantity in cart
 exports.updateCartItem = async (req, res) => {
@@ -214,7 +285,7 @@ exports.getCartItems = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      items: cart.items,
+      items: cart.items.length > 0 ?  cart.items : [],
       subtotal: subtotal.toFixed(2), // Format to 2 decimal places
       shippingEstimate: shippingEstimate.toFixed(2),
       taxEstimate: taxEstimate.toFixed(2),

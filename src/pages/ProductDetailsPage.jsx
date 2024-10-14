@@ -1403,6 +1403,139 @@
 
 
 
+
+
+
+
+// import { FaHeart, FaRegHeart } from "react-icons/fa";
+// import React, { useState, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import Cookies from "js-cookie";
+// import CouponPopup from "../components/Popup/CouponPopup";
+// import axios from "axios";
+// import { AlertCustomStyles } from "../components/Popup/SuccessAlert";
+// import ProductMagnifier from "./ProductMagnifier"; // Import the magnifier component
+
+// const ProductDetails = () => {
+//   const { id } = useParams();
+//   const [isInWishlist, setIsInWishlist] = useState(false);
+//   const [selectedImage, setSelectedImage] = useState("");
+//   const [discountedPrice, setDiscountedPrice] = useState(0);
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [productData, setProductData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [newRating, setNewRating] = useState(0);
+//   const [ratings, setRatings] = useState([]);
+//   const navigate = useNavigate();
+//   const token = Cookies.get("loginToken");
+//   const [message, setMessage] = useState("");
+//   const [showAlert, setShowAlert] = useState(false);
+
+
+//   useEffect(() => {
+//     const getProductById = async () => {
+//       try {
+//         const result = await axios.get(`/product/get/${id}`);
+//         if (result.data.data) {
+//           setProductData(result.data.data);
+//           setSelectedImage(result.data.data.images[0]);
+//           setDiscountedPrice(result.data.data.price);
+//           setRatings(result.data.data.ratings || []);
+//         }
+//       } catch (error) {
+//         setError('Error fetching product data');
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     getProductById();
+//   }, [id]);
+
+//   const redirectFunction = () => {
+//     if (!token) {
+//       navigate("/login");
+//     } else {
+//       navigate("/delivery-address");
+//     }
+//   };
+
+//   const AddToCart = (productId, quantity) => {
+//     // Your existing logic for adding to cart
+//   };
+
+//   if (loading) return <p>Loading...</p>;
+//   if (error) return <p>{error}</p>;
+
+//   return (
+//     <div className="container mx-auto p-4 mt-24">
+//       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
+//       <AlertCustomStyles
+//         visible={showAlert}
+//         setVisible={setShowAlert}
+//         message={message}
+//       />
+
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+//         <div>
+//           <div className="border mb-6 p-4">
+//             <div className="relative overflow-hidden">
+//               {/* Replace the image with ProductMagnifier */}
+//               <ProductMagnifier yourphoto={selectedImage} />
+//             </div>
+//           </div>
+//           <div className="flex space-x-2 overflow-x-auto mb-6">
+//             {productData?.images?.map((img, index) => (
+//               <img
+//                 key={index}
+//                 src={img}
+//                 alt={`Product ${index}`}
+//                 onClick={() => setSelectedImage(img)}
+//                 className={`w-16 h-16 object-cover cursor-pointer border ${
+//                   selectedImage === img
+//                     ? "border-indigo-600"
+//                     : "border-gray-300"
+//                 }`}
+//               />
+//             ))}
+//           </div>
+//         </div>
+//         <div>
+//           <h1 className="text-2xl font-bold mb-4">{productData.title}</h1>
+//           <p className="text-sm text-gray-600 mb-6">{productData.description}</p>
+//           <div className="flex items-center space-x-2 mb-6">
+//             <span className="text-green-600 font-semibold">{productData.totalrating} ★</span>
+//             <button onClick={() => setIsInWishlist(!isInWishlist)} className="ml-4 text-red-500 hover:text-red-700">
+//               {isInWishlist ? <FaHeart size={24} color="darkred" /> : <FaRegHeart size={24} />}
+//             </button>
+//           </div>
+//           <div className="mb-6">
+//             <span className="text-3xl font-bold text-red-600">₹{discountedPrice}</span>
+//             <span className="line-through text-gray-500 ml-4">₹{productData.price}</span>
+//           </div>
+//           {/* Additional product details here */}
+//           <div className="flex space-x-4">
+//             <button onClick={() => AddToCart(productData._id, 1)} className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600 transition">
+//               ADD TO CART
+//             </button>
+//             <button onClick={redirectFunction} className="w-full py-3 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600 transition">
+//               BUY NOW
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ProductDetails;
+
+
+
+
+
+
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -1410,6 +1543,7 @@ import Cookies from "js-cookie";
 import CouponPopup from "../components/Popup/CouponPopup";
 import axios from "axios";
 import { AlertCustomStyles } from "../components/Popup/SuccessAlert";
+import ProductMagnifier from "./ProductMagnifier"; // Import the magnifier component
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -1417,7 +1551,7 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-  const [productData, setProductData] = useState([]);
+  const [productData, setProductData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newRating, setNewRating] = useState(0);
@@ -1425,16 +1559,17 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const token = Cookies.get("loginToken");
   const [message, setMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const getProductById = async () => {
       try {
         const result = await axios.get(`/product/get/${id}`);
-        if (result.data) {
-          setProductData(result.data);
-          setSelectedImage(result.data.images[0]);
-          setDiscountedPrice(result.data.price);
-          setRatings(result.data.ratings || []);
+        if (result.data.data) {
+          setProductData(result.data.data);
+          setSelectedImage(result.data.data.images[0]);
+          setDiscountedPrice(result.data.data.price);
+          setRatings(result.data.data.ratings || []);
         }
       } catch (error) {
         setError('Error fetching product data');
@@ -1464,16 +1599,18 @@ const ProductDetails = () => {
   return (
     <div className="container mx-auto p-4 mt-24">
       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
-      <AlertCustomStyles visible={true} message={message} />
+      <AlertCustomStyles
+        visible={showAlert}
+        setVisible={setShowAlert}
+        message={message}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <div className="border mb-6 p-4">
             <div className="relative overflow-hidden">
-              <img
-                src={selectedImage}
-                alt="Product"
-                className="w-full h-auto transition-transform duration-500 transform hover:scale-125"
-              />
+              {/* Replace the image with ProductMagnifier */}
+              {selectedImage && <ProductMagnifier yourphoto={selectedImage} />}
             </div>
           </div>
           <div className="flex space-x-2 overflow-x-auto mb-6">

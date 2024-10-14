@@ -1,19 +1,3 @@
-// import React from 'react';
-// import './index.css'; // Make sure this line is included
-
-// function App() {
-//   return (
-//     <div className=" bg-black  flex h-screen items-center justify-center bg-gray-100">
-//       <h1 className="text-4xl font-bold text-blue-500">Hello, Vite + Tailwind CSS!</h1>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-//commet line for testing
-
 
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, } from "react-router-dom";

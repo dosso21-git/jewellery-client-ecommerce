@@ -1,6 +1,6 @@
 const express = require("express");
 const { protect } = require("../middleware/authMiddleware");
-const { addToWishlist, removeFromWishlist, getWishlist } = require("../controllers/wishLIstController");
+const { addToWishlist, removeFromWishlist, getWishlist } = require("../controllers/wishListController");
 
 const router = express.Router();
 

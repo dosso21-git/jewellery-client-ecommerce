@@ -94,7 +94,7 @@ const getProductById = async (req, res) => {
       await recentView.save();
     }
 
-    res.status(200).json(product);
+    res.status(200).json({data:product});
   } catch (error) {
     res.status(500).json({ message: "Error fetching Product", error });
   }

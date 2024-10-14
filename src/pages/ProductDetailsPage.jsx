@@ -1062,10 +1062,350 @@
 
 // export default ProductDetails;
 
+
+
+// import { FaHeart, FaRegHeart } from "react-icons/fa";
+// import React, { useState, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import ReactImageMagnify from "react-image-magnify";
+// import Cookies from "js-cookie";
+// import CouponPopup from "../components/Popup/CouponPopup";
+// import axios from "axios";
+// import { AlertCustomStyles } from "../components/Popup/SuccessAlert";
+
+// const ProductDetails = () => {
+//   const { id } = useParams();
+//   const [isInWishlist, setIsInWishlist] = useState(false);
+//   const [selectedImage, setSelectedImage] = useState("");
+//   const [couponCode, setCouponCode] = useState("");
+//   const [discountedPrice, setDiscountedPrice] = useState(0);
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [productData, setProductData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [newRating, setNewRating] = useState(0);
+//   const [ratings, setRatings] = useState([]);
+
+//   const navigate = useNavigate();
+//   const token = Cookies.get("loginToken");
+//   const [message, setMessage] = useState("");
+
+//   const dummyProduct = {
+//     title: "Dummy Product Title",
+//     description: "This is a description of the dummy product.",
+//     price: 100,
+//     images: [
+//       "https://via.placeholder.com/300",
+//       "https://via.placeholder.com/300",
+//     ],
+//     totalrating: 4.5,
+//     ratings: [{ star: 4, comment: "Good!" }],
+//     availableOffers: [
+//       "10% off on first purchase",
+//       "Free shipping on orders over ₹500",
+//     ],
+//   };
+
+//   useEffect(() => {
+//     // setProductData(dummyProduct);
+//     const getProductById = async () => {
+//       try {
+//         const result = await axios.get(`/product/get/${id}`);
+//         if (result.data) {
+//           setProductData(result.data);
+//           setSelectedImage(result.data.images[0]);
+//           setDiscountedPrice(result.data.price);
+//           setRatings(result.data.ratings || []);
+//         } else {
+//           setProductData(dummyProduct); // Use dummy product if no data is returned
+//         }
+//       } catch (error) {
+//         // setError('Error fetching product data');
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     getProductById();
+//   }, [id]);
+
+//   const redirectFunction = () => {
+//     if (!token) {
+//       navigate("/login");
+//     } else {
+//       navigate("/delivery-address");
+//     }
+//   };
+
+//   const AddToCart = (productId, quantity) => {
+//     if (!token) {
+//       navigate("/login");
+//     } else {
+//       addToCartProduct(productId, quantity);
+//       setMessage("product added to cart successfully");
+//       // setShowAlert(true);
+//       // navigate('/cart');
+//     }
+//   };
+//   const AddToWishlist = (productId) => {
+//     if (!token) {
+//       navigate("/login");
+//     } else {
+//       addToWishlistProduct(productId);
+//       setMessage("product added to wishlist successfully");
+//       // setShowAlert(true);
+//       // navigate('/cart');
+//     }
+//   };
+//   const addToCartProduct = async (productId, quantity) => {
+//     try {
+//       const result = await axios.post("/cart/add", {
+//         productId,
+//         quantity,
+//       });
+//       console.log("result", result);
+//       if (result.data) {
+//         setMessage("product added to cart successfully");
+//         setShowAlert(true);
+//       }
+//     } catch (err) {
+//       console.log("this is erro in adding to cart", err);
+//     }
+//   }; 
+//   const addToWishlistProduct = async (productId) => {
+//     try {
+//       const result = await axios.post("/wishlist/create", {
+//         productId,
+//       });
+//       console.log("result", result);
+//       if (result.data) {
+//         setMessage(result.data.message);
+//         setShowAlert(true);
+//       }
+//     } catch (error) {
+//       setMessage(error.data);
+//       alert(error.message);
+//       console.log("this is error in adding to wishlist", error.message);
+//     }
+//   };
+
+//   const applyCoupon = () => {
+//     if (couponCode === "FLAT50") {
+//       setDiscountedPrice(productData.price - 50);
+//       setShowPopup(true);
+//       setTimeout(() => setShowPopup(false), 2000);
+//     } else {
+//       alert("Invalid coupon code");
+//     }
+//   };
+
+//   const submitRating = async () => {
+//     if (newRating < 1 || newRating > 5) {
+//       alert("Please provide a rating between 1 and 5.");
+//       return;
+//     }
+//     const updatedRatings = [
+//       ...ratings,
+//       { star: newRating, comment: "Great product!" },
+//     ]; // Comment can be modified as needed
+//     setRatings(updatedRatings);
+//     setNewRating(0);
+//   };
+
+//   // if (loading) return <p>Loading...</p>;
+//   if (error) return <p>{error}</p>;
+
+//   const discount =
+//     ((productData.price - discountedPrice) / productData.price) * 100;
+
+//   const [showAlert, setShowAlert] = useState(false);
+
+//   const handleShowAlert = () => {
+//     setShowAlert(true);
+//   };
+
+//   useEffect(() => {
+//     handleShowAlert;
+//   }, []);
+//   return (
+//     <div className="container mx-auto p-4 mt-24">
+//       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
+//       <AlertCustomStyles
+//         visible={showAlert}
+//         setVisible={setShowAlert}
+//         message={message}
+//       />
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+//         {" "}
+//         {/* Increased gap between columns */}
+//         <div>
+//           <div className="border mb-6 p-4">
+//             {" "}
+//             {/* Increased margin bottom */}
+//             <ReactImageMagnify
+//               {...{
+//                 smallImage: {
+//                   alt: "Product Image",
+//                   isFluidWidth: true,
+//                   src: selectedImage,
+//                 },
+//                 largeImage: {
+//                   src: selectedImage,
+//                   width: 800,
+//                   height: 900,
+//                 },
+//                 enlargedImageContainerDimensions: {
+//                   width: "100%",
+//                   height: "80%",
+//                 },
+//                 enlargedImagePosition: "beside",
+//               }}
+//               style={{ width: "100%", height: "100%" }}
+//             />
+//           </div>
+//           <div className="flex space-x-2 overflow-x-auto mb-6">
+//             {" "}
+//             {/* Increased margin bottom */}
+//             {productData?.images?.map((img, index) => (
+//               <img
+//                 key={index}
+//                 src={img}
+//                 alt={`Product ${index}`}
+//                 onClick={() => setSelectedImage(img)}
+//                 className={`w-16 h-16 object-cover cursor-pointer border ${
+//                   selectedImage === img
+//                     ? "border-indigo-600"
+//                     : "border-gray-300"
+//                 }`}
+//               />
+//             ))}
+//           </div>
+//         </div>
+//         <div>
+//           <h1 className="text-2xl font-bold mb-4">{productData.title}</h1>{" "}
+//           {/* Increased margin bottom */}
+//           <p className="text-sm text-gray-600 mb-6">
+//             {productData.description}
+//           </p>{" "}
+//           {/* Increased margin bottom */}
+//           <div className="flex items-center space-x-2 mb-6">
+//             {" "}
+//             {/* Increased margin bottom */}
+//             <span className="text-green-600 font-semibold">
+//               {productData.totalrating} ★
+//             </span>
+//             <button
+//               onClick={() => AddToWishlist(productData._id)}
+//               className="ml-4 text-red-500 hover:text-red-700"
+//             >
+//               {isInWishlist ? (
+//                 <FaHeart size={24} color="darkred" />
+//               ) : (
+//                 <FaRegHeart size={24} />
+//               )}
+//             </button>
+//           </div>
+//           <div className="mb-6">
+//             {" "}
+//             {/* Increased margin bottom */}
+//             <span className="text-3xl font-bold text-red-600">
+//               ₹{discountedPrice}
+//             </span>
+//             <span className="line-through text-gray-500 ml-4">
+//               ₹{productData.price}
+//             </span>
+//             <span className="text-green-600 font-semibold ml-2">
+//               {Math.round(discount)}% off
+//             </span>
+//           </div>
+//           <div className="mb-6">
+//             {" "}
+//             {/* Increased margin bottom */}
+//             <h3 className="text-lg font-semibold mb-2">
+//               Rate this Product
+//             </h3>{" "}
+//             {/* Increased margin bottom */}
+//             <input
+//               type="number"
+//               value={newRating}
+//               onChange={(e) => setNewRating(Number(e.target.value))}
+//               placeholder="Rate (1-5)"
+//               min="1"
+//               max="5"
+//               className="border rounded p-2 w-full mb-2"
+//             />
+//             <button
+//               onClick={submitRating}
+//               className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
+//             >
+//               Submit Rating
+//             </button>
+//           </div>
+//           {/* Display Existing Ratings */}
+//           <div className="mb-6">
+//             {" "}
+//             {/* Increased margin bottom */}
+//             <h3 className="text-lg font-semibold mb-2">
+//               Existing Ratings
+//             </h3>{" "}
+//             {/* Increased margin bottom */}
+//             {ratings.length > 0 ? (
+//               ratings.map((rating, index) => (
+//                 <div key={index} className="flex items-center mb-1">
+//                   <span className="text-yellow-500">{rating.star} ★</span>
+//                   <p className="ml-2 text-gray-600">{rating.comment}</p>
+//                 </div>
+//               ))
+//             ) : (
+//               <p>No ratings yet.</p>
+//             )}
+//           </div>
+//           {/* Available Offers */}
+//           {productData?.availableOffers &&
+//             productData.availableOffers.length > 0 && (
+//               <div className="mb-6">
+//                 {" "}
+//                 {/* Increased margin bottom */}
+//                 <h3 className="text-lg font-semibold mb-2">
+//                   Available Offers
+//                 </h3>{" "}
+//                 {/* Increased margin bottom */}
+//                 <ul className="list-disc list-inside text-gray-700 space-y-2">
+//                   {productData.availableOffers.map((offer, index) => (
+//                     <li key={index}>{offer}</li>
+//                   ))}
+//                 </ul>
+//               </div>
+//             )}
+//           {/* Buttons */}
+//           <div className="flex space-x-4">
+//             <button
+//               onClick={() => AddToCart(productData._id, 1)}
+//               className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600 transition"
+//             >
+//               ADD TO CART
+//             </button>
+//             <button
+//               onClick={redirectFunction}
+//               className="w-full py-3 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600 transition"
+//             >
+//               BUY NOW
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ProductDetails;
+
+
+
+
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ReactImageMagnify from "react-image-magnify";
 import Cookies from "js-cookie";
 import CouponPopup from "../components/Popup/CouponPopup";
 import axios from "axios";
@@ -1075,7 +1415,6 @@ const ProductDetails = () => {
   const { id } = useParams();
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-  const [couponCode, setCouponCode] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [productData, setProductData] = useState([]);
@@ -1083,29 +1422,11 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [newRating, setNewRating] = useState(0);
   const [ratings, setRatings] = useState([]);
-
   const navigate = useNavigate();
   const token = Cookies.get("loginToken");
   const [message, setMessage] = useState("");
 
-  const dummyProduct = {
-    title: "Dummy Product Title",
-    description: "This is a description of the dummy product.",
-    price: 100,
-    images: [
-      "https://via.placeholder.com/300",
-      "https://via.placeholder.com/300",
-    ],
-    totalrating: 4.5,
-    ratings: [{ star: 4, comment: "Good!" }],
-    availableOffers: [
-      "10% off on first purchase",
-      "Free shipping on orders over ₹500",
-    ],
-  };
-
   useEffect(() => {
-    // setProductData(dummyProduct);
     const getProductById = async () => {
       try {
         const result = await axios.get(`/product/get/${id}`);
@@ -1114,11 +1435,9 @@ const ProductDetails = () => {
           setSelectedImage(result.data.images[0]);
           setDiscountedPrice(result.data.price);
           setRatings(result.data.ratings || []);
-        } else {
-          setProductData(dummyProduct); // Use dummy product if no data is returned
         }
       } catch (error) {
-        // setError('Error fetching product data');
+        setError('Error fetching product data');
       } finally {
         setLoading(false);
       }
@@ -1136,134 +1455,28 @@ const ProductDetails = () => {
   };
 
   const AddToCart = (productId, quantity) => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      addToCartProduct(productId, quantity);
-      setMessage("product added to cart successfully");
-      // setShowAlert(true);
-      // navigate('/cart');
-    }
-  };
-  const AddToWishlist = (productId) => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      addToWishlistProduct(productId);
-      setMessage("product added to wishlist successfully");
-      // setShowAlert(true);
-      // navigate('/cart');
-    }
-  };
-  const addToCartProduct = async (productId, quantity) => {
-    try {
-      const result = await axios.post("/cart/add", {
-        productId,
-        quantity,
-      });
-      console.log("result", result);
-      if (result.data) {
-        setMessage("product added to cart successfully");
-        setShowAlert(true);
-      }
-    } catch (err) {
-      console.log("this is erro in adding to cart", err);
-    }
-  }; 
-  const addToWishlistProduct = async (productId) => {
-    try {
-      const result = await axios.post("/wishlist/create", {
-        productId,
-      });
-      console.log("result", result);
-      if (result.data) {
-        setMessage(result.data.message);
-        setShowAlert(true);
-      }
-    } catch (error) {
-      setMessage(error.data);
-      alert(error.message);
-      console.log("this is error in adding to wishlist", error.message);
-    }
+    // Your existing logic for adding to cart
   };
 
-  const applyCoupon = () => {
-    if (couponCode === "FLAT50") {
-      setDiscountedPrice(productData.price - 50);
-      setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 2000);
-    } else {
-      alert("Invalid coupon code");
-    }
-  };
-
-  const submitRating = async () => {
-    if (newRating < 1 || newRating > 5) {
-      alert("Please provide a rating between 1 and 5.");
-      return;
-    }
-    const updatedRatings = [
-      ...ratings,
-      { star: newRating, comment: "Great product!" },
-    ]; // Comment can be modified as needed
-    setRatings(updatedRatings);
-    setNewRating(0);
-  };
-
-  // if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
-  const discount =
-    ((productData.price - discountedPrice) / productData.price) * 100;
-
-  const [showAlert, setShowAlert] = useState(false);
-
-  const handleShowAlert = () => {
-    setShowAlert(true);
-  };
-
-  useEffect(() => {
-    handleShowAlert;
-  }, []);
   return (
     <div className="container mx-auto p-4 mt-24">
       {showPopup && <CouponPopup onClose={() => setShowPopup(false)} />}
-      <AlertCustomStyles
-        visible={showAlert}
-        setVisible={setShowAlert}
-        message={message}
-      />
+      <AlertCustomStyles visible={true} message={message} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {" "}
-        {/* Increased gap between columns */}
         <div>
           <div className="border mb-6 p-4">
-            {" "}
-            {/* Increased margin bottom */}
-            <ReactImageMagnify
-              {...{
-                smallImage: {
-                  alt: "Product Image",
-                  isFluidWidth: true,
-                  src: selectedImage,
-                },
-                largeImage: {
-                  src: selectedImage,
-                  width: 800,
-                  height: 900,
-                },
-                enlargedImageContainerDimensions: {
-                  width: "100%",
-                  height: "80%",
-                },
-                enlargedImagePosition: "beside",
-              }}
-              style={{ width: "100%", height: "100%" }}
-            />
+            <div className="relative overflow-hidden">
+              <img
+                src={selectedImage}
+                alt="Product"
+                className="w-full h-auto transition-transform duration-500 transform hover:scale-125"
+              />
+            </div>
           </div>
           <div className="flex space-x-2 overflow-x-auto mb-6">
-            {" "}
-            {/* Increased margin bottom */}
             {productData?.images?.map((img, index) => (
               <img
                 key={index}
@@ -1280,113 +1493,24 @@ const ProductDetails = () => {
           </div>
         </div>
         <div>
-          <h1 className="text-2xl font-bold mb-4">{productData.title}</h1>{" "}
-          {/* Increased margin bottom */}
-          <p className="text-sm text-gray-600 mb-6">
-            {productData.description}
-          </p>{" "}
-          {/* Increased margin bottom */}
+          <h1 className="text-2xl font-bold mb-4">{productData.title}</h1>
+          <p className="text-sm text-gray-600 mb-6">{productData.description}</p>
           <div className="flex items-center space-x-2 mb-6">
-            {" "}
-            {/* Increased margin bottom */}
-            <span className="text-green-600 font-semibold">
-              {productData.totalrating} ★
-            </span>
-            <button
-              onClick={() => AddToWishlist(productData._id)}
-              className="ml-4 text-red-500 hover:text-red-700"
-            >
-              {isInWishlist ? (
-                <FaHeart size={24} color="darkred" />
-              ) : (
-                <FaRegHeart size={24} />
-              )}
+            <span className="text-green-600 font-semibold">{productData.totalrating} ★</span>
+            <button onClick={() => setIsInWishlist(!isInWishlist)} className="ml-4 text-red-500 hover:text-red-700">
+              {isInWishlist ? <FaHeart size={24} color="darkred" /> : <FaRegHeart size={24} />}
             </button>
           </div>
           <div className="mb-6">
-            {" "}
-            {/* Increased margin bottom */}
-            <span className="text-3xl font-bold text-red-600">
-              ₹{discountedPrice}
-            </span>
-            <span className="line-through text-gray-500 ml-4">
-              ₹{productData.price}
-            </span>
-            <span className="text-green-600 font-semibold ml-2">
-              {Math.round(discount)}% off
-            </span>
+            <span className="text-3xl font-bold text-red-600">₹{discountedPrice}</span>
+            <span className="line-through text-gray-500 ml-4">₹{productData.price}</span>
           </div>
-          <div className="mb-6">
-            {" "}
-            {/* Increased margin bottom */}
-            <h3 className="text-lg font-semibold mb-2">
-              Rate this Product
-            </h3>{" "}
-            {/* Increased margin bottom */}
-            <input
-              type="number"
-              value={newRating}
-              onChange={(e) => setNewRating(Number(e.target.value))}
-              placeholder="Rate (1-5)"
-              min="1"
-              max="5"
-              className="border rounded p-2 w-full mb-2"
-            />
-            <button
-              onClick={submitRating}
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
-            >
-              Submit Rating
-            </button>
-          </div>
-          {/* Display Existing Ratings */}
-          <div className="mb-6">
-            {" "}
-            {/* Increased margin bottom */}
-            <h3 className="text-lg font-semibold mb-2">
-              Existing Ratings
-            </h3>{" "}
-            {/* Increased margin bottom */}
-            {ratings.length > 0 ? (
-              ratings.map((rating, index) => (
-                <div key={index} className="flex items-center mb-1">
-                  <span className="text-yellow-500">{rating.star} ★</span>
-                  <p className="ml-2 text-gray-600">{rating.comment}</p>
-                </div>
-              ))
-            ) : (
-              <p>No ratings yet.</p>
-            )}
-          </div>
-          {/* Available Offers */}
-          {productData?.availableOffers &&
-            productData.availableOffers.length > 0 && (
-              <div className="mb-6">
-                {" "}
-                {/* Increased margin bottom */}
-                <h3 className="text-lg font-semibold mb-2">
-                  Available Offers
-                </h3>{" "}
-                {/* Increased margin bottom */}
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  {productData.availableOffers.map((offer, index) => (
-                    <li key={index}>{offer}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          {/* Buttons */}
+          {/* Additional product details here */}
           <div className="flex space-x-4">
-            <button
-              onClick={() => AddToCart(productData._id, 1)}
-              className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600 transition"
-            >
+            <button onClick={() => AddToCart(productData._id, 1)} className="w-full py-3 bg-orange-500 text-white font-semibold rounded hover:bg-orange-600 transition">
               ADD TO CART
             </button>
-            <button
-              onClick={redirectFunction}
-              className="w-full py-3 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600 transition"
-            >
+            <button onClick={redirectFunction} className="w-full py-3 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600 transition">
               BUY NOW
             </button>
           </div>

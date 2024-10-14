@@ -1589,9 +1589,58 @@ const ProductDetails = () => {
     }
   };
 
-  const AddToCart = (productId, quantity) => {
-    // Your existing logic for adding to cart
-  };
+   const AddToCart = (productId, quantity) => {
+        if (!token) {
+          navigate("/login");
+        } else {
+          addToCartProduct(productId, quantity);
+          setMessage("product added to cart successfully");
+          // setShowAlert(true);
+          // navigate('/cart');
+        }
+      };
+      const AddToWishlist = (productId) => {
+        if (!token) {
+          navigate("/login");
+        } else {
+          addToWishlistProduct(productId);
+          setMessage("product added to wishlist successfully");
+          // setShowAlert(true);
+          // navigate('/cart');
+        }
+      };
+      const addToCartProduct = async (productId, quantity) => {
+        try {
+          const result = await axios.post("/cart/add", {
+            productId,
+            quantity,
+          });
+          console.log("result", result);
+          if (result.data) {
+            setMessage("product added to cart successfully");
+            setShowAlert(true);
+          }
+        } catch (err) {
+          console.log("this is erro in adding to cart", err);
+        }
+      }; 
+      const addToWishlistProduct = async (productId) => {
+        try {
+          const result = await axios.post("/wishlist/create", {
+            productId,
+          });
+          console.log("result", result);
+          if (result.data) {
+            setMessage(result.data.message);
+            setShowAlert(true);
+          }
+        } catch (error) {
+          setMessage(error.data);
+          alert(error.message);
+          console.log("this is error in adding to wishlist", error.message);
+        }
+      };
+    
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -1634,7 +1683,7 @@ const ProductDetails = () => {
           <p className="text-sm text-gray-600 mb-6">{productData.description}</p>
           <div className="flex items-center space-x-2 mb-6">
             <span className="text-green-600 font-semibold">{productData.totalrating} ★</span>
-            <button onClick={() => setIsInWishlist(!isInWishlist)} className="ml-4 text-red-500 hover:text-red-700">
+            <button onClick={() => AddToWishlist(productData._id)} className="ml-4 text-red-500 hover:text-red-700">
               {isInWishlist ? <FaHeart size={24} color="darkred" /> : <FaRegHeart size={24} />}
             </button>
           </div>

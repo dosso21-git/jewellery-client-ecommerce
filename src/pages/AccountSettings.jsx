@@ -442,7 +442,7 @@ import OrderSummary from "./OrderSummaryPage";
 import { FaBars, FaTimes } from "react-icons/fa";
 import LoginPage from "./LoginPage";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ConfirmBoxPopup from "../components/Popup/ConfirmBoxPopup";
 import axios from "axios";
 import AddAddress from "../components/Address";
@@ -454,7 +454,12 @@ const AccountSettings = () => {
   const [userProfile, setUserProfile] = useState({});
   const token = Cookies.get('loginToken');
   const navigate = useNavigate();
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // alert(location?.pathname)
+
+
 
   // Fetch user data
   const getUserData = async () => {
@@ -486,6 +491,7 @@ const AccountSettings = () => {
 
   useEffect(() => {
     getUserData();
+    setActiveSection(location?.pathname)
   }, []);
 
   const handleConfirm = () => {
@@ -618,9 +624,9 @@ const AccountSettings = () => {
           description="Are you sure you want to logout."
         />
       )}
-      <div className="flex h-screen mt-36 bg-gray-50 dark:bg-gray-900">
+      <div className="flex h-screen mt-3 bg-gray-50 dark:bg-gray-900">
         <button
-          className="absolute top-36 left-4 md:hidden p-2 bg-gray-200 rounded"
+          className="absolute top-14 left-4 md:hidden p-2 bg-gray-200 rounded"
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-label="Toggle Sidebar"
         >

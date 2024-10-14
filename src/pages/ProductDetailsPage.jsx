@@ -1544,8 +1544,14 @@ import CouponPopup from "../components/Popup/CouponPopup";
 import axios from "axios";
 import { AlertCustomStyles } from "../components/Popup/SuccessAlert";
 import ProductMagnifier from "./ProductMagnifier"; // Import the magnifier component
+import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
+import { useDispatch } from "react-redux";
 
 const ProductDetails = () => {
+
+
+const dispatch = useDispatch();
+
   const { id } = useParams();
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -1570,6 +1576,8 @@ const ProductDetails = () => {
           setSelectedImage(result.data.data.images[0]);
           setDiscountedPrice(result.data.data.price);
           setRatings(result.data.data.ratings || []);
+          dispatch(addToCart(result?.data?.totalItems)); 
+         
         }
       } catch (error) {
         setError('Error fetching product data');
@@ -1616,7 +1624,8 @@ const ProductDetails = () => {
             quantity,
           });
           console.log("result", result);
-          if (result.data) {
+          if (result?.data) {
+            dispatch(addToCart(result?.data?.data?.totalItems)); 
             setMessage("product added to cart successfully");
             setShowAlert(true);
           }

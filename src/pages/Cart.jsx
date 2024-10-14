@@ -6,8 +6,15 @@ import CouponPopup from "../components/Popup/CouponPopup";
 import React from "react";
 import Lottie from "lottie-react";
 import successAnimation from "./cartAnimation/CartAnimation.json"; // Replace with your animation file
+import { useSelector, useDispatch } from 'react-redux';
+import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
+
 
 const CartPage = () => {
+
+  const cartItems = useSelector(state => state.cart.items);
+  const dispatch = useDispatch();
+
   const [cartData, setCartData] = useState(null);
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
@@ -21,13 +28,21 @@ const CartPage = () => {
   };
   const getAllCartData = async () => {
     try {
+    
       const response = await axios.post("/cart/get");
+      if(response.data.items){
       const validItems = response.data.items.filter(
         (item) => item.productId !== null
       );
       setCartData({ ...response.data, items: validItems });
+      dispatch(addToCart(response?.data?.items?.length)); // Assume 1 item is added
+      if(response?.data?.items?.length == 0){
+        dispatch(clearCart())
+      }
+    }else{
+      // setCartData([])
+    }
     } catch (error) {
-      //
       console.error("Error fetching cart data:", error);
     }
   };
@@ -69,6 +84,7 @@ const CartPage = () => {
 
   // Function to calculate totals
   const calculateTotals = () => {
+    // if(items.length > 0){
     const subtotal = items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
@@ -79,6 +95,7 @@ const CartPage = () => {
       subtotal + shippingEstimate + taxEstimate - subtotal * (discount / 100);
 
     return { subtotal, shippingEstimate, taxEstimate, orderTotal };
+  // }
   };
 
   // State for totals
@@ -98,6 +115,7 @@ const CartPage = () => {
       if (response.data.status) {
         // setWishlist(wishlist.filter(item => item._id!== id));
         getAllCartData()
+        dispatch(removeFromCart(id))
       } else {
         console.error('Error removing from wishlist:', response.data);
       }
@@ -132,6 +150,7 @@ const CartPage = () => {
         shipping_estimate: shippingEstimate,
         items: cartData.items,
         address: selectedAddress,
+        items: items,
         totalAmount: orderTotal,
       });
       if (response?.data?.status) {
@@ -162,7 +181,10 @@ const CartPage = () => {
               className="flex flex-wrap justify-between items-center p-4 mb-4 bg-white dark:bg-gray-800 shadow-md rounded-lg relative"
             >
               <button
-                onClick={() => removeItem(item.productId._id)}
+                onClick={() => {
+                  removeItem(item.productId._id);
+                  window.location.reload()
+                }}
                 className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white"
               >
                 &times;

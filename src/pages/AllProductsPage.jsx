@@ -349,7 +349,7 @@ const AllProductsPage = () => {
                   />
                   <div>
                     <h3 className="font-semibold">{data.title}</h3>
-                    <p className="text-sm text-gray-600">Price: ${data.price}</p>
+                    <p className="text-sm text-gray-600">Price: ₹{data.price}</p>
                     <div className="flex items-center gap-1">
                       <FaStar className="text-yellow-400" />
                       <span>{data.totalrating || "0"}</span>

@@ -593,7 +593,7 @@ const Products = () => {
                   />
                   <div>
                     <h3 className="font-semibold text-black">{data.title}</h3>
-                    <p className="text-sm text-black">Price: ${data.price}</p>
+                    <p className="text-sm text-black">Price: ₹{data.price}</p>
                     <div className="flex items-center gap-1">
                       <FaStar className="text-yellow-400" />
                       <span className="text-black">{data.totalrating || "0"}</span>

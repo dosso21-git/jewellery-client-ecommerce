@@ -91,33 +91,19 @@ const CartPage = () => {
     setCartData({ ...cartData, items: newCart });
   };
 
-  const removeItem = async (productId) => {
-    alert(productId)
+  const removeItem = async (id) => {
+    alert(id)
     try {
-      // Assuming userId is available (you may have it stored in state or fetched from a user context)
-      const userId = cartData.userId; 
-  
-      // Make the request to the backend to remove the item from the cart
-      await axios.post('/cart/remove', {
-        userId,
-        productId, // Pass productId here
-      });
-  
-      // Update the local cart state after successful removal
-      const newItems = cartData.items.filter(item => item.productId !== productId);
+      const response = await axios.delete(`/cart/remove/${id}`);
+      if (response.data.message) {
       
-      // Update cartData with the filtered items
-      setCartData({
-        ...cartData,
-        items: newItems,
-        totalItems: newItems.length,
-        totalPrice: newItems.reduce(
-          (acc, item) => acc + item.price * item.quantity, 
-          0
-        )
-      });
+        // setWishlist(wishlist.filter(item => item._id!== id));
+        fetchWishlist()
+      } else {
+        console.error('Error removing from wishlist:', response.data);
+      }
     } catch (error) {
-      console.error("Failed to remove item from cart:", error);
+      alert("theek kar")
     }
   };
 
@@ -152,6 +138,7 @@ const CartPage = () => {
       });
       if (response?.data?.status) {
         console.log(response.message);
+        alert("Order created successfully")
         getAllCartData();
         // alert(response.data.message);
         setCartData(null); // Clear cart after successful order

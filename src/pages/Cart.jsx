@@ -106,7 +106,6 @@ const CartPage = () => {
       alert("theek kar")
     }
   };
-
   const applyCoupon = () => {
     if (couponCode === "SAVE10") {
       setDiscount(10);

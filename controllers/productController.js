@@ -94,7 +94,7 @@ const getProductById = async (req, res) => {
       await recentView.save();
     }
 
-    res.status(200).json({data:product});
+    res.status(200).json({ data: product });
   } catch (error) {
     res.status(500).json({ message: "Error fetching Product", error });
   }
@@ -360,6 +360,34 @@ const checkStock = async (req, res) => {
   }
 };
 
+
+const calcuLatePandL = async (req, res) => {
+  try {
+    const products = await Product.find();
+
+    let totalProfit = 0;
+    let totalLoss = 0;
+
+    products.forEach(product => {
+      const profit = (product.price - product.costPrice) * product.sold;
+      if (profit >= 0) {
+        totalProfit += profit;
+      } else {
+        totalLoss += Math.abs(profit);
+      }
+    });
+
+    res.status(200).json({
+      totalProfit,
+      totalLoss,
+      netProfit: totalProfit - totalLoss,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
-  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock
+  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL
 }; 

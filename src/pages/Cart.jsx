@@ -27,6 +27,7 @@ const CartPage = () => {
       );
       setCartData({ ...response.data, items: validItems });
     } catch (error) {
+      //
       console.error("Error fetching cart data:", error);
     }
   };
@@ -92,18 +93,16 @@ const CartPage = () => {
   };
 
   const removeItem = async (id) => {
-    alert(id)
     try {
       const response = await axios.delete(`/cart/remove/${id}`);
-      if (response.data.message) {
-      
+      if (response.data.status) {
         // setWishlist(wishlist.filter(item => item._id!== id));
-        fetchWishlist()
+        getAllCartData()
       } else {
         console.error('Error removing from wishlist:', response.data);
       }
     } catch (error) {
-      alert("theek kar")
+      console.log('catch block',error)
     }
   };
 
@@ -164,7 +163,7 @@ const CartPage = () => {
               className="flex flex-wrap justify-between items-center p-4 mb-4 bg-white dark:bg-gray-800 shadow-md rounded-lg relative"
             >
               <button
-                onClick={() => removeItem(item._id)}
+                onClick={() => removeItem(item.productId._id)}
                 className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white"
               >
                 &times;

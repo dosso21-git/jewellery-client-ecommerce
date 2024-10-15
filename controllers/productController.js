@@ -132,8 +132,28 @@ const deleteProductAws = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
+
+
+   //if user login thne send its cart lenght in get all products
+      const token = req.headers.authorization?.split(" ")[1];
+      var cartLength;
+      console.log('token',token)
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.id;
+      console.log('userid',userId)
+    const cart = await cartModel
+      .findOne({ userId })
+      .populate("items.productId");
+    console.log('cart',cart)
+    if (cart && cart.items.length > 0) {
+      cartLength = cart.items.length;
+      console.log('cart length ',cartLength)
+      // return res.status(200).json({ message: "No items found in the cart" });
+    }
+  }
     const product = await Product.find({});
-    res.status(200).json({ data: product });
+    res.status(200).json({ data: product,cartLength:  cartLength ?  cartLength : 0 });
   } catch (error) {
     res.status(500).json({ message: "Error fetching Products", error });
   }

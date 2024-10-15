@@ -250,7 +250,7 @@ const MostSellingProducts = () => {
   // Fetch the data from the API
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("/most-selling");
+      const response = await axios.get("/api/user/most-selling");
       if(response.data.data){
       setProducts(response.data.data);
       }

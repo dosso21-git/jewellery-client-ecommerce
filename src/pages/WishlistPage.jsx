@@ -133,7 +133,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const WishlistPage = () => {
+const WishListPage = () => {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const WishlistPage = () => {
   }, []);
   const fetchWishlist = async () => {
     try {
-      const response = await axios.get("/wishlist/get");
+      const response = await axios.get("/api/user/wishlist/get");
       setWishlist(response.data);
     } catch (error) {
       console.error("Error fetching wishlist:", error);
@@ -150,7 +150,7 @@ const WishlistPage = () => {
 
   const removeWishlist = async (id) => {
     try {
-      const response = await axios.delete(`/wishlist/delete/${id}`);
+      const response = await axios.delete(`/api/user/wishlist/delete/${id}`);
       if (response.data.message) {
         // setWishlist(wishlist.filter(item => item._id!== id));
         fetchWishlist();
@@ -200,4 +200,4 @@ const WishlistPage = () => {
   );
 };
 
-export default WishlistPage;
+export default WishListPage;

@@ -21,6 +21,20 @@ const ImageList = [
   },
   {
     id: 3,
+    img: Image2,
+    title: "30% off on all Women's  Brascelete",
+    description:
+      "Who's there lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
+  {
+    id: 4,
+    img: Image3,
+    title: "70% off on all Products Sale",
+    description:
+      "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
+  {
+    id: 5,
     img: Image3,
     title: "70% off on all Products Sale",
     description:

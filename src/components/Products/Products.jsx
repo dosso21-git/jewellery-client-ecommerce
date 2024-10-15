@@ -500,6 +500,9 @@ import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios";
 
+import {addToCart, removeFromCart, clearCart } from '../../redux/cartSlice';
+import { useDispatch } from "react-redux";
+
 const Products = () => {
   const navigate = useNavigate(); // Use the useNavigate hook
 
@@ -507,13 +510,16 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  
+const dispatch = useDispatch();
+
   const handleProductClick = (id) => {
     navigate(`/product-details/${id}`); // Redirect to the product details page
   };
 
   const getAllProducts = async () => {
     try {
-      const response = await axios.get('/product/getall');
+      const response = await axios.get('/api/user/product/getall');
   
       // Check if response.data.data exists and is an array
       if (Array.isArray(response.data.data) && response.data.data.length > 0) {
@@ -528,7 +534,11 @@ const Products = () => {
           typeof product.price === 'number' && 
           typeof product.totalrating === 'number'
         );
-  
+
+     
+          dispatch(addToCart(response.data.cartLength))
+      
+
         if (validProducts.length > 0) {
           setProductsData(validProducts); // Update the state with valid product data
         } else {

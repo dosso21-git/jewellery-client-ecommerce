@@ -16,7 +16,7 @@ const BestSellingProductsPage = () => {
 
   const getAllProducts = async () => {
     try {
-      const result = await axios.get('/product/getall');
+      const result = await axios.get('/api/user/product/getall');
       
       // Check if result.data is an array
       if (Array.isArray(result.data)) {

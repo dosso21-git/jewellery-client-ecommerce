@@ -41,7 +41,7 @@ const dispatch = useDispatch();
       try {
         // alert(id)
         if(id){
-        const result = await axios.get(`/product/get/${id}`);
+        const result = await axios.get(`/api/user/product/get/${id}`);
         if (result.data) {
           setProductData(result.data.data);
           setSelectedImage(result.data.data.images[0]);
@@ -93,7 +93,7 @@ const dispatch = useDispatch();
       };
       const addToCartProduct = async (productId, quantity) => {
         try {
-          const result = await axios.post("/cart/add", {
+          const result = await axios.post("/api/user/cart/add", {
             productId,
             quantity,
           });
@@ -109,7 +109,7 @@ const dispatch = useDispatch();
       }; 
       const addToWishlistProduct = async (productId) => {
         try {
-          const result = await axios.post("/wishlist/create", {
+          const result = await axios.post("/api/user/wishlist/create", {
             productId,
           });
           console.log("result", result);
@@ -127,7 +127,7 @@ const dispatch = useDispatch();
 
       const giveRating = async () => {
         try {
-          const result = await axios.post("/product/rate", {
+          const result = await axios.post("/api/user/product/rate", {
             productId: productData._id,
             comment,
             star,
@@ -179,16 +179,16 @@ const dispatch = useDispatch();
           </div>
         </div>
         <div>
-          <h1 className="text-2xl font-bold mb-4">{productData.title}</h1>
+          <h1 className="text-2xl font-bold mb-4">{productData?.title}</h1>
           <p className="text-sm text-gray-600 mb-6">
-            {productData.description}
+            {productData?.description}
           </p>
           <div className="flex items-center space-x-2 mb-6">
             <span className="text-green-600 font-semibold">
-              {productData.totalrating} ★
+              {productData?.totalrating} ★
             </span>
             <button
-              onClick={() => AddToWishlist(productData._id)}
+              onClick={() => AddToWishlist(productData?._id)}
               className="ml-4 text-red-500 hover:text-red-700"
             >
               {isInWishlist ? (
@@ -203,7 +203,7 @@ const dispatch = useDispatch();
               ₹{discountedPrice}
             </span>
             <span className="line-through text-gray-500 ml-4">
-              ₹{productData.price}
+              ₹{productData?.price}
             </span>
           </div>
           <div className="flex space-x-4 mb-6">

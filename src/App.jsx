@@ -15,7 +15,7 @@ import CartPage from "./pages/Cart";
 import ProductDetails from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import WishlistPage from "./pages/WishListPage";
+import WishListPage from "./pages/WishListPage";
 import DeliveryAddress from "./pages/DeliveryAddress";
 import AllCategoryProducts from "./pages/AllCategoryProductsPage";
 import AllProductsPage from "./pages/AllProductsPage";
@@ -46,6 +46,9 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const App = () => {
+
+  console.log('asd')
+
   React.useEffect(() => {
     AOS.init({
       offset: 100,
@@ -88,7 +91,7 @@ const App = () => {
                 path="/wishlist"
                 element={
                   <ProtectedRoute>
-                    <WishlistPage />
+                    <WishListPage />
                   </ProtectedRoute>
                 }
               />

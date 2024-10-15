@@ -18,7 +18,7 @@ const RegisterPage = () => {
     setMessage(null); // Reset message state
   
     try {
-      const response = await axios.post('/register', {
+      const response = await axios.post('/api/user/register', {
         email,
         firstname,
         lastname,

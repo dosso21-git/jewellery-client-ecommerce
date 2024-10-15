@@ -337,7 +337,7 @@ const AddAddress = () => {
   // Fetch all addresses
   const getAddresses = async () => {
     try {
-      const response = await axios.get("/get/address");
+      const response = await axios.get("/api/user/get/address");
       setAddresses(response.data.addresses);
     } catch (error) {
       console.error("Error fetching addresses:", error);
@@ -348,7 +348,7 @@ const AddAddress = () => {
   // Add new address
   const addAddress = async () => {
     try {
-      const response = await axios.post("/add/address", currentAddress);
+      const response = await axios.post("/api/user/add/address", currentAddress);
       setAddresses([...addresses, response.data.address]);
       resetForm();
       alert("successfully added address");
@@ -361,7 +361,7 @@ const AddAddress = () => {
   // Update address
   const updateAddress = async (id) => {
     try {
-      const response = await axios.put(`/address/update`, {
+      const response = await axios.put(`/api/user/address/update`, {
         id,
         ...currentAddress,
       });
@@ -384,7 +384,7 @@ const AddAddress = () => {
     setIsModalOpen(false)
 
     try {
-      const response = await axios.delete("/address/delete", {
+      const response = await axios.delete("/api/user/address/delete", {
         data: { id }, // Correctly passing `id` in the request body
       });
 

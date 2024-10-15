@@ -446,8 +446,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ConfirmBoxPopup from "../components/Popup/ConfirmBoxPopup";
 import axios from "axios";
 import AddAddress from "../components/Address";
+import { useDispatch } from "react-redux";
+
+import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
 
 const AccountSettings = () => {
+
+  const dispatch = useDispatch();
+
+
   const [activeSection, setActiveSection] = useState("profile");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -464,7 +471,7 @@ const AccountSettings = () => {
   // Fetch user data
   const getUserData = async () => {
     try {
-      const response = await axios.get('/getuser');
+      const response = await axios.get('/api/user/getuser');
       console.log(response.data); // Log the response
       setUserProfile(response.data.getaUser);
     } catch (error) {
@@ -475,7 +482,7 @@ const AccountSettings = () => {
   // Update user data
   const updateUserData = async () => {
     try {
-      const response = await axios.put(`/update`, {
+      const response = await axios.put(`/api/user/update`, {
         firstname: userProfile.firstname,
         lastname: userProfile.lastname,
         email: userProfile.email,
@@ -496,8 +503,9 @@ const AccountSettings = () => {
 
   const handleConfirm = () => {
     Cookies.remove('loginToken'); // Remove token from cookies
-    navigate('/');
+    navigate('/login');
     setIsModalOpen(false);
+    dispatch(clearCart())
   };
 
   const handleCancel = () => {

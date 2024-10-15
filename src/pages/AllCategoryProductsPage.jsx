@@ -13,7 +13,7 @@ const AllCategoryProducts = () => {
     const getData = async () => {
       setLoading(true);
       try {
-        const result = await axios.get(`/product/category/${type}`);
+        const result = await axios.get(`/api/user/product/category/${type}`);
         if (result.data && Array.isArray(result.data.products)) {
           setProductsData(result.data.products);
         } else {

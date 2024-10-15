@@ -29,7 +29,7 @@ const CartPage = () => {
   const getAllCartData = async () => {
     try {
     
-      const response = await axios.post("/cart/get");
+      const response = await axios.post("/api/user/cart/get");
       if(response.data.items){
       const validItems = response.data.items.filter(
         (item) => item.productId !== null
@@ -49,7 +49,7 @@ const CartPage = () => {
 
   const getAddresses = async () => {
     try {
-      const response = await axios.get("/get/address");
+      const response = await axios.get("/api/user/get/address");
       setAddresses(response.data.addresses);
     } catch (error) {
       console.error("Error fetching addresses:", error);
@@ -111,7 +111,7 @@ const CartPage = () => {
 
   const removeItem = async (id) => {
     try {
-      const response = await axios.delete(`/cart/remove/${id}`);
+      const response = await axios.delete(`/api/user/cart/remove/${id}`);
       if (response.data.status) {
         // setWishlist(wishlist.filter(item => item._id!== id));
         getAllCartData()
@@ -143,14 +143,13 @@ const CartPage = () => {
       return;
     }
     try {
-      const response = await axios.post("/orders/create", {
+      const response = await axios.post("/api/user/orders/create", {
         discountedprice: subtotal * (discount / 100),
         discount_type: type,
         tax_estimate: taxEstimate,
         shipping_estimate: shippingEstimate,
-        items: cartData.items,
-        address: selectedAddress,
         items: items,
+        address: selectedAddress,
         totalAmount: orderTotal,
       });
       if (response?.data?.status) {

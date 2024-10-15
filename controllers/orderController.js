@@ -124,7 +124,7 @@ const addressModel = require("../models/addressModel");
 exports.createOrder = async (req, res) => {
   try {
     // Step 1: Retrieve user and order details from the request
-    const { userId, discountedprice, discount_type, tax_estimate, shipping_estimate, address: addressId } = req.body;
+    const { userId, discountedprice, discount_type, tax_estimate, shipping_estimate, address: addressId,items } = req.body;
 
     // Step 2: Validate required fields
     if (!userId) {
@@ -160,7 +160,7 @@ exports.createOrder = async (req, res) => {
     // Step 5: Create the order object, including the complete address
     const orderData = {
       userId,
-      items: cart.items,
+      items: items,
       totalAmount: cart.totalPrice,
       discountedprice,
       discount_type,

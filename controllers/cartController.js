@@ -38,7 +38,7 @@ exports.addToCart = async (req, res) => {
     );
 
     await cart.save();
-    res.status(200).json(cart);
+    res.status(200).json({data : cart , length: cart.length});
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -150,7 +150,7 @@ exports.removeFromCart = async (req, res) => {
     // If there are no items left in the cart, delete the cart
     if (userCart.items.length == 0) {
       await cartModel.deleteOne({ userId });
-      return res.status(200).json({ message: "Cart is empty and has been deleted" });
+      return res.status(200).json({ message: "Cart is empty and has been deleted", status : 200 });
     }
 
     // Update totalItems and totalPrice
@@ -268,7 +268,7 @@ exports.getCartItems = async (req, res) => {
       .populate("items.productId");
 
     if (!cart || cart.items.length === 0) {
-      return res.status(404).json({ message: "No items found in the cart" });
+      return res.status(200).json({ message: "No items found in the cart" });
     }
 
     // Calculate subtotal, shipping, tax, and total

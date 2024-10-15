@@ -205,6 +205,48 @@ exports.getUserOrders = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+// exports.getUserOrders = async (req, res) => {
+//   try {
+//     // Step 1: Retrieve user and date from the request
+//     const userId = req.body.userId;
+//     const selectedDate = req.body.date; // Assuming date is passed in the request body
+//     console.log("Logged-in User ID:", userId);
+//     console.log("Selected Date:", selectedDate);
+
+//     // Step 2: Build the filter criteria
+//     const filter = { userId };
+//     if (selectedDate) {
+//       // Filter orders based on the selected date
+//       const startDate = new Date(selectedDate);
+//       const endDate = new Date(selectedDate);
+//       endDate.setDate(endDate.getDate() + 1); // Include the entire day
+
+//       filter.createdAt = {
+//         $gte: startDate,
+//         $lt: endDate
+//       };
+//     }
+
+//     // Step 3: Find all orders matching the filter criteria
+//     const orders = await Order.find(filter);
+
+//     // Step 4: Check if the user has any orders
+//     if (!orders || orders.length === 0) {
+//       return res.status(404).json({ message: "No orders found for this user" });
+//     }
+
+//     // Step 5: Send response with all orders
+//     return res
+//       .status(200)
+//       .json({ message: "Orders retrieved successfully", orders });
+//   } catch (error) {
+//     console.error("Error fetching user orders:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
 // Update an order by ID
 exports.updateOrder = async (req, res) => {
   try {

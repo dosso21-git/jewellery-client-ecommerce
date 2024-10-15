@@ -16,10 +16,9 @@ const PullToRefresh = ({ fetchData, children }) => {
       const pullDistance = currentY - startY;
 
       if (pullDistance > 0) {
-        setRefreshHeight(pullDistance);
+        setRefreshHeight(pullDistance); 
       }
     };
-
     const handleTouchEnd = async () => {
       if (refreshHeight > 100) { // Threshold for triggering refresh
         await refreshData();

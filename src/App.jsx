@@ -127,7 +127,7 @@ const App = () => {
               <Route path="/terms&conditon" element={<TermsAndConditions />} />
               <Route path="/refund_policy" element={<Refund_policy />} />
             </Route>
-          </Routes>₹
+          </Routes>
         </Router>
       </ErrorBoundary>
     </AppProvider>

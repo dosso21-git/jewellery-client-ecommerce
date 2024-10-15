@@ -16,9 +16,4 @@ const MainLayout = ({ showSearchBar = true }) => {
     </div>
   );
 };
-
 export default MainLayout;
-
-
-
-

@@ -33,25 +33,25 @@ const getBannerById = async (req, res) => {
 
 const createBanner = async (req, res) => {
     try {
-    const { title, content, offer, discount } = req.body;
+        const { title, content, offer, discount } = req.body;
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'banners',
-    });
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'banners',
+        });
 
-    removeTmp(req.file.path);
+        removeTmp(req.file.path);
 
-    const newBanner = new Banner({
-        title,
-        content,
-        offer,
-        discount,
-        imageUrl: result.secure_url,
-        imagePublicId: result.public_id,
-    });
+        const newBanner = new Banner({
+            title,
+            content,
+            offer,
+            discount,
+            imageUrl: req.file.path,
+            imagePublicId: req.file.filename,
+        });
 
-    const savedBanner = await newBanner.save();
-    res.status(201).json(savedBanner);
+        const savedBanner = await newBanner.save();
+        res.status(201).json(savedBanner);
     } catch (error) {
         res.status(500).json({ message: 'Error creating banner' });
     }

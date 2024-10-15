@@ -10,21 +10,56 @@ const { default: mongoose } = require("mongoose");
 const productModel = require("../models/productModel");
 const Rating = require("../models/ratingModel");
 
+
+
 const createProduct = async (req, res) => {
   try {
+    // Validate required fields
+    const { title, description, price, category, quantity } = req.body;
+    
+
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
         error: { fileError: "No pictures uploaded or invalid file type" },
       });
     }
 
+    // Validate each field
+    const errors = {};
+
+    if (!title || typeof title !== 'string' || title.trim() === "") {
+      errors.title = "Title is required and must be a non-empty string";
+    }
+
+    if (!description || typeof description !== 'string' || description.trim() === "") {
+      errors.description = "Description is required and must be a non-empty string";
+    }
+
+    if (!price || typeof price !== 'number' || price <= 0) {
+      errors.price = "Price is required and must be a positive number";
+    }
+
+    if (!category || typeof category !== 'string' || category.trim() === "") {
+      errors.category = "Category is required and must be a non-empty string";
+    }
+
+    if (!quantity || typeof quantity !== 'number' || quantity < 0) {
+      errors.quantity = "Quantity is required and must be a non-negative number";
+    }
+
+    // Check for validation errors
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    // If no errors, create the product
     const pictureUrls = req.files.map((file) => file.path);
     const newProduct = new Product({
-      title: req.body.title,
-      description: req.body.description,
-      price: req.body.price,
-      category: req.body.category,
-      quantity: req.body.quantity,
+      title,
+      description,
+      price,
+      category,
+      quantity,
       images: pictureUrls,
     });
 
@@ -37,6 +72,7 @@ const createProduct = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
 
 const getAllProducts = async (req, res) => {
   try {

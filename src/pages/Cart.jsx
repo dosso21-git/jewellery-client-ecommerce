@@ -148,9 +148,8 @@ const CartPage = () => {
         discount_type: type,
         tax_estimate: taxEstimate,
         shipping_estimate: shippingEstimate,
-        items: cartData.items,
-        address: selectedAddress,
         items: items,
+        address: selectedAddress,
         totalAmount: orderTotal,
       });
       if (response?.data?.status) {

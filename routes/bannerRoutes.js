@@ -26,7 +26,7 @@ const upload = multer({ storage: storage }).single('banner');
 router.post('/admin/createBanner', protect, isAdmin, fileUpload(), createBanner)
 router.get('/allbanners', publicApiAccess, getBanners)
 router.get('/admin/banner/:id', protect, isAdmin, getBannerById)
-router.put('/admin/createBanner', protect, isAdmin, upload, updateBanner)
-router.delete('/admin/createBanner', protect, isAdmin, deleteBanner)
+router.put('/admin/update/:id', protect, isAdmin, fileUpload(), updateBanner)
+router.delete('/admin/delete/:id', protect, isAdmin, deleteBanner)
 
 module.exports = router;

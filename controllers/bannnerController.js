@@ -1,6 +1,6 @@
-const fs = require('fs');
 const Banner = require('../models/bannerModel');
 const { putObject } = require("../config/putObject");
+const { deleteObject } = require("../config/deleteObject");
 
 
 const getBanners = async (req, res) => {
@@ -11,6 +11,7 @@ const getBanners = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
 
 const getBannerById = async (req, res) => {
     try {
@@ -23,6 +24,7 @@ const getBannerById = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
 
 const createBanner = async (req, res) => {
     try {
@@ -56,45 +58,52 @@ const createBanner = async (req, res) => {
     }
 };
 
+
 const updateBanner = async (req, res) => {
     try {
+        const { id } = req.params;
         const { title, content, offer, discount } = req.body;
-        let banner = await Banner.findById(req.params.id);
+        const { imageUrl } = req.files;
 
-        if (!banner) {
-            return res.status(404).json({ message: 'Banner not found' });
+        const existingBanner = await Banner.findById(id);
+        if (!existingBanner) {
+            return res.status(404).json({ error: "Banner not found" });
         }
 
-        let imageUrl = banner.imageUrl;
-        let imagePublicId = banner.imagePublicId;
+        if (imageUrl && existingBanner.imageUrl) {
 
-        if (req.file) {
-            await cloudinary.uploader.destroy(banner.imagePublicId);
-
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: 'banners',
-            });
-
-            removeTmp(req.file.path);
-
-            imageUrl = result.secure_url;
-            imagePublicId = result.public_id;
+            const imageKey = existingBanner.imageUrl.split("/").slice(-2).join("/");
+            console.log("setrdfvbhj:", imageKey);
+            await deleteObject(imageKey);
         }
 
-        banner = await Banner.findByIdAndUpdate(req.params.id, {
-            title,
-            content,
-            offer,
-            discount,
-            imageUrl,
-            imagePublicId,
-        }, { new: true });
+        if (title) existingBanner.title = title;
+        if (content) existingBanner.content = content;
+        if (offer) existingBanner.offer = offer;
+        if (discount !== undefined) existingBanner.discount = discount;
 
-        res.json(banner);
+        if (imageUrl) {
+            let newImageUrl;
+
+            const fileName = `images/${Date.now()}`;
+            const { url } = await putObject(imageUrl.data, fileName);
+            newImageUrl = url;
+
+            existingBanner.imageUrl = newImageUrl;
+        }
+
+        await existingBanner.save();
+
+        return res.status(200).json({
+            message: "Banner updated successfully",
+            banner: existingBanner,
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Error updating banner' });
+        console.error("Error updating banner:", error);
+        return res.status(500).json({ error: "Server Error" });
     }
 };
+
 
 const deleteBanner = async (req, res) => {
     try {

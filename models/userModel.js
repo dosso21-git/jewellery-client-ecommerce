@@ -1,79 +1,88 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-var userSchema = new mongoose.Schema({
+var userSchema = new mongoose.Schema(
+  {
     firstname: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     lastname: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
     mobile: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
     profilepic: {
-        type: String
+      type: String,
     },
     password: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     role: {
-        type: String,
-        default: "user",
+      type: String,
+      default: "user",
     },
     isDeleted: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     isBlocked: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
     cart: {
-        type: Array,
-        default: [],
+      type: Array,
+      default: [],
     },
     notifications: [
-        {
-            notificationId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Notification',
-            },
-            isRead: {
-                type: Boolean,
-                default: false,
-            },
-            readAt: {
-                type: Date,
-            },
+      {
+        notificationId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Notification",
         },
+        isRead: {
+          type: Boolean,
+          default: false,
+        },
+        readAt: {
+          type: Date,
+        },
+      },
     ],
-    address: [{
+    address: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Address",
-    }],
-    wishlist: [{
+      },
+    ],
+    wishlist: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
-    }],
+      },
+    ],
     token: {
-        type: String,
+      type: String,
     },
-    ipAddresses: [{
+    ipAddresses: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserIP',
-    }],
-}, {
+        ref: "UserIP",
+      },
+    ],
+  },
+  {
     timestamps: true,
-});
+  }
+);
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

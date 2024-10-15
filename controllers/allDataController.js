@@ -60,15 +60,6 @@ const getCounts = async (req, res) => {
 //     }
 //   };
 
-
-
-
-
-
-
-
-
-
 const getallsearch = async (req, res) => {
   try {
     const { query, sort } = req.query;
@@ -102,6 +93,5 @@ const getallsearch = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 module.exports = { getCounts, getallsearch }

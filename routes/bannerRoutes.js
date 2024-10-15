@@ -27,6 +27,6 @@ router.post('/admin/createBanner', protect, isAdmin, fileUpload(), createBanner)
 router.get('/allbanners', publicApiAccess, getBanners)
 router.get('/admin/banner/:id', protect, isAdmin, getBannerById)
 router.put('/admin/update/:id', protect, isAdmin, fileUpload(), updateBanner)
-router.delete('/admin/delete/:id', protect, isAdmin, deleteBanner)
+router.delete('/admin/banner/delete/:id', protect, isAdmin, deleteBanner)
 
 module.exports = router;

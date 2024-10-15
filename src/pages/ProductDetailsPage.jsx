@@ -155,7 +155,6 @@ const dispatch = useDispatch();
         setVisible={setShowAlert}
         message={message}
       />
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24">
         <div>
           <div className="border mb-6 p-4">
@@ -244,7 +243,6 @@ const dispatch = useDispatch();
               BUY NOW
             </button>
           </div>
-      
         </div>
         <ProductRatings productId={id} />
       </div>

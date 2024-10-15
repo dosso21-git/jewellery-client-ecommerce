@@ -1,13 +1,5 @@
 const fs = require('fs');
 const Banner = require('../models/bannerModel');
-const cloudinary = require('../config/cloudinary');
-
-
-const removeTmp = (path) => {
-    fs.unlink(path, (err) => {
-        if (err) throw err;
-    });
-};
 
 
 const getBanners = async (req, res) => {
@@ -35,19 +27,25 @@ const createBanner = async (req, res) => {
     try {
         const { title, content, offer, discount } = req.body;
 
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'banners',
-        });
+        const { pictures } = req.files;
 
-        removeTmp(req.file.path);
+        if (!pictures) {
+            return res.status(400).json({
+                error: { fileError: "No pictures uploaded or invalid file type" },
+            });
+        }
+
+        const fileName = `images/${Date.now()}`;
+
+        const { url, key } = await putObject(file.data, fileName);
+        console.log('url key', url, key);
 
         const newBanner = new Banner({
             title,
             content,
             offer,
             discount,
-            imageUrl: req.file.path,
-            imagePublicId: req.file.filename,
+            imageUrl: url,
         });
 
         const savedBanner = await newBanner.save();

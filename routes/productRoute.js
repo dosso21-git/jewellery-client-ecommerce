@@ -28,7 +28,7 @@ const upload = multer({ storage: storage }).array('pictures', 10);
 
 
 // Admin
-router.post('/admin/create', protect, isAdmin, upload, createProduct);
+router.post('/admin/create', protect, isAdmin, fileUpload(), createProduct);
 router.post('/test',fileUpload(),createProductTest)
 router.delete('/admin/delete/:id', protect, isAdmin, deleteProduct);
 router.delete('/admin/delete/:productId/image/:pictureIndex', protect, isAdmin, deleteProductPicture);

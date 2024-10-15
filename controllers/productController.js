@@ -16,17 +16,15 @@ const { putObject } = require("../config/putObject");
 
 const createProduct = async (req, res) => {
   try {
-    // Validate required fields
     const { title, description, price, category, quantity } = req.body;
-    
+    const { pictures } = req.files;
 
-    if (!req.files || req.files.length === 0) {
+    if (!pictures) {
       return res.status(400).json({
         error: { fileError: "No pictures uploaded or invalid file type" },
       });
     }
 
-    // Validate each field
     const errors = {};
 
     if (!title || typeof title !== 'string' || title.trim() === "") {
@@ -37,7 +35,7 @@ const createProduct = async (req, res) => {
       errors.description = "Description is required and must be a non-empty string";
     }
 
-    if (!price || typeof price !== 'number' || price <= 0) {
+    if (!price || price <= 0) {
       errors.price = "Price is required and must be a positive number";
     }
 
@@ -45,29 +43,49 @@ const createProduct = async (req, res) => {
       errors.category = "Category is required and must be a non-empty string";
     }
 
-    if (!quantity || typeof quantity !== 'number' || quantity < 0) {
+    if (!quantity || quantity < 0) {
       errors.quantity = "Quantity is required and must be a non-negative number";
     }
 
-    // Check for validation errors
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({ errors });
     }
 
-    // If no errors, create the product
-    const pictureUrls = req.files.map((file) => file.path);
+    const existingProduct = await Product.findOne({ title });
+    if (existingProduct) {
+      return res.status(400).json({
+        error: { duplicate: "Product already exists with this title" },
+      });
+    }
+
+    let images = [];
+
+    if (Array.isArray(pictures)) {
+      for (const picture of pictures) {
+        const fileName = `images/${Date.now()}`;
+        const { url, key } = await putObject(picture.data, fileName);
+        images.push(url);
+      }
+    } else {
+      const fileName = `images/${Date.now()}`;
+      const { url, key } = await putObject(pictures.data, fileName);
+      images.push(url);
+    }
+
     const newProduct = new Product({
       title,
       description,
       price,
       category,
       quantity,
-      images: pictureUrls,
+      images,
     });
 
     await newProduct.save();
+
     return res.status(201).json({
       message: "Product created successfully",
+      product: newProduct,
     });
   } catch (error) {
     console.error("Error creating product:", error);
@@ -76,19 +94,17 @@ const createProduct = async (req, res) => {
 };
 
 
-
-
 const createProductTest = async (req, res) => {
   try {
     const { file } = req.files;
     console.log('file', file);
-    
+
     // Use a timestamp for the filename, formatted to include milliseconds
     const fileName = `images/${Date.now()}`;
-    
+
     const { url, key } = await putObject(file.data, fileName);
     console.log('url key', url, key);
-    
+
     return res.send(url);
   } catch (error) {
     console.error("Error creating product:", error);
@@ -137,7 +153,7 @@ const getProductById = async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
 
     console.log(token);
-let cart ;
+    let cart;
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decoded.id;
@@ -162,14 +178,14 @@ let cart ;
 
 
 
-       cart = await cartModel
-      .findOne({ userId })
-      .populate("items.productId");
+      cart = await cartModel
+        .findOne({ userId })
+        .populate("items.productId");
 
       await recentView.save();
     }
 
-    res.status(200).json({ data: product ,totalItems:cart?.items?.length});
+    res.status(200).json({ data: product, totalItems: cart?.items?.length });
   } catch (error) {
     res.status(500).json({ message: "Error fetching Product", error });
   }
@@ -465,5 +481,5 @@ const calcuLatePandL = async (req, res) => {
 
 
 module.exports = {
-  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL,createProductTest
+  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL, createProductTest
 }; 

@@ -2,42 +2,6 @@ const { s3Client } = require("./s3-Credentials")
 const {PutObjectCommand} = require("@aws-sdk/client-s3")
 
 
-// exports.putObject = async (file,fileName) =>{
-//     try{
-//         console.log(process.env.AWS_S3_BUCKET)
-
-//         const params={
-//             Bucket: process.env.AWS_S3_BUCKET,
-//             Key: `${fileName}`,
-//             Body: file,
-//             ContentType:"image/jpg,jpeg,png",
-//             // ContentType:"application/pdf"
-//         }
-
-//         const command = new PutObjectCommand(params)
-//         const data = await s3Client.send(command);
-
-//         console.log('data form aws',data)
-
-//         if(data.$metadata.httpStatusCode !== 200){
-//               return;
-//         }
-//         let url = `https//${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com}/images`
-//         console.log(url)
-//         return {url,key:params.key}
-
-//     }catch(err){
-
-//     }
-// }
-
-
-
-
-
-
-
-
 exports.putObject = async (file, fileName) => {
     try {
         console.log(process.env.AWS_S3_BUCKET);

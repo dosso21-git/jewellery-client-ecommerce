@@ -11,6 +11,7 @@ const productModel = require("../models/productModel");
 const Rating = require("../models/ratingModel");
 const cartModel = require('../models/cartModel');
 const { putObject } = require("../config/putObject");
+const { deleteObject } = require("../config/deleteObject");
 
 const createProduct = async (req, res) => {
   try {
@@ -60,6 +61,25 @@ const createProductTest = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
+
+
+const deleteProductAws = async (req, res) => {
+  try {
+      const { key } = req.body; // Expecting the S3 key to be passed in the request body
+      const success = await deleteObject(key);
+      
+      if (success) {
+          return res.status(200).json({ message: "File deleted successfully" });
+      } else {
+          return res.status(500).json({ error: "Failed to delete file" });
+      }
+  } catch (error) {
+      console.error("Error handling delete request:", error);
+      return res.status(500).json({ error: "Server Error" });
+  }
+};
+
 
 
 const getAllProducts = async (req, res) => {
@@ -430,5 +450,5 @@ const calcuLatePandL = async (req, res) => {
 
 
 module.exports = {
-  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL,createProductTest
+  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL,createProductTest,deleteProductAws
 }; 

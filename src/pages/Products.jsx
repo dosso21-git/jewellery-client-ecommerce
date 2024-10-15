@@ -17,9 +17,14 @@ import {
 } from '@heroicons/react/solid';
 import { motion } from 'framer-motion';
 
+<<<<<<< HEAD
 const ManageDishes = ({ initialImages }) => {
   const { productId } = useParams();
   
+=======
+
+const MainPage = () => {
+>>>>>>> be778dd156a208946a0830946002a6c994d58e64
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
@@ -29,7 +34,6 @@ const ManageDishes = ({ initialImages }) => {
     category: '',
     img: [],
   });
-  const fileInput = useRef(null);
   const [loader, setLoader] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
   const [currentImageIndices, setCurrentImageIndices] = useState({});
@@ -97,7 +101,6 @@ const ManageDishes = ({ initialImages }) => {
       }
     });
 
-    setLoader(true);
     try {
       if (editingProduct) {
         await axios.put(`user/admin/product/update/${editingProduct._id}`, formDataObj);
@@ -107,15 +110,22 @@ const ManageDishes = ({ initialImages }) => {
         setSuccessMessage('Product created successfully!');
       }
       fetchProducts();
-      resetForm();
+      setFormData({
+        title: '',
+        description: '',
+        price: '',
+        quantity: '',
+        category: '',
+        img: [],
+      });
+      setEditingProduct(null);
     } catch (error) {
-      console.error('Error saving product:', error);
-    } finally {
-      setLoader(false);
+      console.error('Error submitting form:', error);
     }
   };
 
   const handleEdit = (product) => {
+    setFormData(product);
     setEditingProduct(product);
     setFormData({
       title: product.title || '',
@@ -146,32 +156,15 @@ const ManageDishes = ({ initialImages }) => {
   };
 
   const handleSearch = async () => {
-    if (searchInput) {
-      setLoader(true);
-      try {
-        const response = await axios.get(`/user/product/category/${searchInput}`);
-        setProducts(response.data.products || []);
-      } catch (error) {
-        console.error('Error fetching products by category:', error);
-        setProducts([]);
-      } finally {
-        setLoader(false);
-      }
-    } else {
-      fetchProducts();
+    setLoader(true);
+    try {
+      const response = await axios.get(`user/product/getall?category=${searchInput}`);
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoader(false);
     }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      title: '',
-      description: '',
-      price: '',
-      category: '',
-      quantity: '',
-      img: [],
-    });
-    setEditingProduct(null);
   };
 
   const handleImageChange = (direction, productId) => {
@@ -373,4 +366,4 @@ const ManageDishes = ({ initialImages }) => {
   );
 };
 
-export default ManageDishes;
+export default MainPage;

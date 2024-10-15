@@ -9,7 +9,7 @@ const RecentViewProducts = () => {
   // Fetch the data from the API
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("/recent-views/get");
+      const response = await axios.get("/api/user/recent-views/get");
       if (response.data.data) {
         setProducts(response.data.data);
       }

@@ -11,7 +11,7 @@ const ProductRatings = ({ productId }) => {
     const fetchRatings = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/product/rate/${productId}`);
+        const response = await axios.get(`/api/user/product/rate/${productId}`);
         // Check if response data has a 'ratings' field and it's an array
         const productRatings = response.data.data.ratings;
         console.log(productRatings,"pankaj")

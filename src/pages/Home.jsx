@@ -465,7 +465,7 @@ const Home = () => {
     const getData = async () => {
       // setLoading(true);
       try {
-        const result = await axios.get(`/getallsearch?query=${search}&sort=${sort}`, {
+        const result = await axios.get(`/api/user/getallsearch?query=${search}&sort=${sort}`, {
           headers: {
             'Cache-Control': 'no-cache'
           },

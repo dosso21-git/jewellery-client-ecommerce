@@ -41,7 +41,7 @@ const dispatch = useDispatch();
       try {
         // alert(id)
         if(id){
-        const result = await axios.get(`/product/get/${id}`);
+        const result = await axios.get(`/api/user/product/get/${id}`);
         if (result.data) {
           setProductData(result.data.data);
           setSelectedImage(result.data.data.images[0]);
@@ -93,7 +93,7 @@ const dispatch = useDispatch();
       };
       const addToCartProduct = async (productId, quantity) => {
         try {
-          const result = await axios.post("/cart/add", {
+          const result = await axios.post("/api/user/cart/add", {
             productId,
             quantity,
           });
@@ -109,7 +109,7 @@ const dispatch = useDispatch();
       }; 
       const addToWishlistProduct = async (productId) => {
         try {
-          const result = await axios.post("/wishlist/create", {
+          const result = await axios.post("/api/user/wishlist/create", {
             productId,
           });
           console.log("result", result);
@@ -127,7 +127,7 @@ const dispatch = useDispatch();
 
       const giveRating = async () => {
         try {
-          const result = await axios.post("/product/rate", {
+          const result = await axios.post("/api/user/product/rate", {
             productId: productData._id,
             comment,
             star,

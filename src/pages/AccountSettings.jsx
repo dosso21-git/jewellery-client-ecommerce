@@ -471,7 +471,7 @@ const AccountSettings = () => {
   // Fetch user data
   const getUserData = async () => {
     try {
-      const response = await axios.get('/getuser');
+      const response = await axios.get('/api/user/getuser');
       console.log(response.data); // Log the response
       setUserProfile(response.data.getaUser);
     } catch (error) {
@@ -482,7 +482,7 @@ const AccountSettings = () => {
   // Update user data
   const updateUserData = async () => {
     try {
-      const response = await axios.put(`/update`, {
+      const response = await axios.put(`/api/user/update`, {
         firstname: userProfile.firstname,
         lastname: userProfile.lastname,
         email: userProfile.email,

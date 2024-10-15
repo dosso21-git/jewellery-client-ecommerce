@@ -128,7 +128,7 @@ const TopRated = () => {
 
   const getAllProducts = async () => {
     try {
-      const result = await axios.get('/product/toprated');
+      const result = await axios.get('/api/user/product/toprated');
       if (Array.isArray(result.data.data)) {
         setProductsData(result.data.data);
       } else {

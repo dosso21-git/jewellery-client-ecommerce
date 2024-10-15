@@ -192,7 +192,7 @@ const OrderSummary = () => {
 
   const getAllOrderHistory = async () => {
     try {
-      const response = await axios.get('/orders/getall');
+      const response = await axios.get('/api/user/orders/getall');
       console.log('response', response.data);
       setOrders(response.data.orders);
     } catch (err) {

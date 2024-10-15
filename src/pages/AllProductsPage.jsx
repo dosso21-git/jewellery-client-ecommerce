@@ -271,7 +271,7 @@ const AllProductsPage = () => {
 
   const getAllProducts = async () => {
     try {
-      const response = await axios.get('/product/getall');
+      const response = await axios.get('/api/user/product/getall');
   
       // Check if response.data.data exists and is an array
       if (Array.isArray(response.data.data) && response.data.data.length > 0) {

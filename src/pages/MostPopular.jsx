@@ -135,7 +135,7 @@ const MostPopularProducts = () => {
 
   const getAllProducts = async () => {
     try {
-      const result = await axios.get('/product/getpopularproduct');
+      const result = await axios.get('/api/user/product/getpopularproduct');
 
       // Check if result.data.popularProducts is an array
       if (Array.isArray(result.data.popularProducts)) {

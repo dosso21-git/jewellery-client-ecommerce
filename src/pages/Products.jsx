@@ -1,9 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import PopupMessage from './PopupMessage';
-import { FaEdit, FaTrashAlt, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
+import { useNavigate, Link, useParams  } from 'react-router-dom';
+import Popup from './Popup';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+  PlusIcon,
+  TrashIcon,
+  PencilIcon,
+  StarIcon,
+  ClipboardListIcon,
+  CurrencyDollarIcon,
+  TagIcon,
+} from '@heroicons/react/solid';
+import { motion } from 'framer-motion';
 
-const ManageDishes = () => {
+const ManageDishes = ({ initialImages }) => {
+  const { productId } = useParams();
+  
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
@@ -20,7 +36,10 @@ const ManageDishes = () => {
   const [searchInput, setSearchInput] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(''); // State for success message
+  const [successMessage, setSuccessMessage] = useState('');
+  const [images, setImages] = useState(initialImages || []); // Ensure initialImages is always an array
+  const formRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -30,7 +49,7 @@ const ManageDishes = () => {
     setLoader(true);
     try {
       const response = await axios.get('user/product/getall');
-      setProducts(response.data);
+      setProducts(response.data.data);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -38,38 +57,54 @@ const ManageDishes = () => {
     }
   };
 
+  const deleteImageFromServer = async (pictureIndex,productId) => {
+    
+    setLoader(true);
+   
+    try {
+      await axios.delete(`user/admin/delete/${productId}/image/${pictureIndex}`);
+      fetchProducts();
+    } catch (error) {
+      console.error('Error deleting images:', error);
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const deleteImageFromState = (index,productId) => {
+    deleteImageFromServer(index,productId);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const updatedImages = [...formData.img, ...files];
-    setFormData({ ...formData, img: updatedImages });
+    setFormData((prev) => ({ ...prev, img: updatedImages }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataObj = new FormData();
-    formDataObj.append('title', formData.title);
-    formDataObj.append('description', formData.description);
-    formDataObj.append('price', formData.price);
-    formDataObj.append('category', formData.category);
-    formDataObj.append('quantity', formData.quantity);
-
-    formData.img.forEach((image) => {
-      formDataObj.append('pictures', image);
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === 'img') {
+        value.forEach((image) => formDataObj.append('pictures', image));
+      } else {
+        formDataObj.append(key, value);
+      }
     });
 
     setLoader(true);
     try {
       if (editingProduct) {
-        await confirmUpdate(editingProduct._id, formDataObj);
-        setSuccessMessage('Product updated successfully!'); // Set success message
+        await axios.put(`user/admin/product/update/${editingProduct._id}`, formDataObj);
+        setSuccessMessage('Product updated successfully!');
       } else {
         await axios.post('user/admin/create', formDataObj);
-        setSuccessMessage('Product created successfully!'); // Set success message
+        setSuccessMessage('Product created successfully!');
       }
       fetchProducts();
       resetForm();
@@ -90,9 +125,10 @@ const ManageDishes = () => {
       quantity: product.quantity || '',
       img: [],
     });
+    formRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const ConfirmDelete = (id) => {
+  const confirmDelete = (id) => {
     setConfirmAction(() => () => handleDelete(id));
     setShowPopup(true);
   };
@@ -104,19 +140,6 @@ const ManageDishes = () => {
       fetchProducts();
     } catch (error) {
       console.error('Error deleting product:', error);
-    } finally {
-      setLoader(false);
-    }
-  };
-
-  const confirmUpdate = async (id, formDataObj) => {
-    setLoader(true);
-    try {
-      await axios.put(`user/admin/update/${id}`, formDataObj);
-      fetchProducts();
-      resetForm();
-    } catch (error) {
-      console.error('Error updating product:', error);
     } finally {
       setLoader(false);
     }
@@ -156,19 +179,27 @@ const ManageDishes = () => {
       const currentIndex = prevIndices[productId] || 0;
       const totalImages = products.find(product => product._id === productId)?.images.length || 0;
 
-      if (direction === 'left') {
-        return { ...prevIndices, [productId]: currentIndex === 0 ? totalImages - 1 : currentIndex - 1 };
-      } else if (direction === 'right') {
-        return { ...prevIndices, [productId]: currentIndex === totalImages - 1 ? 0 : currentIndex + 1 };
-      }
-      return prevIndices;
+      return {
+        ...prevIndices,
+        [productId]: direction === 'left' 
+          ? (currentIndex === 0 ? totalImages - 1 : currentIndex - 1) 
+          : (currentIndex === totalImages - 1 ? 0 : currentIndex + 1),
+      };
     });
   };
 
   return (
     <div className="container mx-auto p-8">
+      <button
+        className="mb-4 flex items-center bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-300 ease-in-out"
+        onClick={() => navigate('/dashboard')}
+      >
+        <ChevronLeftIcon className="h-5 w-5 mr-2" />
+        Back to Dashboard
+      </button>
+      
       <div className="mb-4 relative">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Search by Category</label>
+        <label className="block text-purple-700 text-sm font-bold mb-2">Search by Category</label>
         <input
           type="text"
           value={searchInput}
@@ -183,18 +214,23 @@ const ManageDishes = () => {
         />
         <button
           onClick={handleSearch}
-          className="absolute text-lg text-blue-600 left-3 bottom-2 transform -translate-y-1/2 text-gray-600"
+          className="absolute text-lg text-blue-600 left-3 bottom-2 transform -translate-y-1/2"
         >
-          <FaSearch />
+          <SearchIcon className="h-5 w-5" />
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl mb-4">{editingProduct ? 'Edit Dish' : 'Create a New Dish'}</h2>
+      <form ref={formRef} onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 className="text-2xl mb-4 flex items-center">
+          <PlusIcon className="h-6 w-6 mr-2" />
+          {editingProduct ? 'Edit Dish' : 'Create a New Dish'}
+        </h2>
 
-        {['title', 'description', 'price', 'category', 'quantity'].map((field) => (
-          <div className="mb-4" key={field}>
-            <label className="block text-gray-700 text-sm font-bold mb-2">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+        {['title', 'description', 'price', 'category', 'quantity'].map((field, index) => (
+          <div className="mb-4" key={index}>
+            <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center">
+              {field.charAt(0).toUpperCase() + field.slice(1)}
+            </label>
             <input
               name={field}
               type="text"
@@ -230,7 +266,14 @@ const ManageDishes = () => {
           const currentImageIndex = currentImageIndices[product._id] || 0;
 
           return (
-            <div key={product._id} className="bg-white shadow-md rounded-lg p-6">
+            <motion.div
+              key={product._id}
+              className="bg-white shadow-md rounded-lg p-6"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+            >
               {product.images && product.images.length > 0 && (
                 <div className="relative mb-4">
                   <img
@@ -238,40 +281,73 @@ const ManageDishes = () => {
                     alt={`Dish ${product.title} Image`}
                     className="w-full h-48 rounded"
                   />
-                  {/* Left Button */}
+                  <button
+                    onClick={() => deleteImageFromState(currentImageIndex,product._id)}  
+                    className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded"
+                  >
+                    X
+                  </button>
                   <button
                     onClick={() => handleImageChange('left', product._id)}
                     className="absolute text-xl left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-300"
                     style={{ zIndex: 1 }}
                   >
-                    <FaChevronLeft />
+                    <ChevronLeftIcon className="h-6 w-6 text-gray-700" />
                   </button>
-                  {/* Right Button */}
                   <button
                     onClick={() => handleImageChange('right', product._id)}
                     className="absolute text-xl right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-300"
                     style={{ zIndex: 1 }}
                   >
-                    <FaChevronRight />
+                    <ChevronRightIcon className="h-6 w-6 text-gray-700" />
                   </button>
                 </div>
               )}
 
               <h3 className="text-xl font-semibold">{product.title}</h3>
               <p className="text-gray-600">{product.description}</p>
-              <p className="text-gray-800 font-bold">Price: ${product.price}</p>
-              <p className="text-gray-800 font-bold">Quantity: {product.quantity}</p>
-              <p className="text-gray-800 font-bold">Category: {product.category}</p>
+
+              <div className="flex items-center text-gray-800 font-bold">
+                <CurrencyDollarIcon className="h-5 w-5 text-green-600 mr-2" />
+                <span className='text-blue-600'>$ {product.price}</span> 
+              </div>
+
+              <div className="flex items-center text-gray-800 font-bold">
+                <StarIcon className="h-5 w-5 text-pink-600 mr-2" />
+                Quantity: {product.quantity}
+              </div>
+
+              <div className="flex items-center text-gray-800 font-bold">
+                <TagIcon className="h-5 w-5 text-orange-600 mr-2" />
+                Category: {product.category}
+              </div>
+
+              <div className="flex items-center text-gray-800 font-bold">
+                <ClipboardListIcon className="h-5 w-5 text-red-600 mr-2" />
+                Sold: {product.sold}
+              </div>
+
+              <div className="flex items-center text-gray-800 font-bold">
+                <StarIcon className="h-5 w-5 text-yellow-400 mr-2" />
+                {product.rating}
+              </div>
 
               <div className="flex justify-between mt-4">
                 <button onClick={() => handleEdit(product)} className="text-blue-500 hover:underline">
-                  <FaEdit />
+                  <PencilIcon className="h-5 text-3xl w-5" />
                 </button>
-                <button onClick={() => ConfirmDelete(product._id)} className="text-red-500 hover:underline">
-                  <FaTrashAlt />
+                <button onClick={() => confirmDelete(product._id)} className="text-red-500 hover:underline">
+                  <TrashIcon className="h-5 text-xl w-5" />
                 </button>
               </div>
-            </div>
+              <div className="px-4 py-2 bg-gray-100">
+                <Link to={`/dashboard/viewproduct/${product._id}`}>
+                  <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition-all">
+                    View Product
+                  </button>
+                </Link>
+              </div>
+            </motion.div>
           );
         })}
       </div>
@@ -287,11 +363,10 @@ const ManageDishes = () => {
         />
       )}
 
-      {/* Success Message Popup */}
       {successMessage && (
-        <PopupMessage
+        <Popup
           message={successMessage}
-          onConfirm={() => setSuccessMessage('')} // Hide message on confirm
+          onClose={() => setSuccessMessage('')}
         />
       )}
     </div>

@@ -198,8 +198,6 @@
 
 
 
-
-
 import { useEffect, useState } from 'react';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import Loader from './common/Loader';
@@ -208,6 +206,7 @@ import Main from './pages/Main';
 import Forgetpassword from './pages/Forgetpassword';
 import { AuthProvider } from './AuthContext'; // Import the AuthProvider
 import Cookies from 'js-cookie';
+import {LoaderProvider} from './pages/GlobalContext'
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -229,6 +228,7 @@ function App() {
 
   return (
     <AuthProvider>
+      <LoaderProvider>
       <Routes>
         {/* If no token, redirect to SignIn */}
         {!token ? (
@@ -248,6 +248,7 @@ function App() {
           </>
         )}
       </Routes>
+      </LoaderProvider>
     </AuthProvider>
   );
 }

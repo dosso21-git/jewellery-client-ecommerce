@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaHome, FaCalendar,  FaFileAlt , FaUser, FaCog, FaArrowLeft, FaEnvelope, FaComment } from 'react-icons/fa';
-import { MdContactPhone } from "react-icons/md";
-import { HiMiniTrophy } from "react-icons/hi2";
-import { FaPhoneVolume } from "react-icons/fa6";
-import { MdGroups2 } from "react-icons/md";
+import { HomeIcon, CalendarIcon, UserIcon,ArchiveIcon,ClockIcon, ClipboardListIcon, PlusIcon, UserCircleIcon, GiftIcon , UploadIcon, CloudUploadIcon ,ShoppingCartIcon,  StatusOnlineIcon,CogIcon, BellIcon , PaperAirplaneIcon, TagIcon , ArrowLeftIcon,  ViewGridIcon} from '@heroicons/react/solid';
+import { CreditCardIcon, } from '@heroicons/react/outline';
+
+import { MdGroups2 } from 'react-icons/md';
 import Cookies from 'js-cookie';
 
 interface SidebarProps {
@@ -24,21 +23,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
   );
 
-  // Manage dropdown state for activities
   const [isActivitiesOpen, setActivitiesOpen] = useState(false);
   const [token, setToken] = useState<string | null>(Cookies.get('userToken'));
-  // const loginType = Cookies.get('loginType'); // Fetch loginType from cookies
 
   // Close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
-      if (
-        !sidebarOpen ||
-        sidebar.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
+      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) return;
       setSidebarOpen(false);
     };
     document.addEventListener('click', clickHandler);
@@ -67,15 +59,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const handleMenuClick = () => {
     setSidebarOpen(false);
   };
-  
+
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
     >
-      {/* SIDEBAR HEADER */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <button
           ref={trigger}
@@ -83,113 +72,124 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           aria-controls="sidebar"
           aria-expanded={sidebarOpen}
           className="block lg:hidden"
-        >
-          {/* Add your icon here if needed */}
-        </button>
+        />
         {sidebarOpen && (
           <button
             onClick={() => setSidebarOpen(false)}
             className="block lg:hidden absolute top-5 left-5 z-50 text-black bg-transparent border-0"
           >
-            <FaArrowLeft size={24} />
+            <ArrowLeftIcon className="h-6 w-6" />
           </button>
         )}
       </div>
-      {/* SIDEBAR HEADER */}
 
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        {/* Sidebar Menu */}
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
-          {/* Menu Group */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white ">MENU</h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white">MENU</h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
-              {/* Menu Item Dashboard */}
               <NavLink
                 to="/dashboard"
                 onClick={handleMenuClick}
-                className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                  pathname.includes('dashboard') && ''
-                }`}
+                className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('dashboard') && ''}`}
               >
-                <FaHome className="text-lg text-red-500" />
-                Dashboard 
+                <ViewGridIcon className="h-8 w-8 text-red-500" />
+                Dashboard
               </NavLink>
 
-              {/* Menu Item Calendar */}
               <li>
- 
+                <NavLink
+                  to="/dashboard/calendar"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('calendar') && ''}`}
+                >
+                  <ClockIcon className="h-8 w-8 text-green-400" />
+                  Calendar
+                </NavLink>
+              </li>
 
- 
-
-  <NavLink
-    to="/dashboard/calendar"
-    onClick={handleMenuClick}
-    className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${
-      pathname.includes('calendar') && ''
-    }`}
-  >
-    <FaCalendar className="text-lg text-green-400" />
-    Calendar
-  </NavLink>
-
-</li>
-
-
-              {/* Menu Item Counsellor */}
-              
-              {/* Menu Item Profile */}
               <li>
                 <NavLink
                   to="/dashboard/profile"
                   onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black hover:text-white duration-300 ease-in-out dark:text-white hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('profile') && 'bg-graydark dark:bg-meta-4'
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black hover:text-white duration-300 ease-in-out dark:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('profile') && 'bg-graydark dark:bg-meta-4'}`}
                 >
-                  <FaUser className="text-lg text-yellow-400" />
+                  < UserCircleIcon className="h-8 w-8 text-yellow-400" />
                   Profile
                 </NavLink>
               </li>
 
-            
               <li>
                 <NavLink
                   to="/dashboard/products"
                   onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('documents') && 'bg-graydark dark:bg-meta-4'
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('products') && 'bg-graydark dark:bg-meta-4'}`}
                 >
-                  < MdGroups2 className="text-xl text-green-400" />
-                Add Products
+                  < ShoppingCartIcon className="h-8 w-8 text-blue-400" />
+                  Add Products
                 </NavLink>
               </li>
-
-              
-             
 
               <li>
                 <NavLink
-                  to="/dashboard/performance"
+                  to="/dashboard/upload"
                   onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('settings') && 'bg-graydark dark:bg-meta-4'
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('upload') && 'bg-graydark dark:bg-meta-4'}`}
                 >
-                 <HiMiniTrophy className="text-lg text-orange-400" />
-                  Performance
+                  <CloudUploadIcon  className="h-8 w-8 text-purple-500" />
+                  Upload Products
                 </NavLink>
               </li>
 
-              {/* Activities Section */}
+              {/* <li>
+                <NavLink
+                  to="/dashboard/stock"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('stock') && 'bg-graydark dark:bg-meta-4'}`}
+                >
+                  <ClipboardListIcon className="h-8 w-8 text-red-700" />
+                  Stock Status
+                </NavLink>
+              </li> */}
+{/* 
               <li>
+                <NavLink
+                  to="/dashboard/getoffers"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('getoffers') && 'bg-graydark dark:bg-meta-4'}`}
+                >
+                  < GiftIcon   className="h-8 w-8 text-pink-600" />
+                  Get All Offers
+                </NavLink>
+              </li> */}
+
+              <li>
+                <NavLink
+                  to="/dashboard/globalnotification"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('globalnotification') && 'bg-graydark dark:bg-meta-4'}`}
+                >
+                  < BellIcon  className="h-8 w-8 text-orange-400" />
+                  Create Notification
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/sendnotification"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('sendnotification') && 'bg-graydark dark:bg-meta-4'}`}
+                >
+                  < PaperAirplaneIcon className="h-8 w-8 text-green-700" />
+                  Send Notification
+                </NavLink>
+              </li>
+
+              {/* <li>
                 <div
                   onClick={() => setActivitiesOpen(!isActivitiesOpen)}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    isActivitiesOpen ? 'bg-graydark dark:bg-meta-4' : ''
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${isActivitiesOpen ? 'bg-graydark dark:bg-meta-4' : ''}`}
                 >
                   <FaFileAlt className="text-lg text-purple-400" />
                   Activities
@@ -205,9 +205,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="/dashboard/send-message"
                         onClick={handleMenuClick}
-                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          pathname.includes('send-message') && 'bg-graydark dark:bg-meta-4'
-                        }`}
+                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('send-message') && 'bg-graydark dark:bg-meta-4'}`}
                       >
                         <FaComment className="text-lg text-blue-500" />
                         Send Message
@@ -217,25 +215,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="/dashboard/send-email"
                         onClick={handleMenuClick}
-                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          pathname.includes('send-email') && 'bg-graydark dark:bg-meta-4'
-                        }`}
+                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('send-email') && 'bg-graydark dark:bg-meta-4'}`}
                       >
                         <FaEnvelope className="text-lg text-blue-500" />
                         Send Email
                       </NavLink>
                     </li>
-                    
                   </ul>
                 )}
-              </li>
-              <li>
-  
-              </li>
-            
-
+              </li> */}
             </ul>
-           
           </div>
         </nav>
       </div>

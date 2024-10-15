@@ -3,32 +3,20 @@ import DefaultLayout from '../layout/DefaultLayout';
 import PageTitle from '../Components/PageTitle';
 import ECommerce from './Dashboard/ECommerce';
 import Calendar from './Calendar';
-import Profile from './Profile';
-import FormElements from './Form/FormElements';
-import FormLayout from './Form/FormLayout';
-import Tables from './Tables';
-import Chart from './Chart';
-import Alerts from './UiElements/Alerts';
-import Buttons from './UiElements/Buttons';
-import Counseller from '../Components/Counseller';
-import SendMessagePage from '../Components/Activity/sendmessage';
-import SendEmail from '../Components/Activity/sendemail';
-import Performance from './Performance';
 import Attendance from './Attendance';
-import Review from './Review';
-import Feedback from './Feedback';
 import Task from './LeadList';
-import Contact from './Contact';
-import TaskDetail from './TaskDetail';
 import Call from './Call';
 import Products from './Products'
 import Sales from './Sales';
-import Lead from './Lead';
-import SalespersonsCounselorsList from './Models/SalespersonsCounselorsList';
-import LeadEntryForm from './Dashboard/CreateLead';
-// import UpdateLead from './Updatelead';
-
-
+import Topproduct from './TopProducts';
+import Mostpopular from './MostPopular';
+import Getoffer from './Getoffer'
+import Globalnotification from './GlobalNotification';
+import Sendnotificaion from './SendNotification';
+import Uploadproducts from './UploadProducts';
+import Viewproduct from './ViewProduct';
+import Profile from './Profile';
+import Stock from './Stock'
 
 
 
@@ -36,12 +24,13 @@ import LeadEntryForm from './Dashboard/CreateLead';
 const Main = () => {
   return (
     <DefaultLayout>
+     
       <Routes>
         <Route
           index
           element={
             <>
-              <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Admin Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               <ECommerce />
             </>
           }
@@ -58,85 +47,122 @@ const Main = () => {
         />
 
 
-      <Route
-           path="/statics"
-          element={
-            <>
-              <PageTitle title="statics |  Dashboard " />
-              <SalespersonsCounselorsList />
-            </>
-          }
-        />
-
-          <Route
-           path="/create-lead"
-           element={
-            <>
-              <PageTitle title="lead |  Dashboard " />
-              <LeadEntryForm />
-            </>
-          }
-        />
-
-
-
-
-
-
         <Route
-          path="/viewlead"
+          path="/profile"
           element={
             <>
               <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Lead />
+              < Profile />
+            </>
+          }
+        />
+         
+
+         <Route
+          path="/upload"
+          element={
+            <>
+              <PageTitle title="upload | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              < Uploadproducts />
             </>
           }
         />
 
 
+           
+         <Route
+          path="/stock"
+          element={
+            <>
+              <PageTitle title="upload | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              < Stock />
+            </>
+          }
+        />
+
+
+       <Route
+          path="/viewproduct/:id"
+          element={
+            <>
+              <PageTitle title="View | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Viewproduct />
+            </>
+          }
+        />
+         
+
+
+          
         <Route
-            path="/counsellor"
-            element={
-             <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Counseller />
-          </>
-            }
-          />
-            <Route
-            path="/contact"
-            element={
-             <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Contact/>
-          </>
-            }
-          />
- 
+          path="/calendar"
+          element={
+            <>
+              <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Calendar />
+            </>
+          }
+        />
+
+
+
+
+         <Route
+           path="/getoffers"
+           element={
+            <>
+              <PageTitle title="Offer |  Dashboard " />
+              <Getoffer />
+            </>
+          }
+        />
+
+
+<Route
+           path="/sendnotification"
+           element={
+            <>
+              <PageTitle title="Notification |  Dashboard " />
+              <Sendnotificaion/>
+            </>
+          }
+        />
+
+
+
+          
 
           <Route
-            path="/feedback"
-            element={
-             <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Feedback/>
-          </>
-            }
-          />
+          path="/mostpopular"
+          element={
+            <>
+              <PageTitle title="Products| TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Mostpopular />
+            </>
+          }
+        />
+
           <Route
-            path="/performance"
-            element={
-             <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Performance/>
-          </>
-            }
-          />
+          path="globalnotification"
+          element={
+            <>
+              <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Globalnotification/>
+            </>
+          }
+        />
+
+
+      
+      
+           
+ 
+        
            <Route
-            path="/attendance"
+            path="sellingproduct"
             element={
              <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+             <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
            <Attendance/>
           </>
             }
@@ -167,132 +193,38 @@ const Main = () => {
             path="/products"
             element={
              <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+             <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
            <Products />
           </>
             }
           />
           <Route
-            path="/review"
+            path="/topproduct"
             element={
              <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Review/>
+             <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+           <Topproduct/>
           </>
             }
           />
-        <Route
-          path="/profile"
-          element={
-            <>
-              <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Profile />
-            </>
-          }
-        />
+       
 
-        <Route
-          path="/taskdetail"
-          element={
-            <>
-              <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <TaskDetail/>
-            </>
-          }
-        />
+       
          <Route
-          path="/task"
+          path="/user"
           element={
             <>
-              <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="User | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               <Task />
             </>
           }
         />
         
-        <Route
-          path="/forms/form-elements"
-          element={
-            <>
-              <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <FormElements />
-            </>
-          }
-        />
-        <Route
-          path="/forms/form-layout"
-          element={
-            <>
-              <PageTitle title="Form Layout | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <FormLayout />
-            </>
-          }
-        />
-        <Route
-          path="/tables"
-          element={
-            <>
-              <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Tables />
-            </>
-          }
-        />
-         <Route
-          path="/send-message"
-          element={
-            <>
-              <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <SendMessagePage />
-            </>
-          }
-        />
-         <Route
-          path="/send-email"
-          element={
-            <>
-              <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <SendEmail />
-            </>
-          }
-        />
-
-         <Route
-          path="/sales"
-          element={
-            <>
-              <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Sales />
-            </>
-          }
-        />
-        <Route
-          path="/chart"
-          element={
-            <>
-              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Chart />
-            </>
-          }
-        />
-        <Route
-          path="/ui/alerts"
-          element={
-            <>
-              <PageTitle title="Alerts | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Alerts />
-            </>
-          }
-        />
-        <Route
-          path="/ui/buttons"
-          element={
-            <>
-              <PageTitle title="Buttons | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Buttons />
-            </>
-          }
-        />
+       
+       
+       
       </Routes>
+      
     </DefaultLayout>
   );
 }

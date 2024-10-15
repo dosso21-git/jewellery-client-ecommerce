@@ -1,384 +1,274 @@
-// import { useEffect, useState } from 'react';
-// import { FaEnvelope, FaPhone, FaBuilding, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaEdit } from 'react-icons/fa';
-// import CoverOne from '../images/cover/cover-01.png';
-// import axios from 'axios'
-
-
-// const Profile = () => {
-//   const [userdata, setData] = useState(null);
-//   const [selectedImage, setSelectedImage] = useState(null); // State to store selected image
-//   const [previewImage, setPreviewImage] = useState(null); // State to store preview image URL
-//   const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
- 
-
-
-//   useEffect(() => {
-//     fetchEmployeeData();
-//   },[]);
-
-
-
-//   const fetchEmployeeData = async () => {
-//     try {
-//       alert('sd')
-//       const response = await axios.get('/employee/get');
-//       if (!response) {
-//         throw new Error('Failed to fetch employee data');
-//       }
-//       const data = response.data
-//       setData(data);
-//     } catch (error) {
-//       console.error('Error fetching employee data:', error);
-//     }
-//   };
-
-//   if (!userdata) {
-//     return <p>Loading...</p>;
-//   }
-
-//   const formattedHireDate = userdata.hireDate
-//     ? new Date(userdata.hireDate).toLocaleDateString()
-//     : '27/9/24';
-
-//   const employeeDetails = [
-//     { label: 'Full Name', value: userdata.name || 'Arohi', icon: <FaUserAlt /> },
-//     { label: 'Email', value: userdata.email || 'arohi5@gmail.com', icon: <FaEnvelope /> },
-//     { label: 'Phone', value: userdata.contactNumber || '+123 456 7890', icon: <FaPhone /> },
-//     { label: 'Department', value: userdata.department || 'IT', icon: <FaBuilding /> },
-//     { label: 'Hire Date', value: formattedHireDate, icon: <FaCalendarAlt /> },
-//     { label: 'Address', value: userdata.address || 'Noida', icon: <FaMapMarkerAlt /> },
-//   ];
-
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       setSelectedImage(file);
-//       setPreviewImage(URL.createObjectURL(file)); // Create a preview URL for the selected image
-//       setIsEditing(true); // Enable editing mode when an image is selected
-//     }
-//   };
-
-//   const handleUpdate = () => {
-//     // Implement API call to update profile image here
-//     // After successfully updating the image, you can reset the states
-//     setIsEditing(false);
-//     setSelectedImage(null);
-//   };
-
-//   const handleCancel = () => {
-//     setPreviewImage(null);
-//     setSelectedImage(null);
-//     setIsEditing(false); // Exit edit mode without making changes
-//   };
-
-//   return (
-//     <>
-//       {/* Profile Cover Section */}
-//       <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg bg-gradient-to-r from-black to-gray-300 dark:bg-gray-800">
-//         <div className="relative z-20 h-36 md:h-72">
-//           <img
-//             src={CoverOne}
-//             alt="profile cover"
-//             className="h-full w-full rounded-t-lg object-cover object-center"
-//           />
-//           <div className="absolute bottom-4 right-4 z-10">
-//             <button
-//               onClick={() => document.getElementById('cover').click()}
-//               className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary py-2 px-4 text-sm font-medium text-white hover:bg-opacity-80 border border-transparent hover:border-primary transition duration-300"
-//             >
-//               <span>Edit Cover</span>
-//             </button>
-//             <input
-//               type="file"
-//               id="cover"
-//               className="sr-only"
-//               onChange={handleImageChange}
-//             />
-//           </div>
-//         </div>
-
-//         {/* Profile Information */}
-//         <div className="px-6 pb-8 text-center lg:pb-10 xl:pb-12">
-//           <div className="relative z-30 mx-auto -mt-24 h-32 w-32 max-w-xs rounded-full bg-white p-2 backdrop-blur border border-gray-300 dark:border-gray-700 shadow-lg">
-//             <div className="relative">
-//               {/* Profile Picture */}
-//               <img
-//                 src={previewImage || '/pic1.jpg'} // Display the preview image if available
-//                 alt="Profile"
-//                 className="h-full w-full rounded-full object-cover"
-//               />
-//               {/* Edit Icon */}
-//               <div
-//                 onClick={() => document.getElementById('profile-pic').click()}
-//                 className="absolute bottom-0 right-0 p-2 bg-gray-800 rounded-full cursor-pointer"
-//               >
-//                 <FaEdit className="text-blue-500 text-2xl" />
-//                 <input
-//                   type="file"
-//                   id="profile-pic"
-//                   className="sr-only"
-//                   onChange={handleImageChange}
-//                 />
-//               </div>
-//             </div>
-//           </div>
-
-//           {isEditing && (
-//             <div className="flex justify-center mt-4 space-x-4">
-//               <button
-//                 onClick={handleUpdate}
-//                 className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
-//               >
-//                 Update
-//               </button>
-//               <button
-//                 onClick={handleCancel}
-//                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-//               >
-//                 Cancel
-//               </button>
-//             </div>
-//           )}
-
-//           <div className="mt-4">
-//             <h3 className="mb-2 text-3xl font-bold text-white dark:text-white">
-//               {userdata.name || 'Arohi'}
-//             </h3>
-//             <p className="text-lg font-medium text-white dark:text-gray-400">
-//               {userdata.jobTitle || 'Developer'}
-//             </p>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Redesigned Employee Information Section */}
-//       <div className="mt-10 p-8 bg-gradient-to-b from-blue-50 via-blue-100 to-blue-200 dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-//         <h4 className="text-3xl font-semibold mb-8 text-center text-gray-800 dark:text-gray-200">
-//           Employee Information
-//         </h4>
-//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-//           {employeeDetails.map((detail, index) => (
-//             <div
-//               key={index}
-//               className="flex items-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-//             >
-//               <div className="p-3 bg-gray-100 dark:bg-gray-600 rounded-full mr-4 text-primary text-lg">
-//                 {detail.icon}
-//               </div>
-//               <div>
-//                 <span className="block font-semibold text-gray-800 dark:text-white">
-//                   {detail.label}
-//                 </span>
-//                 <span className="text-gray-600 dark:text-gray-300">
-//                   {detail.value}
-//                 </span>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Profile;
-
-
-
-
-
-
-
-
-
-
-import { useEffect, useState } from 'react';
-import { FaEnvelope, FaPhone, FaBuilding, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaEdit } from 'react-icons/fa';
-import CoverOne from '../images/cover/cover-01.png';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import Modal from 'react-modal';
+import { XIcon, EyeIcon, EyeOffIcon, UserIcon, MailIcon, PhoneIcon } from '@heroicons/react/solid';
 
-interface UserData {
+interface IUser {
+  _id: string;
   name: string;
   email: string;
-  contactNumber: string;
-  department: string;
-  hireDate: string;
-  address: string;
-  jobTitle?: string; // Optional field
-  usertype_name?:string;
+  profilepic?: string;
+  mobile?: string;
+  firstname?: string;
+  lastname?: string;
 }
 
-const Profile: React.FC = () => {
-  const [userdata, setData] = useState<UserData | null>(null);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const apiUrl = import.meta.env.VITE_API_URL;
+Modal.setAppElement('#root'); // Set the root element for the modal
 
+const Profile: React.FC = () => {
+  const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+  const [firstname, setFirstname] = useState<string>('');
+  const [lastname, setLastname] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [mobile, setMobile] = useState<string>('');
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Modals visibility state
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchEmployeeData();
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get('/user/admin/getuser');
+        const userData = response.data.getaUser;
+        setUser(userData);
+        setFirstname(userData.firstname || '');
+        setLastname(userData.lastname || '');
+        setEmail(userData.email || '');
+        setMobile(userData.mobile || '');
+      } catch (error) {
+        setError('Failed to load user profile.');
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
   }, []);
 
-  const fetchEmployeeData = async () => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setProfilePicture(e.target.files[0]);
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    const formData = new FormData();
+    formData.append('firstname', firstname);
+    formData.append('lastname', lastname);
+    formData.append('email', email);
+    formData.append('mobile', mobile);
+    if (profilePicture) {
+      formData.append('image', profilePicture);
+    }
+
     try {
-      const response = await axios.get(`${ apiUrl}/employee/get`);
-      if (!response) {
-        throw new Error('Failed to fetch employee data');
-      }
-      setData(response.data);
+      const response = await axios.put('/user/admin/update', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      alert('Profile updated successfully!');
+      setUser(response.data.user);
+      setIsProfileModalOpen(false); // Close modal on success
     } catch (error) {
-      console.error('Error fetching employee data:', error);
+      console.error('Error updating profile', error);
+      alert('Failed to update profile.');
     }
   };
 
-  if (!userdata) {
-    return <p>Loading...</p>;
-  }
+  const handleUpdatePassword = async () => {
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
 
-  const formattedHireDate = userdata.hireDate
-    ? new Date(userdata.hireDate).toLocaleDateString()
-    : '27/9/24';
-
-  const employeeDetails = [
-    { label: 'Full Name', value: userdata.name || 'Arohi', icon: <FaUserAlt /> },
-    { label: 'Email', value: userdata.email || 'arohi5@gmail.com', icon: <FaEnvelope /> },
-    { label: 'Phone', value: userdata.contactNumber || '+123 456 7890', icon: <FaPhone /> },
-    { label: 'Department', value: userdata.department || 'IT', icon: <FaBuilding /> },
-    { label: 'Hire Date', value: formattedHireDate, icon: <FaCalendarAlt /> },
-    { label: 'Address', value: userdata.address || 'Noida', icon: <FaMapMarkerAlt /> },
-  ];
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedImage(file);
-      setPreviewImage(URL.createObjectURL(file));
-      setIsEditing(true);
+    try {
+      await axios.put('/user/admin/updatepassword', {
+        password,
+      });
+      alert('Password updated successfully!');
+      setPassword('');
+      setConfirmPassword('');
+      setIsPasswordModalOpen(false); // Close modal on success
+    } catch (error) {
+      console.error('Error updating password', error);
+      alert('Failed to update password.');
     }
   };
 
-  const handleUpdate = async () => {
-    if (selectedImage) {
-      // Implement API call to update profile image here
-      // After successfully updating the image, you can reset the states
-      setIsEditing(false);
-      setSelectedImage(null);
-    }
-  };
-
-  const handleCancel = () => {
-    setPreviewImage(null);
-    setSelectedImage(null);
-    setIsEditing(false);
-  };
+  if (loading) return <div className="text-center text-xl">Loading...</div>;
+  if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <>
-      {/* Profile Cover Section */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg bg-gradient-to-r from-black to-gray-300 dark:bg-gray-800">
-        <div className="relative z-20 h-36 md:h-72">
-          <img
-            src={CoverOne}
-            alt="profile cover"
-            className="h-full w-full rounded-t-lg object-cover object-center"
-          />
-          <div className="absolute bottom-4 right-4 z-10">
-            <button
-              onClick={() => document.getElementById('cover')?.click()}
-              className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary py-2 px-4 text-sm font-medium text-white hover:bg-opacity-80 border border-transparent hover:border-primary transition duration-300"
-            >
-              <span>Edit Cover</span>
-            </button>
-            <input
-              type="file"
-              id="cover"
-              className="sr-only"
-              onChange={handleImageChange}
-            />
-          </div>
-        </div>
-
-        {/* Profile Information */}
-        <div className="px-6 pb-8 text-center lg:pb-10 xl:pb-12">
-          <div className="relative z-30 mx-auto -mt-24 h-32 w-32 max-w-xs rounded-full bg-white p-2 backdrop-blur border border-gray-300 dark:border-gray-700 shadow-lg">
-            <div className="relative">
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold mb-4">User Profile</h2>
+      {user && (
+        <div className="flex flex-col lg:flex-row justify-between">
+          {/* Left side: Profile Details */}
+          <div className="bg-white rounded-lg shadow p-6 w-full lg:w-1/2 mb-4 lg:mb-0">
+            <div className="flex items-center mb-4">
               <img
-                src={previewImage || '/pic1.jpg'}
+                src={user.profilepic}
                 alt="Profile"
-                className="h-full w-full rounded-full object-cover"
+                className="w-24 h-24 rounded-full mr-4"
               />
-              <div
-                onClick={() => document.getElementById('profile-pic')?.click()}
-                className="absolute bottom-0 right-0 p-2 bg-gray-800 rounded-full cursor-pointer"
-              >
-                <FaEdit className="text-blue-500 text-2xl" />
-                <input
-                  type="file"
-                  id="profile-pic"
-                  className="sr-only"
-                  onChange={handleImageChange}
-                />
-              </div>
-            </div>
-          </div>
-
-          {isEditing && (
-            <div className="flex justify-center mt-4 space-x-4">
-              <button
-                onClick={handleUpdate}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
-              >
-                Update
-              </button>
-              <button
-                onClick={handleCancel}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-
-          <div className="mt-4">
-            <h3 className="mb-2 text-3xl font-bold text-white dark:text-white">
-              {userdata.name || 'Arohi'}
-            </h3>
-            <p className="text-lg font-medium text-white dark:text-gray-400">
-              {userdata.usertype_name || 'no type'}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Redesigned Employee Information Section */}
-      <div className="mt-10 p-8 bg-gradient-to-b from-blue-50 via-blue-100 to-blue-200 dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-        <h4 className="text-3xl font-semibold mb-8 text-center text-gray-800 dark:text-gray-200">
-          Employee Information
-        </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {employeeDetails.map((detail, index) => (
-            <div
-              key={index}
-              className="flex items-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="p-3 bg-gray-100 dark:bg-gray-600 rounded-full mr-4 text-primary text-lg">
-                {detail.icon}
-              </div>
               <div>
-                <span className="block font-semibold text-gray-800 dark:text-white">
-                  {detail.label}
-                </span>
-                <span className="text-gray-600 dark:text-gray-300">
-                  {detail.value}
-                </span>
+                <h3 className="text-xl font-semibold">{`${user.firstname} ${user.lastname}`}</h3>
+                <p className="text-gray-600">{user.email}</p>
+                <p className="text-gray-600">{user.mobile}</p>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Right side: Buttons for updating */}
+          <div className="flex flex-col space-y-4 w-full lg:w-1/2">
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setIsProfileModalOpen(true)}
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded flex-1"
+              >
+                Update Profile
+              </button>
+              <button
+                onClick={() => setIsPasswordModalOpen(true)}
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded flex-1"
+              >
+                Update Password
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      )}
+
+      {/* Profile Update Modal */}
+      <Modal
+        isOpen={isProfileModalOpen}
+        onRequestClose={() => setIsProfileModalOpen(false)}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+        style={{
+          content: {
+            maxWidth: '600px',
+            maxHeight: '500px',
+            margin: 'auto',
+            padding: '20px',
+            borderRadius: '8px',
+            overflowY: 'auto'
+          }
+        }}
+      >
+        <button onClick={() => setIsProfileModalOpen(false)} className="absolute top-4 right-4">
+          <XIcon className="h-6 w-6 text-gray-600" />
+        </button>
+        <h3 className="text-2xl font-bold mb-4">Update Profile</h3>
+
+        <label className="block text-sm font-bold mb-2">First Name:</label>
+        <div className="relative mb-4">
+          <UserIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
+          <input
+            type="text"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            className="border rounded p-2 pl-10 w-full"
+          />
+        </div>
+
+        <label className="block text-sm font-bold mb-2">Last Name:</label>
+        <div className="relative mb-4">
+          <UserIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
+          <input
+            type="text"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            className="border rounded p-2 pl-10 w-full"
+          />
+        </div>
+
+        <label className="block text-sm font-bold mb-2">Email:</label>
+        <div className="relative mb-4">
+          <MailIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border rounded p-2 pl-10 w-full"
+          />
+        </div>
+
+        <label className="block text-sm font-bold mb-2">Mobile:</label>
+        <div className="relative mb-4">
+          <PhoneIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
+          <input
+            type="text"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            className="border rounded p-2 pl-10 w-full"
+          />
+        </div>
+
+        <label className="block text-sm font-bold mb-2">Profile Picture:</label>
+        <input type="file" onChange={handleFileChange} className="mb-4" />
+
+        <button
+          onClick={handleUpdateProfile}
+          className="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-6"
+        >
+          Save Changes
+        </button>
+      </Modal>
+
+      {/* Password Update Modal */}
+      <Modal
+        isOpen={isPasswordModalOpen}
+        onRequestClose={() => setIsPasswordModalOpen(false)}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        <button onClick={() => setIsPasswordModalOpen(false)} className="absolute top-4 right-4">
+          <XIcon className="h-6 w-6 text-gray-600" />
+        </button>
+        <h3 className="text-2xl font-bold mb-4">Update Password</h3>
+
+        <label className="block text-sm font-bold mb-2">New Password:</label>
+        <div className="relative mb-4">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border rounded p-2 w-full"
+          />
+          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-2 top-2">
+            {showPassword ? <EyeOffIcon className="h-5 w-5 text-gray-400" /> : <EyeIcon className="h-5 w-5 text-gray-400" />}
+          </button>
+        </div>
+
+        <label className="block text-sm font-bold mb-2">Confirm Password:</label>
+        <div className="relative mb-4">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="border rounded p-2 w-full"
+          />
+          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-2 top-2">
+            {showPassword ? <EyeOffIcon className="h-5 w-5 text-gray-400" /> : <EyeIcon className="h-5 w-5 text-gray-400" />}
+          </button>
+        </div>
+
+        <button
+          onClick={handleUpdatePassword}
+          className="bg-green-500 text-white font-bold py-2 px-4 rounded"
+        >
+          Save Password
+        </button>
+      </Modal>
+    </div>
   );
 };
 

@@ -29,7 +29,7 @@ const CalendarPage = () => {
       </div>
 
       {/* Additional content to make it more attractive */}
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-4xl w-full">
+      {/* <div className="bg-white shadow-lg rounded-lg p-8 max-w-4xl w-full">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Upcoming Events</h2>
         <div className="space-y-4">
           <div className="flex items-center justify-between bg-gradient-to-r from-teal-400 to-blue-500 text-white p-4 rounded-lg">
@@ -65,7 +65,7 @@ const CalendarPage = () => {
             <span>5:00 PM</span>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -19,6 +19,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
+
+
+  "typeRoots": [
+  "./node_modules/@types",
+  "./src/@types" // Adjust this path based on where you created the .d.ts file
+],
   "include": ["src", "src/lib.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -18,26 +18,25 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   children,
 }) => {
   return (
-    <div className="rounded-3xl border-2 border-green-500 bg-white py-6 px-7.5 shadow-default dark:bg-black ">
-      <div className="flex h-11.5 w-11.5 items-center justify-center rounded-3xl bg-meta-2 dark:bg-meta-4">
+    <div className="rounded-3xl border-2 border-green-500 bg-white py-6 px-7.5 shadow-lg transition-transform transform hover:scale-105 duration-300 dark:bg-gray-800">
+      <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4 shadow-md">
         {children}
       </div>
 
       <div className="mt-4 flex items-end justify-between">
         <div>
-          <h4 className="text-title-md font-bold text-black dark:text-white ">
+          <h4 className="text-title-md font-bold text-black dark:text-white">
             {total}
           </h4>
-          <span className="text-sm font-medium">{title}</span>
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{title}</span>
         </div>
 
         <span
           className={`flex items-center gap-1 text-sm font-medium ${
-            levelUp && 'text-meta-3'
-          } ${levelDown && 'text-meta-5'} `}
+            levelUp ? 'text-meta-3' : levelDown ? 'text-meta-5' : 'text-gray-600 dark:text-gray-300'
+          }`}
         >
           {rate}
-
           {levelUp && (
             <svg
               className="fill-meta-3"

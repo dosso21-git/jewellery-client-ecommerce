@@ -1,212 +1,139 @@
 import React, { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 import axios from 'axios';
+import { useNavigate,Link } from 'react-router-dom';
+import { SearchIcon, ArrowLeftIcon, StarIcon, ShoppingCartIcon } from '@heroicons/react/solid';
+import { motion } from 'framer-motion';
 
-interface AttendanceRecord {
-  date: string;
-  day: string;
-  status: 'Present' | 'Absent';
+interface Offer {
+  _id: string;
+  title: string;
+  discount: number;
+  validUntil?: Date;
 }
 
-const Attendance: React.FC = () => {
-  const apiUrl = import.meta.env.VITE_API_URL as string;
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  quantity: number;
+  offer?: Offer;
+  sold: number;
+  images: string[];
+  totalrating: number;
+}
 
-  
-
-
-  const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
+const MostSellingProducts: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<string>('');
+  const navigate = useNavigate();
 
-  const [selectedMonth, setSelectedMonth] = useState<string>(''); 
-  const [selectedDate, setSelectedDate] = useState<string>(''); 
-
-  const userData = Cookies.get('userData');
-
-  const months = Array.from({ length: 12 }, (_, i) => ({
-    value: i,
-    label: new Date(0, i).toLocaleString('default', { month: 'long' }),
-  }));
-
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
-
-  const getCurrentMonthName = (month: number): string => {
-    return new Date(0, month).toLocaleString('default', { month: 'long' }) + ' ' + new Date().getFullYear();
-  };
-
-  const getDaysInMonth = (month: number): number => {
-    const now = new Date();
-    const year = now.getFullYear();
-    return new Date(year, month + 1, 0).getDate();
-  };
-
-  const getDayName = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleString('default', { weekday: 'long' });
-  };
-
-  const getFilteredAttendance = (): AttendanceRecord[] => {
-    let filteredAttendance = attendance;
-
-    // Filter by month if selected
-    if (selectedMonth !== '') {
-      filteredAttendance = filteredAttendance.filter((item) => {
-        const date = new Date(item.date);
-        return date.getMonth() === parseInt(selectedMonth, 10);
-      });
-    }
-
-    // Filter by date if selected
-    if (selectedDate !== '') {
-      filteredAttendance = filteredAttendance.filter((item) => {
-        const date = new Date(item.date);
-        return date.getDate() === parseInt(selectedDate, 10);
-      });
-    }
-
-    return filteredAttendance;
-  };
-
-  const fetchAttendance = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${apiUrl}/attendance/get`, {
-        month: selectedMonth !== '' ? parseInt(selectedMonth) : undefined,
-        day: selectedDate !== '' ? parseInt(selectedDate) : undefined,
-      });
-      const data = response.data;
-      if (data) {
-        setAttendance(data);
-        setError(null);
-      } else {
-        setError('No attendance data found');
-      }
-    } catch (err : any) {
-      // Check if error response exists
-      if (err.response) {
-        // Server responded with a status other than 2xx
-        if (err.response.status === 404) {
-          setError(err.response.data.message || 'No attendance data found');
-        } else {
-          setError('An error occurred while fetching attendance data');
-        }
-      } else {
-        // No response was received from the server
-        setError('Network error or server is not reachable');
-      }
-    } finally {
-      setLoading(false); // Stop loading after request is complete
-    }
-  };
-  
-  // Add this useEffect to call fetchAttendance when selectedMonth or selectedDate changes
   useEffect(() => {
-    fetchAttendance();
-  }, [selectedMonth, selectedDate]);
-  
+    fetchMostSellingProducts();
+  }, []);
 
+  const fetchMostSellingProducts = async () => {
+    try {
+      const response = await axios.get('user/most-selling', {
+        params: { limit: 10 },
+      });
+      setProducts(response.data.data);
+    } catch (err) {
+      setError('Failed to fetch most selling products');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  if (loading) {
+    return <div className="text-center text-lg">Loading...</div>;
+  }
 
+  if (error) {
+    return <div className="text-red-500 text-lg">{error}</div>;
+  }
 
-  if (loading) return <p className="text-gray-600">Loading...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
-
-  const filteredAttendance = getFilteredAttendance();
-  const totalDaysInMonth = getDaysInMonth(selectedMonth !== '' ? parseInt(selectedMonth) : new Date().getMonth());
-  const currentMonthName = selectedMonth !== '' ? getCurrentMonthName(parseInt(selectedMonth)) : 'All Months';
+  const filteredProducts = products.filter((product) => {
+    const title = product.title.toLowerCase();
+    const description = product.description.toLowerCase();
+    return title.includes(searchInput.toLowerCase()) || description.includes(searchInput.toLowerCase());
+  });
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-100">
-      <div className="bg-white rounded-lg shadow-lg max-w-full md:max-w-4xl w-full p-6 md:p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Attendance Overview</h1>
+    <div className="container mx-auto py-8">
+      <button
+        className="mb-4 bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-300 ease-in-out flex items-center"
+        onClick={() => navigate('/dashboard')}
+      >
+        <ArrowLeftIcon className="h-5 w-5 mr-2" />
+        Back to Dashboard
+      </button>
 
-        <div className="flex flex-col md:flex-row justify-between mb-6 gap-5">
-          <div className="w-full md:w-1/2 mb-4 md:mb-0">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="month">
-              Select Month
-            </label>
-            <select
-              id="month"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition ease-in-out"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-            >
-              <option value="">All Months</option>
-              {months.map((month) => (
-                <option key={month.value} value={month.value}>
-                  {month.label}
-                </option>
-              ))}
-            </select>
-          </div>
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Most Selling Products</h2>
 
-          <div className="w-full md:w-1/2">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
-              Select Date
-            </label>
-            <select
-              id="date"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition ease-in-out"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            >
-              <option value="">All Days</option>
-              {days.slice(0, getDaysInMonth(selectedMonth !== '' ? parseInt(selectedMonth) : new Date().getMonth())).map((day) => (
-                <option key={day} value={day}>
-                  {day}
-                </option>
-              ))}
-            </select>
-          </div>
+      <div className="flex justify-center mb-4">
+        <div className="relative w-64">
+          <input
+            type="text"
+            placeholder="Search products..."
+            className="p-2 border border-gray-300 rounded-lg w-full pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          <SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
         </div>
+      </div>
 
-        <div className="mb-6">
-          <p className="text-xl font-semibold text-gray-700 mb-4">Summary for {currentMonthName}</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-200 p-4 rounded-lg shadow-md">
-            <div className="p-4 bg-gradient-to-r from-black to-blue-400 rounded-lg shadow-sm transition transform hover:scale-105">
-              <p className="text-white">Total Days in Month</p>
-              <p className="text-yellow-400 text-2xl font-bold">{totalDaysInMonth}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {filteredProducts.map((product) => (
+          <motion.div
+            key={product._id}
+            className="bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:shadow-xl"
+            initial={{ scale: 0.8, opacity: 0 }} // Initial state
+            whileInView={{ scale: 1, opacity: 1 }} // Animate to this state when in view
+            exit={{ scale: 0.8, opacity: 0 }} // Exit animation
+            transition={{ duration: 0.5 }} // Transition duration
+            viewport={{ once: false }} // Reset animation when scrolling
+          >
+            <img
+              src={product.images[0]}
+              alt={product.title}
+              className="w-full h-48 object-cover mb-4 rounded-md"
+            />
+            <h3 className="text-xl font-semibold">{product.title}</h3>
+            <p className="text-gray-600">{product.description}</p>
+            <div className="mt-4 flex items-center">
+              <span className="text-lg font-bold text-blue-600">₹{product.price}</span>
+              {product.offer && (
+                <span className="ml-2 inline-block bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">
+                  {product.offer.discount} Rs Off
+                </span>
+              )}
             </div>
-            <div className="p-4 bg-gradient-to-r from-black to-blue-400 rounded-lg shadow-sm transition transform hover:scale-105">
-              <p className="text-white">Days Present</p>
-              <p className="text-green-400 text-2xl font-bold">
-                {filteredAttendance.filter((item) => item.status === 'Present').length}
-              </p>
+            <div className="mt-2 flex items-center">
+              <ShoppingCartIcon className="h-5 w-5 text-gray-500 mr-1" />
+              <p className="text-gray-500">Sold: {product.sold}</p>
             </div>
-            <div className="p-4 bg-gradient-to-r from-black to-blue-400 rounded-lg shadow-sm transition transform hover:scale-105">
-              <p className="text-white">Days Absent</p>
-              <p className="text-red-400 text-2xl font-bold">
-                {filteredAttendance.filter((item) => item.status === 'Absent').length}
-              </p>
+            <div className="mt-2 flex items-center">
+              <StarIcon className="h-5 w-5 text-yellow-500 mr-1" />
+              <p className="text-yellow-500">Rating: {product.totalrating}</p>
             </div>
-          </div>
-        </div>
+            <div className="px-4 py-2 bg-gray-100">
+               <Link to={`/dashboard/viewproduct/${product._id}`}>
+  <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition-all">
+    View Product
+  </button>
+</Link>
 
-        {filteredAttendance.length > 0 ? (
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Detailed Attendance Records</h2>
-            <div className="space-y-4">
-              {filteredAttendance.map((item, index) => (
-                <div key={index} className="p-4 bg-white rounded-lg shadow-md flex justify-between items-center transition transform hover:scale-105">
-                  <div>
-                    <p className="text-gray-800 font-medium">{item.date}</p>
-                    <p className="text-gray-600">{item.day} ({getDayName(item.date)})</p>
-                  </div>
-                  <span
-                    className={`font-semibold ${item.status === 'Present' ? 'text-green-600' : 'text-red-600'}`}
-                  >
-                    {item.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <p className="text-gray-600 mt-6">No attendance records available for the selected month and date.</p>
-        )}
+              </div>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default Attendance;
+export default MostSellingProducts;

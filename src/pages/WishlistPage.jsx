@@ -133,7 +133,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const WishlistPage = () => {
+const WishListPage = () => {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
@@ -200,4 +200,4 @@ const WishlistPage = () => {
   );
 };
 
-export default WishlistPage;
+export default WishListPage;

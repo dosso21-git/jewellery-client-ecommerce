@@ -11,7 +11,7 @@ const AppProvider = ({ children }) => {
   // Set Axios defaults
  
   useEffect(() => {
-    axios.defaults.baseURL = baseURL;
+    axios.defaults.baseURL = `${baseURL}/api/user`;
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {

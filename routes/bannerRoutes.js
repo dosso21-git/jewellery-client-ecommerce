@@ -6,6 +6,7 @@ const path = require("path")
 const { protect, publicApiAccess, isAdmin } = require('../middleware/authMiddleware');
 const cloudinary = require('../config/cloudinary.js');
 const { createBanner, getBanners, getBannerById, updateBanner, deleteBanner } = require('../controllers/bannnerController.js');
+const fileUpload = require('express-fileupload');
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -22,9 +23,9 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage }).single('banner');
 
 
-router.post('/admin/createBanner', protect, isAdmin, upload, createBanner)
-router.get('/admin/allbanners', publicApiAccess, getBanners)
-router.get('/admin/banner/:id', publicApiAccess, getBannerById)
+router.post('/admin/createBanner', protect, isAdmin, fileUpload(), createBanner)
+router.get('/allbanners', publicApiAccess, getBanners)
+router.get('/admin/banner/:id', protect, isAdmin, getBannerById)
 router.put('/admin/createBanner', protect, isAdmin, upload, updateBanner)
 router.delete('/admin/createBanner', protect, isAdmin, deleteBanner)
 

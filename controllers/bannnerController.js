@@ -1,11 +1,12 @@
 const fs = require('fs');
 const Banner = require('../models/bannerModel');
+const { putObject } = require("../config/putObject");
 
 
 const getBanners = async (req, res) => {
     try {
         const banners = await Banner.find();
-        res.json(banners);
+        res.json({ data: banners });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
@@ -37,7 +38,7 @@ const createBanner = async (req, res) => {
 
         const fileName = `images/${Date.now()}`;
 
-        const { url, key } = await putObject(file.data, fileName);
+        const { url, key } = await putObject(pictures.data, fileName);
         console.log('url key', url, key);
 
         const newBanner = new Banner({
@@ -49,7 +50,7 @@ const createBanner = async (req, res) => {
         });
 
         const savedBanner = await newBanner.save();
-        res.status(201).json(savedBanner);
+        res.status(201).json({ data: savedBanner });
     } catch (error) {
         res.status(500).json({ message: 'Error creating banner' });
     }

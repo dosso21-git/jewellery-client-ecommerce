@@ -4,7 +4,7 @@ const UserIP = require("../models/userIpModel");
 
 const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization
-  console.log('auth heaeder', authHeader)
+  // console.log('auth heaeder', authHeader)
   if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.split(" ")[1];
     try {
@@ -30,7 +30,7 @@ const protect = async (req, res, next) => {
       res.status(500).json({ error: "Server error" });
     }
   } else {
-    console.log("No token found in headers");
+    // console.log("No token found in headers");
     res.status(401).json({ error: "No token provided" });
   }
 };
@@ -93,7 +93,7 @@ const getIpAddress = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
   const userId = req.user._id;
   const adminUser = await User.findOne(userId);
-  console.log("Admin Details:", adminUser);
+  // console.log("Admin Details:", adminUser);
   
   if (!adminUser) {
     return res.status(404).json({ message: "User not found." });

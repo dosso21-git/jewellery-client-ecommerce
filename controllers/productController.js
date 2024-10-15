@@ -11,6 +11,7 @@ const productModel = require("../models/productModel");
 const Rating = require("../models/ratingModel");
 const cartModel = require('../models/cartModel');
 const { putObject } = require("../config/putObject");
+const { deleteObject } = require("../config/deleteObject");
 
 
 
@@ -54,7 +55,7 @@ const createProduct = async (req, res) => {
     const existingProduct = await Product.findOne({ title });
     if (existingProduct) {
       return res.status(400).json({
-        error: { duplicate: "Product already exists with this title" },
+        error: "Product already exists with this title"
       });
     }
 
@@ -99,7 +100,6 @@ const createProductTest = async (req, res) => {
     const { file } = req.files;
     console.log('file', file);
 
-    // Use a timestamp for the filename, formatted to include milliseconds
     const fileName = `images/${Date.now()}`;
 
     const { url, key } = await putObject(file.data, fileName);
@@ -113,6 +113,23 @@ const createProductTest = async (req, res) => {
 };
 
 
+const deleteProductAws = async (req, res) => {
+  try {
+    const { key } = req.body;
+    const success = await deleteObject(key);
+
+    if (success) {
+      return res.status(200).json({ message: "File deleted successfully" });
+    } else {
+      return res.status(500).json({ error: "Failed to delete file" });
+    }
+  } catch (error) {
+    console.error("Error handling delete request:", error);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
 const getAllProducts = async (req, res) => {
   try {
     const product = await Product.find({});
@@ -121,6 +138,7 @@ const getAllProducts = async (req, res) => {
     res.status(500).json({ message: "Error fetching Products", error });
   }
 };
+
 
 const getProductById = async (req, res) => {
   try {
@@ -191,44 +209,102 @@ const getProductById = async (req, res) => {
   }
 };
 
+
+// const updateProduct = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     const existingProduct = await Product.findById(id);
+//     if (!existingProduct) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+
+//     if (req.files && req.files.length > 0) {
+//       const uploadedImages = await Promise.all(
+//         req.files.map(async (file) => {
+//           const result = await cloudinary.uploader.upload(file.path);
+//           return result.secure_url;
+//         })
+//       );
+
+//       existingProduct.images = [...existingProduct.images, ...uploadedImages];
+//     }
+
+//     existingProduct.title = req.body.title || existingProduct.title;
+//     existingProduct.description =
+//       req.body.description || existingProduct.description;
+//     existingProduct.price = req.body.price || existingProduct.price;
+//     existingProduct.category = req.body.category || existingProduct.category;
+//     existingProduct.quantity = req.body.quantity || existingProduct.quantity;
+
+//     const updatedProduct = await existingProduct.save();
+
+//     res.status(200).json({
+//       message: "Product updated successfully",
+//       product: updatedProduct,
+//     });
+//   } catch (error) {
+//     console.error("Error updating product:", error);
+//     res.status(500).json({ message: "Error updating product", error });
+//   }
+// };
+
+
 const updateProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { productId } = req.params;
+    const { title, description, price, category, quantity } = req.body;
+    const { pictures } = req.files;
 
-    const existingProduct = await Product.findById(id);
+
+    const existingProductTitle = await Product.findOne({ title });
+    if (existingProductTitle) {
+      return res.status(400).json({
+        message: "Product already exists with this title"
+      });
+    }
+
+    const existingProduct = await Product.findById(productId);
     if (!existingProduct) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ error: "Product not found" });
     }
 
-    if (req.files && req.files.length > 0) {
-      const uploadedImages = await Promise.all(
-        req.files.map(async (file) => {
-          const result = await cloudinary.uploader.upload(file.path);
-          return result.secure_url;
-        })
-      );
+    if (title) existingProduct.title = title;
+    if (description) existingProduct.description = description;
+    if (price) existingProduct.price = price;
+    if (category) existingProduct.category = category;
+    if (quantity !== undefined) existingProduct.quantity = quantity;
 
-      existingProduct.images = [...existingProduct.images, ...uploadedImages];
+    if (pictures) {
+      let newImages = [];
+
+      if (Array.isArray(pictures)) {
+        for (const picture of pictures) {
+          const fileName = `images/${Date.now()}`;
+          const { url, key } = await putObject(picture.data, fileName);
+          newImages.push(url);
+        }
+      } else {
+        const fileName = `images/${Date.now()}_${pictures.originalname}`;
+        const { url, key } = await putObject(pictures.data, fileName);
+        newImages.push(url);
+      }
+
+      existingProduct.images.push(...newImages);
     }
 
-    existingProduct.title = req.body.title || existingProduct.title;
-    existingProduct.description =
-      req.body.description || existingProduct.description;
-    existingProduct.price = req.body.price || existingProduct.price;
-    existingProduct.category = req.body.category || existingProduct.category;
-    existingProduct.quantity = req.body.quantity || existingProduct.quantity;
+    await existingProduct.save();
 
-    const updatedProduct = await existingProduct.save();
-
-    res.status(200).json({
+    return res.status(200).json({
       message: "Product updated successfully",
-      product: updatedProduct,
+      product: existingProduct,
     });
   } catch (error) {
     console.error("Error updating product:", error);
-    res.status(500).json({ message: "Error updating product", error });
+    return res.status(500).json({ error: "Server Error" });
   }
 };
+
 
 const deleteProduct = async (req, res) => {
   const session = await mongoose.startSession();
@@ -244,19 +320,13 @@ const deleteProduct = async (req, res) => {
 
     const imagePaths = deletedProduct.images;
     for (const imageUrl of imagePaths) {
-      const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
-      await cloudinary.uploader.destroy(publicId, (error, result) => {
-        if (error) {
-          console.error(
-            `Failed to delete image ${publicId} from Cloudinary:`,
-            error
-          );
-        } else {
-          console.log(
-            `Image ${publicId} deleted successfully from Cloudinary.`
-          );
-        }
-      });
+      const key = imageUrl.split("/").slice(-2).join("/");
+      const success = await deleteObject(key);
+
+      if (!success) {
+        console.error(`Failed to delete image with key: ${key}`);
+        return res.status(500).json({ error: "Failed to delete product images" });
+      }
     }
 
     await productModel.findByIdAndDelete(id).session(session);
@@ -304,6 +374,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+
 const getMostSellingProducts = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   try {
@@ -314,48 +385,50 @@ const getMostSellingProducts = async (req, res) => {
   }
 };
 
+
 const deleteProductPicture = async (req, res) => {
   const { productId, pictureIndex } = req.params;
+
   try {
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
+
     if (pictureIndex < 0 || pictureIndex >= product.images.length) {
       return res
         .status(400)
         .json({ error: { pictureError: "Invalid picture index" } });
     }
+
     const imageUrl = product.images[pictureIndex];
     console.log(`Image URL: ${imageUrl}`);
-    const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
-    console.log(
-      `Attempting to delete Cloudinary image with publicId: "${publicId}"`
-    );
-    const cloudinaryResponse = await cloudinary.uploader.destroy(publicId);
-    console.log(`Cloudinary Response:`, cloudinaryResponse);
-    if (cloudinaryResponse.result !== "ok") {
-      const resources = await cloudinary.api.resources({
-        type: "upload",
-        prefix: "products/",
-        max_results: 500,
-      });
-      console.log("Existing Resources:", resources);
+
+    const key = imageUrl.split("/").slice(-2).join("/");
+    console.log(`Attempting to delete S3 image with key: "${key}"`);
+
+    const success = await deleteObject(key);
+    console.log(`S3 Deletion Response:`, success);
+
+    if (!success) {
       return res.status(500).json({
-        error: "Failed to delete image from Cloudinary",
-        details: cloudinaryResponse,
+        error: "Failed to delete image from S3",
       });
     }
+
     product.images.splice(pictureIndex, 1);
     await product.save();
+
     return res.status(200).json({
       message: "Picture deleted successfully",
     });
+
   } catch (error) {
     console.error("Error deleting picture:", error);
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
 
 const getProductsByCategory = async (req, res) => {
   try {
@@ -379,6 +452,7 @@ const getProductsByCategory = async (req, res) => {
     });
   }
 };
+
 
 const trackProductView = async (req, res) => {
   const { productId } = req.params;
@@ -407,6 +481,7 @@ const trackProductView = async (req, res) => {
   }
 };
 
+
 const getPopularProducts = async (req, res) => {
   try {
     const popularProducts = await PopularProduct.find({})
@@ -424,6 +499,7 @@ const getPopularProducts = async (req, res) => {
     return res.status(500).json({ message: "Internal server error  hai" });
   }
 };
+
 
 const checkStock = async (req, res) => {
   const { status } = req.query;
@@ -481,5 +557,5 @@ const calcuLatePandL = async (req, res) => {
 
 
 module.exports = {
-  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL, createProductTest
+  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL, createProductTest, deleteProductAws
 }; 

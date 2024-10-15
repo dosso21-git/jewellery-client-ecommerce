@@ -10,6 +10,7 @@ const { default: mongoose } = require("mongoose");
 const productModel = require("../models/productModel");
 const Rating = require("../models/ratingModel");
 const cartModel = require('../models/cartModel');
+const { putObject } = require("../config/putObject");
 
 const createProduct = async (req, res) => {
   try {
@@ -38,6 +39,28 @@ const createProduct = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
+
+
+
+const createProductTest = async (req, res) => {
+  try {
+    const { file } = req.files;
+    console.log('file', file);
+    
+    // Use a timestamp for the filename, formatted to include milliseconds
+    const fileName = `images/${Date.now()}`;
+    
+    const { url, key } = await putObject(file.data, fileName);
+    console.log('url key', url, key);
+    
+    return res.send(url);
+  } catch (error) {
+    console.error("Error creating product:", error);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
 
 const getAllProducts = async (req, res) => {
   try {
@@ -407,5 +430,5 @@ const calcuLatePandL = async (req, res) => {
 
 
 module.exports = {
-  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL
+  createProduct, getAllProducts, getProductById, deleteProduct, updateProduct, getProductsByCategory, getMostSellingProducts, deleteProductPicture, trackProductView, getPopularProducts, checkStock, calcuLatePandL,createProductTest
 }; 

@@ -510,6 +510,9 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+    // const [token, setToken] = useState(Cookies.get('loginToken') || null);
+  // const baseURL =  import.meta.env.VITE_APP_API_URL; // Replace with your API URL
   
 const dispatch = useDispatch();
 

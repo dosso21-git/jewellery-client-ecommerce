@@ -446,8 +446,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ConfirmBoxPopup from "../components/Popup/ConfirmBoxPopup";
 import axios from "axios";
 import AddAddress from "../components/Address";
+import { useDispatch } from "react-redux";
+
+import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
 
 const AccountSettings = () => {
+
+  const dispatch = useDispatch();
+
+
   const [activeSection, setActiveSection] = useState("profile");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -496,8 +503,9 @@ const AccountSettings = () => {
 
   const handleConfirm = () => {
     Cookies.remove('loginToken'); // Remove token from cookies
-    navigate('/');
+    navigate('/login');
     setIsModalOpen(false);
+    dispatch(clearCart())
   };
 
   const handleCancel = () => {

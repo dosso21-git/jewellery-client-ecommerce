@@ -529,7 +529,7 @@ const DropdownLinks = [
 const Navbar = () => {
 
   const cartItems = useSelector(state => state.cart);
-  console.log('cartitmes',cartItems.length)
+  console.log('cartitmes',cartItems)
 
   // alert(cartItems)
   const [isMenuOpen, setIsMenuOpen] = useState(false);

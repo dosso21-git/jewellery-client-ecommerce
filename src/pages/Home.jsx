@@ -528,7 +528,7 @@ const Home = () => {
         <>
           <Hero handleOrderPopup={handleOrderPopup} />
           <Products/>
-          <TopProducts handleOrderPopup={handleOrderPopup} />
+          {/* <TopProducts handleOrderPopup={handleOrderPopup} /> */}
           <Banner />
           <CategoryProducts />
           <Subscribe />

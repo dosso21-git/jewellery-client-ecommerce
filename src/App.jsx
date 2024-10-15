@@ -46,6 +46,9 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const App = () => {
+
+  console.log('asd')
+
   React.useEffect(() => {
     AOS.init({
       offset: 100,

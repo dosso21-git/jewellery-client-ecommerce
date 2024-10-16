@@ -28,7 +28,7 @@ const getBannerById = async (req, res) => {
 
 const createBanner = async (req, res) => {
     try {
-        const { title, content, offer, discount } = req.body;
+        const { title, content, offer, discount, type } = req.body;
 
         const { pictures } = req.files;
 
@@ -48,6 +48,7 @@ const createBanner = async (req, res) => {
             content,
             offer,
             discount,
+            type,
             imageUrl: url,
         });
 

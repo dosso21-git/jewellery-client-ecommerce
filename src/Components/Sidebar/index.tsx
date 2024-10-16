@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-<<<<<<< HEAD
-import { HomeIcon, CalendarIcon, UserIcon,ArchiveIcon,ClockIcon, ClipboardListIcon, PlusIcon, UserCircleIcon, GiftIcon , UploadIcon, CloudUploadIcon ,ShoppingCartIcon,  StatusOnlineIcon,CogIcon, BellIcon , PaperAirplaneIcon, TagIcon , ArrowLeftIcon,  ViewGridIcon} from '@heroicons/react/solid';
-import { CreditCardIcon, } from '@heroicons/react/outline';
-
-=======
 import {
   FaHome,
   FaCalendar,
@@ -18,9 +13,9 @@ import {
 import { MdContactPhone } from 'react-icons/md';
 import { HiMiniTrophy } from 'react-icons/hi2';
 import { FaPhoneVolume } from 'react-icons/fa6';
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
 import { MdGroups2 } from 'react-icons/md';
 import Cookies from 'js-cookie';
+import { ArrowLeftIcon, BellIcon, PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/solid';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -102,13 +97,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
           <div>
-<<<<<<< HEAD
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white">MENU</h3>
-=======
             <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white ">
               MENU
             </h3>
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
 
             <ul className="mb-6 flex flex-col gap-1.5">
               <NavLink
@@ -116,11 +107,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 onClick={handleMenuClick}
                 className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('dashboard') && ''}`}
               >
-<<<<<<< HEAD
-                <ViewGridIcon className="h-8 w-8 text-red-500" />
-=======
                 <FaHome className="text-lg text-red-500" />
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
                 Dashboard
               </NavLink>
 
@@ -128,15 +115,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/dashboard/calendar"
                   onClick={handleMenuClick}
-<<<<<<< HEAD
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('calendar') && ''}`}
-                >
-                  <ClockIcon className="h-8 w-8 text-green-400" />
-                  Calendar
-                </NavLink>
-              </li>
-
-=======
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${
                     pathname.includes('calendar') && ''
                   }`}
@@ -145,7 +123,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Calendar
                 </NavLink>
               </li>
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
               <li>
                 <NavLink
                   to="/dashboard/profile"
@@ -161,11 +138,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/dashboard/products"
                   onClick={handleMenuClick}
-<<<<<<< HEAD
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('products') && 'bg-graydark dark:bg-meta-4'}`}
-                >
-                  < ShoppingCartIcon className="h-8 w-8 text-blue-400" />
-=======
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes('documents') &&
                     'bg-graydark dark:bg-meta-4'
@@ -185,7 +157,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }`}
                 >
                   <MdGroups2 className="text-xl text-green-400" />
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
                   Add Products
                 </NavLink>
               </li>
@@ -194,12 +165,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/dashboard/upload"
                   onClick={handleMenuClick}
-<<<<<<< HEAD
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('upload') && 'bg-graydark dark:bg-meta-4'}`}
-                >
-                  <CloudUploadIcon  className="h-8 w-8 text-purple-500" />
-                  Upload Products
-=======
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes('settings') &&
                     'bg-graydark dark:bg-meta-4'
@@ -207,7 +172,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <HiMiniTrophy className="text-lg text-orange-400" />
                   Performance
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
                 </NavLink>
               </li>
 
@@ -255,7 +219,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
 
-              {/* <li>
+               <li>
                 <div
                   onClick={() => setActivitiesOpen(!isActivitiesOpen)}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${isActivitiesOpen ? 'bg-graydark dark:bg-meta-4' : ''}`}
@@ -289,14 +253,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="/dashboard/send-message"
                         onClick={handleMenuClick}
-<<<<<<< HEAD
-                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('send-message') && 'bg-graydark dark:bg-meta-4'}`}
-=======
                         className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                           pathname.includes('send-message') &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
                       >
                         <FaComment className="text-lg text-blue-500" />
                         Send Message
@@ -306,14 +266,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="/dashboard/send-email"
                         onClick={handleMenuClick}
-<<<<<<< HEAD
-                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('send-email') && 'bg-graydark dark:bg-meta-4'}`}
-=======
                         className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                           pathname.includes('send-email') &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
                       >
                         <FaEnvelope className="text-lg text-blue-500" />
                         Send Email
@@ -321,12 +277,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     </li>
                   </ul>
                 )}
-<<<<<<< HEAD
-              </li> */}
-=======
               </li>
               <li></li>
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
             </ul>
           </div>
         </nav>

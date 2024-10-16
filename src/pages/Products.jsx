@@ -17,14 +17,8 @@ import {
 } from '@heroicons/react/solid';
 import { motion } from 'framer-motion';
 
-<<<<<<< HEAD
-const ManageDishes = ({ initialImages }) => {
-  const { productId } = useParams();
-  
-=======
 
 const MainPage = () => {
->>>>>>> be778dd156a208946a0830946002a6c994d58e64
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     title: '',

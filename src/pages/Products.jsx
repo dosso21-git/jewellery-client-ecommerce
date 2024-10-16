@@ -214,7 +214,7 @@ const MainPage = () => {
 
         {['title', 'description', 'price', 'category', 'quantity'].map((field, index) => (
           <div className="mb-4" key={index}>
-            <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center">
+            <label className="text-gray-700 text-sm font-bold mb-2 flex items-center">
               {field.charAt(0).toUpperCase() + field.slice(1)}
             </label>
             <input

@@ -62,7 +62,7 @@ const AccountSettings = () => {
 
   useEffect(() => {
     getUserData();
-    setActiveSection(location?.pathname)
+    setActiveSection('profile')
   }, []);
 
   const handleConfirm = () => {
@@ -89,7 +89,9 @@ const AccountSettings = () => {
     updateUserData();
   };
 
+
   const renderContent = () => {
+
     switch (activeSection) {
       case "profile":
         return (
@@ -206,7 +208,7 @@ const AccountSettings = () => {
         </button>
         <div className={`mt-10 w-64 bg-gray-100 dark:bg-gray-800 p-4 ${sidebarOpen ? "block" : "hidden"} md:block h-full`}>
           <nav className="space-y-4">
-            {["profile","addresses", "reset-password","orders", "teams", "notifications", "billing"].map((section) => (
+            {["profile","addresses", "reset-password","orders"].map((section) => (
               <button
                 key={section}
                 className={`block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 ${activeSection === section ? "bg-gray-200 dark:bg-gray-700" : ""}`}
@@ -239,7 +241,7 @@ const AccountSettings = () => {
           </nav>
         </div>
         <div className="flex-grow p-6 overflow-y-auto">
-          {renderContent()}
+          { !sidebarOpen ? renderContent() : ''}
         </div>
       </div>
     </>

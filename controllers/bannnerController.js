@@ -28,7 +28,7 @@ const getBannerById = async (req, res) => {
 
 const createBanner = async (req, res) => {
     try {
-        const { title, content, offer, discount } = req.body;
+        const { title, content, offer, discount, type } = req.body;
 
         const { pictures } = req.files;
 
@@ -48,6 +48,7 @@ const createBanner = async (req, res) => {
             content,
             offer,
             discount,
+            type,
             imageUrl: url,
         });
 
@@ -62,7 +63,7 @@ const createBanner = async (req, res) => {
 const updateBanner = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, content, offer, discount } = req.body;
+        const { title, content, offer, discount, type } = req.body;
         const { imageUrl } = req.files;
 
         const existingBanner = await Banner.findById(id);
@@ -80,7 +81,17 @@ const updateBanner = async (req, res) => {
         if (title) existingBanner.title = title;
         if (content) existingBanner.content = content;
         if (offer) existingBanner.offer = offer;
-        if (discount !== undefined) existingBanner.discount = discount;
+        if (type) existingBanner.type = type;
+
+        if (discount !== undefined) {
+            if (discount === null || discount === '') {
+                existingBanner.discount = null;
+            } else if (!isNaN(discount)) {
+                existingBanner.discount = Number(discount);
+            } else {
+                return res.status(400).json({ error: "Invalid discount value" });
+            }
+        }
 
         if (imageUrl) {
             let newImageUrl;

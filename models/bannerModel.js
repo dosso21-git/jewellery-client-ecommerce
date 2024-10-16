@@ -8,6 +8,9 @@ const bannerSchema = new mongoose.Schema({
     content: {
         type: String
     },
+    type: {
+        type: String
+    },
     offer: {
         type: String,
         // required: true

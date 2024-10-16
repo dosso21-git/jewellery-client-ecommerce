@@ -1,21 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import {
-  FaHome,
-  FaCalendar,
-  FaFileAlt,
-  FaUser,
-  FaCog,
-  FaArrowLeft,
-  FaEnvelope,
-  FaComment,
-} from 'react-icons/fa';
+import { FaHome, FaCalendar, FaFileAlt, FaUser, FaCog, FaArrowLeft, FaEnvelope, FaComment, } from 'react-icons/fa';
 import { MdContactPhone } from 'react-icons/md';
 import { HiMiniTrophy } from 'react-icons/hi2';
 import { FaPhoneVolume } from 'react-icons/fa6';
 import { MdGroups2 } from 'react-icons/md';
 import Cookies from 'js-cookie';
-import { ArrowLeftIcon, BellIcon, PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/solid';
+import BellIcon from '@heroicons/react/solid/BellIcon';
+import PaperAirplaneIcon from '@heroicons/react/solid/PaperAirplaneIcon';
+import UserCircleIcon from '@heroicons/react/solid/UserCircleIcon';
+import ArrowLeftIcon from '@heroicons/react/solid/ArrowLeftIcon';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -35,7 +29,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   );
 
   const [isActivitiesOpen, setActivitiesOpen] = useState(false);
-  const [token, setToken] = useState<string | null>(Cookies.get('userToken'));
+  const [token, setToken] = useState<string | undefined>(Cookies.get('userToken'));
 
   // Close on click outside
   useEffect(() => {
@@ -115,9 +109,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/dashboard/calendar"
                   onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${
-                    pathname.includes('calendar') && ''
-                  }`}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark  dark:hover:bg-meta-4 ${pathname.includes('calendar') && ''
+                    }`}
                 >
                   <FaCalendar className="text-lg text-green-400" />
                   Calendar
@@ -138,10 +131,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/dashboard/products"
                   onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('documents') &&
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('documents') &&
                     'bg-graydark dark:bg-meta-4'
-                  }`}
+                    }`}
                 >
                   <MdGroups2 className="text-xl text-green-400" />
                   All Products
@@ -151,10 +143,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/dashboard/create_products"
                   onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('documents') &&
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('documents') &&
                     'bg-graydark dark:bg-meta-4'
-                  }`}
+                    }`}
                 >
                   <MdGroups2 className="text-xl text-green-400" />
                   Add Products
@@ -165,10 +156,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/dashboard/upload"
                   onClick={handleMenuClick}
-                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('settings') &&
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('settings') &&
                     'bg-graydark dark:bg-meta-4'
-                  }`}
+                    }`}
                 >
                   <HiMiniTrophy className="text-lg text-orange-400" />
                   Performance
@@ -185,7 +175,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Stock Status
                 </NavLink>
               </li> */}
-{/* 
+              {/* 
               <li>
                 <NavLink
                   to="/dashboard/getoffers"
@@ -203,8 +193,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   onClick={handleMenuClick}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('globalnotification') && 'bg-graydark dark:bg-meta-4'}`}
                 >
-                  < BellIcon  className="h-8 w-8 text-orange-400" />
+                  < BellIcon className="h-8 w-8 text-orange-400" />
                   Create Notification
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/banners"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('globalnotification') && 'bg-graydark dark:bg-meta-4'}`}
+                >
+                  < BellIcon className="h-8 w-8 text-orange-400" />
+                  Banners
                 </NavLink>
               </li>
 
@@ -219,7 +220,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
 
-               <li>
+              <li>
                 <div
                   onClick={() => setActivitiesOpen(!isActivitiesOpen)}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${isActivitiesOpen ? 'bg-graydark dark:bg-meta-4' : ''}`}
@@ -227,9 +228,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   <FaFileAlt className="text-lg text-purple-400" />
                   Activities
                   <span
-                    className={`ml-auto ${
-                      isActivitiesOpen ? 'rotate-180' : ''
-                    }`}
+                    className={`ml-auto ${isActivitiesOpen ? 'rotate-180' : ''
+                      }`}
                   >
                     <svg
                       className="w-4 h-4 transform transition-transform duration-200"
@@ -253,10 +253,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="/dashboard/send-message"
                         onClick={handleMenuClick}
-                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          pathname.includes('send-message') &&
+                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('send-message') &&
                           'bg-graydark dark:bg-meta-4'
-                        }`}
+                          }`}
                       >
                         <FaComment className="text-lg text-blue-500" />
                         Send Message
@@ -266,10 +265,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="/dashboard/send-email"
                         onClick={handleMenuClick}
-                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          pathname.includes('send-email') &&
+                        className={`group flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('send-email') &&
                           'bg-graydark dark:bg-meta-4'
-                        }`}
+                          }`}
                       >
                         <FaEnvelope className="text-lg text-blue-500" />
                         Send Email

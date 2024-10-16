@@ -12,6 +12,7 @@ import Topproduct from './TopProducts';
 import Mostpopular from './MostPopular';
 import Getoffer from './Getoffer'
 import Globalnotification from './GlobalNotification';
+import Banners from './Banners'
 import Sendnotificaion from './SendNotification';
 import Uploadproducts from './UploadProducts';
 import Viewproduct from './ViewProduct';
@@ -24,7 +25,7 @@ import Stock from './Stock'
 const Main = () => {
   return (
     <DefaultLayout>
-     
+
       <Routes>
         <Route
           index
@@ -35,7 +36,7 @@ const Main = () => {
             </>
           }
         />
-        
+
         <Route
           path="/calendar"
           element={
@@ -56,9 +57,9 @@ const Main = () => {
             </>
           }
         />
-         
 
-         <Route
+
+        <Route
           path="/upload"
           element={
             <>
@@ -69,8 +70,8 @@ const Main = () => {
         />
 
 
-           
-         <Route
+
+        <Route
           path="/stock"
           element={
             <>
@@ -81,7 +82,7 @@ const Main = () => {
         />
 
 
-       <Route
+        <Route
           path="/viewproduct/:id"
           element={
             <>
@@ -90,10 +91,10 @@ const Main = () => {
             </>
           }
         />
-         
 
 
-          
+
+
         <Route
           path="/calendar"
           element={
@@ -107,9 +108,9 @@ const Main = () => {
 
 
 
-         <Route
-           path="/getoffers"
-           element={
+        <Route
+          path="/getoffers"
+          element={
             <>
               <PageTitle title="Offer |  Dashboard " />
               <Getoffer />
@@ -118,21 +119,21 @@ const Main = () => {
         />
 
 
-<Route
-           path="/sendnotification"
-           element={
+        <Route
+          path="/sendnotification"
+          element={
             <>
               <PageTitle title="Notification |  Dashboard " />
-              <Sendnotificaion/>
+              <Sendnotificaion />
             </>
           }
         />
 
 
 
-          
 
-          <Route
+
+        <Route
           path="/mostpopular"
           element={
             <>
@@ -142,75 +143,85 @@ const Main = () => {
           }
         />
 
-          <Route
+        <Route
           path="globalnotification"
           element={
             <>
               <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-              <Globalnotification/>
+              <Globalnotification />
+            </>
+          }
+        />
+
+        <Route
+          path="banners"
+          element={
+            <>
+              <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Banners />
             </>
           }
         />
 
 
-      
-      
-           
- 
-        
-           <Route
-            path="sellingproduct"
-            element={
-             <>
-             <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Attendance/>
-          </>
-            }
-          />
 
-          <Route
-            path="/call"
-            element={
-             <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Call/>
-          </>
-            }
-          />
 
-          
-             <Route
-            path="/sales"
-            element={
-             <>
-             <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Sales/>
-          </>
-            }
-          /> 
 
-             <Route
-            path="/products"
-            element={
-             <>
-             <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Products />
-          </>
-            }
-          />
-          <Route
-            path="/topproduct"
-            element={
-             <>
-             <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-           <Topproduct/>
-          </>
-            }
-          />
-       
 
-       
-         <Route
+
+        <Route
+          path="sellingproduct"
+          element={
+            <>
+              <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Attendance />
+            </>
+          }
+        />
+
+        <Route
+          path="/call"
+          element={
+            <>
+              <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Call />
+            </>
+          }
+        />
+
+
+        <Route
+          path="/sales"
+          element={
+            <>
+              <PageTitle title="Counseller | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Sales />
+            </>
+          }
+        />
+
+        <Route
+          path="/products"
+          element={
+            <>
+              <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Products />
+            </>
+          }
+        />
+        <Route
+          path="/topproduct"
+          element={
+            <>
+              <PageTitle title="Products | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Topproduct />
+            </>
+          }
+        />
+
+
+
+        <Route
           path="/user"
           element={
             <>
@@ -219,13 +230,13 @@ const Main = () => {
             </>
           }
         />
-        
-       
-       
-       
+
+
+
+
       </Routes>
-      
-    </DefaultLayout>
+
+    </DefaultLayout >
   );
 }
 

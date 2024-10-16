@@ -35,7 +35,6 @@ const MainPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
-  const [images, setImages] = useState(initialImages || []); // Ensure initialImages is always an array
   const formRef = useRef(null);
   const navigate = useNavigate();
 

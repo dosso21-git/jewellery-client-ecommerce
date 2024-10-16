@@ -258,3 +258,12 @@ span.flatpickr-weekday,
   outline: none;
 }
 
+
+.description {
+  display: -webkit-box;           /* Enable flexbox */
+  -webkit-box-orient: vertical;  /* Vertical orientation */
+  -webkit-line-clamp: 2;         /* Limit to 2 lines */
+  overflow: hidden;               /* Hide overflow */
+  text-overflow: ellipsis;       /* Add ellipsis */
+  max-height: 3em;               /* Adjust max-height according to line height */
+}

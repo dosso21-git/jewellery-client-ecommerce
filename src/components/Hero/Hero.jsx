@@ -133,16 +133,18 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Hero = ({ handleOrderPopup }) => {
   const [banners, setBanners] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchBanners = async () => {
       try {
         const response = await axios.get("/api/user/allbanners");
-        if(response.data.data){
-        setBanners(response.data.data); // Assuming the response structure is as provided
+        if (response.data.data) {
+          setBanners(response.data.data); // Assuming the response structure is as provided
         }
       } catch (error) {
         console.error("Error fetching banners:", error);
@@ -165,10 +167,14 @@ const Hero = ({ handleOrderPopup }) => {
     pauseOnFocus: true,
   };
 
+  const handleOrder = (type) => {
+    navigate(`/all-category/${type}`)
+  }
+
   return (
     <div className="relative overflow-hidden min-h-[550px] sm:min-h-[650px] bg-gray-100 flex justify-center items-center dark:bg-gray-950 dark:text-white duration-200">
       {/* Background pattern */}
-      <div className="h-[700px] w-[700px] bg-primary/40 absolute -top-1/2 right-0 rounded-3xl rotate-45 -z-[8]"></div>
+      <div className="h-[700px] w-[700px] bg-primary/60 absolute -top-1/2 right-0 rounded-3xl rotate-45 z-0"></div>
       {/* Hero section */}
       <div className="container pb-8 sm:pb-0">
         <Slider {...settings}>
@@ -199,7 +205,7 @@ const Hero = ({ handleOrderPopup }) => {
                     data-aos-delay="300"
                   >
                     <button
-                      onClick={handleOrderPopup}
+                      onClick={() => handleOrder(banner.type)}
                       className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
                     >
                       Order Now

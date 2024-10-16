@@ -28,6 +28,9 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      screens: {
+        'custom': '1030px'
+      },
       colors: {
         primary: "#fea928",
         secondary: "#ed8900",

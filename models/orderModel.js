@@ -10,13 +10,13 @@ const orderSchema = new mongoose.Schema(
     },
     totalAmount: { type: Number, required: true },
     discountedprice: { type: Number },
-    discount_type: { type: String},
+    discount_type: { type: String },
     status: {
       type: String,
       enum: ["pending", "completed", "canceled"],
       default: "pending",
     },
-    address:{
+    address: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Address",
       required: true,
@@ -34,7 +34,6 @@ const orderSchema = new mongoose.Schema(
     ],
     shipping_estimate: { type: Number, required: true },
     tax_estimate: { type: Number, required: true },
-
   },
   { timestamps: true }
 );

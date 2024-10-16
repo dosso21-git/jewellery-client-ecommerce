@@ -172,17 +172,6 @@ const getProductById = async (req, res) => {
       },
     });
 
-
-    //if user login then send its cart length
-    // const token = req.headers.authorization?.split(" ")[1];
-
-    // console.log(token);
-
-    // if (token) {
-    //   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    //   const userId = decoded.id;
-
-
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -228,46 +217,6 @@ const getProductById = async (req, res) => {
     res.status(500).json({ message: "Error fetching Product", error });
   }
 };
-
-
-// const updateProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const existingProduct = await Product.findById(id);
-//     if (!existingProduct) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-
-//     if (req.files && req.files.length > 0) {
-//       const uploadedImages = await Promise.all(
-//         req.files.map(async (file) => {
-//           const result = await cloudinary.uploader.upload(file.path);
-//           return result.secure_url;
-//         })
-//       );
-
-//       existingProduct.images = [...existingProduct.images, ...uploadedImages];
-//     }
-
-//     existingProduct.title = req.body.title || existingProduct.title;
-//     existingProduct.description =
-//       req.body.description || existingProduct.description;
-//     existingProduct.price = req.body.price || existingProduct.price;
-//     existingProduct.category = req.body.category || existingProduct.category;
-//     existingProduct.quantity = req.body.quantity || existingProduct.quantity;
-
-//     const updatedProduct = await existingProduct.save();
-
-//     res.status(200).json({
-//       message: "Product updated successfully",
-//       product: updatedProduct,
-//     });
-//   } catch (error) {
-//     console.error("Error updating product:", error);
-//     res.status(500).json({ message: "Error updating product", error });
-//   }
-// };
 
 
 const updateProduct = async (req, res) => {

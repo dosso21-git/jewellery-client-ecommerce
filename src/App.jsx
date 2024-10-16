@@ -59,6 +59,8 @@ const App = () => {
     AOS.refresh();
   }, []);
 
+
+
   return (
     <AppProvider>
       <ErrorBoundary>

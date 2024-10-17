@@ -187,62 +187,74 @@ const AccountSettings = () => {
   };
 
   return (
-    <>
-      {isModalOpen && (
-        <ConfirmBoxPopup 
-          onDeactivate={handleConfirm} 
-          onCancel={handleCancel} 
-          title="Logout ?" 
-          description="Are you sure you want to logout."
-        />
-      )}
-      <div className="flex h-screen mt-13 bg-gray-50 dark:bg-gray-900">
-        <button
-          className="mt-0 absolute top-14 left-4 md:hidden p-2 bg-gray-200 rounded"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          aria-label="Toggle Sidebar"
-        >
-          {sidebarOpen ? <FaTimes /> : <FaBars />}
-        </button>
-        <div className={`mt-10 w-64 bg-gray-100 dark:bg-gray-800 p-4 ${sidebarOpen ? "block" : "hidden"} md:block h-full`}>
-          <nav className="space-y-4">
-            {["profile","addresses", "reset-password","orders", "teams", "notifications", "billing"].map((section) => (
-              <button
-                key={section}
-                className={`block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 ${activeSection === section ? "bg-gray-200 dark:bg-gray-700" : ""}`}
-                onClick={() => {
-                  setActiveSection(section);
-                  setSidebarOpen(false); // Close sidebar on mobile
-                }}
-                aria-label={section.charAt(0).toUpperCase() + section.slice(1)}
-              >
-                {section.charAt(0).toUpperCase() + section.slice(1)}
-              </button>
-            ))}
-            {token ? (
-              <button
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
-                onClick={handleLogout}
-                aria-label="Logout"
-              >
-                Logout
-              </button>
-            ) : (
-              <button
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
-                onClick={() => setActiveSection("Login")}
-                aria-label="Login"
-              >
-                Login
-              </button>
-            )}
-          </nav>
-        </div>
-        <div className="flex-grow p-6 overflow-y-auto">
-          {renderContent()}
-        </div>
-      </div>
-    </>
+<>
+  {isModalOpen && (
+    <ConfirmBoxPopup
+      onDeactivate={handleConfirm}
+      onCancel={handleCancel}
+      title="Logout?"
+      description="Are you sure you want to logout?"
+    />
+  )}
+  <div className="flex flex-col md:flex-row h-screen mt-14 bg-gray-50 dark:bg-gray-900">
+    {/* Mobile toggle button */}
+    <button
+      className="mt-0 absolute top-14 left-4 md:hidden p-2 bg-gray-200 dark:bg-gray-700 rounded"
+      onClick={() => setSidebarOpen(!sidebarOpen)}
+      aria-label="Toggle Sidebar"
+    >
+      {sidebarOpen ? <FaTimes /> : <FaBars />}
+    </button>
+
+    {/* Sidebar */}
+    <div
+      className={` w-64 bg-gray-100 dark:bg-gray-800 p-4 transform md:transform-none transition-transform duration-300 ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } md:translate-x-0 fixed md:relative h-full z-10`}
+    >
+      <nav className="space-y-4 mt-4">
+        {["profile", "addresses", "reset-password", "orders", "teams", "notifications", "billing"].map((section) => (
+          <button
+            key={section}
+            className={`block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 ${
+              activeSection === section ? "bg-gray-200 dark:bg-gray-700" : ""
+            }`}
+            onClick={() => {
+              setActiveSection(section);
+              setSidebarOpen(false); // Close sidebar on mobile
+            }}
+            aria-label={section.charAt(0).toUpperCase() + section.slice(1)}
+          >
+            {section.charAt(0).toUpperCase() + section.slice(1)}
+          </button>
+        ))}
+        {token ? (
+          <button
+            className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+            onClick={handleLogout}
+            aria-label="Logout"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+            onClick={() => setActiveSection("Login")}
+            aria-label="Login"
+          >
+            Login
+          </button>
+        )}
+      </nav>
+    </div>
+
+    {/* Main content */}
+    <div className="flex-grow p-6 overflow-y-auto">
+      {renderContent()}
+    </div>
+  </div>
+</>
+
   );
 };
 

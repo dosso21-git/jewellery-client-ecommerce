@@ -206,7 +206,7 @@ const AccountSettings = () => {
         >
           {sidebarOpen ? <FaTimes /> : <FaBars />}
         </button>
-        <div className={`w-64 bg-gray-100 dark:bg-gray-800 px-4 py-10 ${sidebarOpen ? "block" : "hidden"} md:block h-full`}>
+        <div className={` w-64 bg-gray-100 dark:bg-gray-800 px-4 py-8 ${sidebarOpen ? "block" : "hidden"} md:block h-full`}>
           <nav className="space-y-4">
             {["profile", "addresses", "reset-password", "orders"].map((section) => (
               <button

@@ -383,7 +383,6 @@
 
 
 import React, { useEffect, useState } from "react";
-import Logo from "../../assets/logo.png";
 import { IoMdSearch } from "react-icons/io";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdAccountCircle } from "react-icons/md";
@@ -451,9 +450,8 @@ const Navbar = () => {
         <div className="container flex justify-between items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-1">
-              <img src={Logo} alt="Logo" className="w-8 sm:w-10" />
-              <div className="hidden sm:flex justify-center">
-                <span className="sm:text-2xl">Jewellery-Shop</span>
+              <div className="sm:flex justify-center">
+                <h1 className="text-[12px] md:text-2xl flex flex-col text-gray-500"><p>Iridscent <b className="text-secondary">Gems</b></p> <span className="text-[6px] md:text-sm text-secondary">Jewels as Unique as You</span></h1>
               </div>
             </Link>
           </div>

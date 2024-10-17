@@ -10,7 +10,6 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-
 const BannerImg = {
   backgroundImage: `url(${Banner})`,
   backgroundPosition: "bottom",
@@ -68,7 +67,6 @@ const Footer = () => {
               Have questions or need assistance? Reach out to us at <a href="#" className="text-blue-600 hover:underline">contact@iridescentgems.com.</a>
             </p>
           </div>
-
           {/* Footer Links */}
           <div className="md:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-8">
             {/* Important Links */}
@@ -94,7 +92,6 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
-
             {/* Social Links */}
             <div>
               <div className="flex gap-4 text-gray-300">

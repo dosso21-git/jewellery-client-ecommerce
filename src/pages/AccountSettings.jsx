@@ -200,7 +200,7 @@ const AccountSettings = () => {
       )}
       <div className="flex h-screen mt-13 bg-gray-50 dark:bg-gray-900">
         <button
-          className="mt-0 absolute top-14 left-4 md:hidden p-2 bg-gray-200 rounded"
+          className="absolute top-14 left-4 md:hidden p-2 bg-gray-200 rounded"
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-label="Toggle Sidebar"
         >

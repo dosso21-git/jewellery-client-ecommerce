@@ -63,7 +63,9 @@ const Footer = () => {
               <h1 className="text-3xl font-bold">iridescentgems</h1>
             </div>
             <p className="text-gray-300">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum in beatae ea recusandae blanditiis veritatis.
+              At Iridescent Gems, we create handcrafted jewellery inspired by nature's beauty. Discover unique pieces that add elegance to any occasion.
+              Contact Us
+              Have questions or need assistance? Reach out to us at <a href="#" className="text-blue-600 hover:underline">contact@iridescentgems.com.</a>
             </p>
           </div>
 

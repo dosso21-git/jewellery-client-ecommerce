@@ -62,7 +62,7 @@ const AccountSettings = () => {
 
   useEffect(() => {
     getUserData();
-    setActiveSection(location?.pathname)
+    setActiveSection('profile')
   }, []);
 
   const handleConfirm = () => {
@@ -89,7 +89,9 @@ const AccountSettings = () => {
     updateUserData();
   };
 
+
   const renderContent = () => {
+
     switch (activeSection) {
       case "profile":
         return (
@@ -187,6 +189,7 @@ const AccountSettings = () => {
   };
 
   return (
+<<<<<<< HEAD
 <>
   {isModalOpen && (
     <ConfirmBoxPopup
@@ -255,6 +258,64 @@ const AccountSettings = () => {
   </div>
 </>
 
+=======
+    <>
+      {isModalOpen && (
+        <ConfirmBoxPopup 
+          onDeactivate={handleConfirm} 
+          onCancel={handleCancel} 
+          title="Logout ?" 
+          description="Are you sure you want to logout."
+        />
+      )}
+      <div className="flex h-screen mt-13 bg-gray-50 dark:bg-gray-900">
+        <button
+          className="mt-0 absolute top-14 left-4 md:hidden p-2 bg-gray-200 rounded"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label="Toggle Sidebar"
+        >
+          {sidebarOpen ? <FaTimes /> : <FaBars />}
+        </button>
+        <div className={`mt-10 w-64 bg-gray-100 dark:bg-gray-800 p-4 ${sidebarOpen ? "block" : "hidden"} md:block h-full`}>
+          <nav className="space-y-4">
+            {["profile","addresses", "reset-password","orders"].map((section) => (
+              <button
+                key={section}
+                className={`block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 ${activeSection === section ? "bg-gray-200 dark:bg-gray-700" : ""}`}
+                onClick={() => {
+                  setActiveSection(section);
+                  setSidebarOpen(false); // Close sidebar on mobile
+                }}
+                aria-label={section.charAt(0).toUpperCase() + section.slice(1)}
+              >
+                {section.charAt(0).toUpperCase() + section.slice(1)}
+              </button>
+            ))}
+            {token ? (
+              <button
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+                onClick={handleLogout}
+                aria-label="Logout"
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+                onClick={() => setActiveSection("Login")}
+                aria-label="Login"
+              >
+                Login
+              </button>
+            )}
+          </nav>
+        </div>
+        <div className="flex-grow p-6 overflow-y-auto">
+          { !sidebarOpen ? renderContent() : ''}
+        </div>
+      </div>
+    </>
+>>>>>>> e4fbe43a6f912bc30b1e9bbf68399432174e496e
   );
 };
 

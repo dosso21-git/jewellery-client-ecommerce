@@ -1,11 +1,9 @@
 //todayimport { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import CouponPopup from "../components/Popup/CouponPopup";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Lottie from "lottie-react";
-import successAnimation from "./cartAnimation/CartAnimation.json"; // Replace with your animation file
+import successAnimation from "./cartAnimation/CartAnimation.json";
 import { useSelector, useDispatch } from 'react-redux';
 import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
 
@@ -19,7 +17,7 @@ const CartPage = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null); // Added for error handling
+  const [errorMessage, setErrorMessage] = useState(null); 
   const [type, setType] = useState("coupon");
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);

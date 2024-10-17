@@ -7,7 +7,6 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const { token } = useParams(); // Get token from URL parameters
 
   const navigate = useNavigate();
 
@@ -20,7 +19,7 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.post('/api/user/reset-password', { password, token });
+      const response = await axios.put('/api/user/updatepassword', { password });
       setMessage(response.data.message); // Assuming your API returns a message on success
       setError(""); // Clear any previous errors
       navigate('/login'); // Redirect to login after successful reset

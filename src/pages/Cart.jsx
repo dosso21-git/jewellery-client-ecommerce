@@ -238,6 +238,7 @@ const CartPage = () => {
             Order Summary
           </h3>
           <div className="mt-4">
+      <h1 className="text-red-800 font-bold">      Select Your Address:</h1>
             {Array.isArray(addresses) && addresses.length > 0 ? (
               addresses.map((address) => (
                 <div

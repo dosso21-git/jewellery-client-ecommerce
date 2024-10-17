@@ -165,7 +165,7 @@ const CategoryProducts = () => {
           <div
             key={product._id}
             data-aos="zoom-in"
-            className="group relative flex flex-col items-center justify-center cursor-pointer p-4 rounded-lg bg-white dark:bg-gray-800 hover:bg-black/80 dark:hover:bg-primary hover:text-white shadow-lg transition duration-300 ease-in-out"
+            className="group relative flex flex-col items-center justify-center cursor-pointer p-4 rounded-lg bg-white dark:bg-gray-800  dark:hover:bg-primary shadow-lg transition duration-300 ease-in-out"
             onClick={() => {
               navigationFunction(product.category); // Navigate based on product category
             }}

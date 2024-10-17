@@ -15,7 +15,7 @@ import CartPage from "./pages/Cart";
 import ProductDetails from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import WishListPage from "./pages/WishListPage";
+import WishListPage from "./pages/WishlistPage";
 import DeliveryAddress from "./pages/DeliveryAddress";
 import AllCategoryProducts from "./pages/AllCategoryProductsPage";
 import AllProductsPage from "./pages/AllProductsPage";

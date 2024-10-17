@@ -130,11 +130,16 @@
 // }
 
 // export default WishlistPage
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom'
 
 const WishListPage = () => {
   const [wishlist, setWishlist] = useState([]);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchWishlist();
@@ -161,6 +166,12 @@ const WishListPage = () => {
       alert("theek kar");
     }
   };
+
+
+  const getProdDetails = (id) => {
+    navigate(`/product-details/${id}`)
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-center mb-6 mt-6">My Wishlist</h1>
@@ -174,7 +185,8 @@ const WishListPage = () => {
               <img
                 src={item.images[0]}
                 alt={item.title}
-                className="w-full h-48 object-cover"
+                className="w-full h-48 object-cover cursor-pointer"
+                onClick={() => getProdDetails(item._id)}
               />
               <div className="p-4">
                 <h2 className="text-lg font-semibold">{item.title}</h2>
@@ -193,7 +205,7 @@ const WishListPage = () => {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">Your wishlist is empty.</p> // Fallback message
+          <p className="text-gray-500">Your wishlist is empty.</p>
         )}
       </div>
     </div>

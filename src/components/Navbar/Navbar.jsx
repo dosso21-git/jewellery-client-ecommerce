@@ -451,7 +451,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-1">
               <div className="sm:flex justify-center">
-                <h1 className="text-[12px] md:text-2xl flex flex-col text-gray-500"><p>Iridscent <b className="text-secondary">Gems</b></p> <span className="text-[6px] md:text-sm text-secondary">Jewels as Unique as You</span></h1>
+                <h1 className="text-[12px] md:text-2xl flex flex-col text-gray-500"><p>Iridscent<b className="text-secondary">Gems</b></p> <span className="text-[6px] md:text-sm text-secondary">Jewels as Unique as You</span></h1>
               </div>
             </Link>
           </div>

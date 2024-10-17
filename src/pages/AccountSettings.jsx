@@ -11,7 +11,7 @@ import axios from "axios";
 import AddAddress from "../components/Address";
 import { useDispatch } from "react-redux";
 
-import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
+import { addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
 import ResetPassword from "./LoginResetPassword";
 
 const AccountSettings = () => {
@@ -176,11 +176,11 @@ const AccountSettings = () => {
           </div>
         );
       case "orders":
-        return <OrderSummary/>;
+        return <OrderSummary />;
       case "reset-password":
-        return <ResetPassword/>;
-        case "addresses":
-          return <AddAddress/>;
+        return <ResetPassword />;
+      case "addresses":
+        return <AddAddress />;
       case "Login":
         return <LoginPage />;
       default:
@@ -191,10 +191,10 @@ const AccountSettings = () => {
   return (
     <>
       {isModalOpen && (
-        <ConfirmBoxPopup 
-          onDeactivate={handleConfirm} 
-          onCancel={handleCancel} 
-          title="Logout ?" 
+        <ConfirmBoxPopup
+          onDeactivate={handleConfirm}
+          onCancel={handleCancel}
+          title="Logout ?"
           description="Are you sure you want to logout."
         />
       )}
@@ -206,9 +206,9 @@ const AccountSettings = () => {
         >
           {sidebarOpen ? <FaTimes /> : <FaBars />}
         </button>
-        <div className={`mt-10 w-64 bg-gray-100 dark:bg-gray-800 p-4 ${sidebarOpen ? "block" : "hidden"} md:block h-full`}>
+        <div className={`w-64 bg-gray-100 dark:bg-gray-800 px-4 py-10 ${sidebarOpen ? "block" : "hidden"} md:block h-full`}>
           <nav className="space-y-4">
-            {["profile","addresses", "reset-password","orders"].map((section) => (
+            {["profile", "addresses", "reset-password", "orders"].map((section) => (
               <button
                 key={section}
                 className={`block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 ${activeSection === section ? "bg-gray-200 dark:bg-gray-700" : ""}`}
@@ -241,7 +241,7 @@ const AccountSettings = () => {
           </nav>
         </div>
         <div className="flex-grow p-6 overflow-y-auto">
-          { !sidebarOpen ? renderContent() : ''}
+          {!sidebarOpen ? renderContent() : ''}
         </div>
       </div>
     </>

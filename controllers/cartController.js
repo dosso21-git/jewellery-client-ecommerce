@@ -11,6 +11,16 @@ exports.addToCart = async (req, res) => {
     const product = await productModel.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
+    const user = await userModel.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const wishlistIndex = user.wishlist.indexOf(productId);
+
+    if (wishlistIndex >= 0) {
+      user.wishlist.splice(wishlistIndex, 1);
+      await user.save();
+    }
+
     let cart = await cartModel.findOne({ userId });
 
     if (!cart) {
@@ -38,96 +48,23 @@ exports.addToCart = async (req, res) => {
     );
 
     await cart.save();
-    res.status(200).json({data : cart , length: cart.length});
+    res.status(200).json({ data: cart, length: cart.length });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
-// Remove item from cart
-// exports.removeFromCart = async (req, res) => {
-//   try {
-//     const {userId} = req.body
-//     const {productId } = req.params;
-//     console.log(productId);
-//     const user = await cartModel.findById(userId);
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-//     console.log(user)
-//     user.cartModel = user.cartModel.filter(
-//       (item) => item !== productId
-//     );
-//     await user.save();
-//     return res.status(200).json({ message: "Product removed from cart" });
-//   } catch (err) {
-//     res.status(500).json({ message: "Server error", error: err.message });
-//   }
-// };
-
-
-
-
-
-// exports.removeFromCart = async (req, res) => {
-//   try {
-//     const { userId } = req.body; // Assuming userId is passed in the request body
-//     const { productId } = req.params; // Assuming productId is passed in the request parameters
-    
-//     console.log('User ID:', userId);
-//     console.log('Removing product ID:', productId);
-    
-//     // Find the user by userId
-//     const user = await cartModel.findOne({ userId });
-    
-//     // Check if user exists
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     // Log the user object for debugging
-//     console.log('User found:', user.items);
-    
-//     // Remove the productId from the cart array
-//     user.items = user.items.filter(item => item !== productId);
-//     console.log('this is itmes',user.items)
-//     // If there are no items left in the cart, delete the cart
-//     if (user.items.length == 1) {
-//       console.log('this is me ')
-//       await cartModel.deleteOne({ userId });
-//       return res.status(200).json({ message: "Cart is empty and has been deleted" });
-//     }
-
-//     // Update totalItems and totalPrice if there are still items in the cart
-//     user.totalItems = user.items.length; // Update totalItems
-//     user.totalPrice = user.items.reduce((total, item) => total + (item.price * item.quantity), 0); // Recalculate totalPrice
-    
-//     // Save the updated user object
-//     await user.save();
-    
-//     // Respond with a success message
-//     return res.status(200).json({ message: "Product removed from cart" });
-//   } catch (err) {
-//     // Log the error for debugging
-//     console.error('Error removing product from cart:', err);
-//     res.status(500).json({ message: "Server error", error: err.message });
-//   }
-// };
-
-
-
-
 exports.removeFromCart = async (req, res) => {
   try {
     const { userId } = req.body; // User ID from the request body
     const { productId } = req.params; // Product ID from the request parameters
-    
+
     console.log('User ID:', userId);
     console.log('Removing product ID:', productId);
-    
+
     // Find the cart by userId
     const userCart = await cartModel.findOne({ userId });
-    
+
     // Check if the cart exists
     if (!userCart) {
       return res.status(404).json({ message: "User not found or cart is empty" });
@@ -135,10 +72,10 @@ exports.removeFromCart = async (req, res) => {
 
     // Log the current items for debugging
     console.log('Current items in cart:', userCart.items);
-    
+
     // Find the index of the item to remove
     const itemIndex = userCart.items.findIndex(item => item.productId == productId);
-    console.log('item index',itemIndex)
+    console.log('item index', itemIndex)
     // If the item is found, remove it
     if (itemIndex !== -1) {
       userCart.items.splice(itemIndex, 1);
@@ -150,19 +87,19 @@ exports.removeFromCart = async (req, res) => {
     // If there are no items left in the cart, delete the cart
     if (userCart.items.length == 0) {
       await cartModel.deleteOne({ userId });
-      return res.status(200).json({ message: "Cart is empty and has been deleted", status : 200 });
+      return res.status(200).json({ message: "Cart is empty and has been deleted", status: 200 });
     }
 
     // Update totalItems and totalPrice
     userCart.totalItems = userCart.items.length; // Update totalItems
     userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0); // Recalculate totalPrice
-    
-    console.log('last user cart data is here ',userCart)
+
+    console.log('last user cart data is here ', userCart)
     // Save the updated cart object
     await userCart.save();
-    
+
     // Respond with a success message
-    return res.status(200).json({ message: "Product removed from cart",status : 200 });
+    return res.status(200).json({ message: "Product removed from cart", status: 200 });
   } catch (err) {
     // Log the error for debugging
     console.error('Error removing product from cart:', err);
@@ -268,7 +205,7 @@ exports.getCartItems = async (req, res) => {
       .populate("items.productId");
 
     if (!cart || cart.items.length === 0) {
-      return res.status(200).json({ message: "No items found in the cart" });
+      return res.status(200).json({ message: "No items found in the cart", data:0 });
     }
 
     // Calculate subtotal, shipping, tax, and total
@@ -285,7 +222,7 @@ exports.getCartItems = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      items: cart.items.length > 0 ?  cart.items : [],
+      items: cart.items.length > 0 ? cart.items : [],
       subtotal: subtotal.toFixed(2), // Format to 2 decimal places
       shippingEstimate: shippingEstimate.toFixed(2),
       taxEstimate: taxEstimate.toFixed(2),

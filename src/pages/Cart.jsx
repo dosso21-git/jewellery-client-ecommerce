@@ -2,44 +2,53 @@
 import axios from "axios";
 import CouponPopup from "../components/Popup/CouponPopup";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom'
 import Lottie from "lottie-react";
 import successAnimation from "./cartAnimation/CartAnimation.json";
 import { useSelector, useDispatch } from 'react-redux';
-import {addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
+import { addToCart, removeFromCart, clearCart } from '../redux/cartSlice';
 
 
 const CartPage = () => {
 
   const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const [cartData, setCartData] = useState(null);
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null); 
+  const [errorMessage, setErrorMessage] = useState(null);
   const [type, setType] = useState("coupon");
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+
   const handleAddressSelection = (addressId) => {
     setSelectedAddress(addressId);
   };
+
+
   const getAllCartData = async () => {
     try {
-    
+
       const response = await axios.post("/api/user/cart/get");
-      if(response.data.items){
-      const validItems = response.data.items.filter(
-        (item) => item.productId !== null
-      );
-      setCartData({ ...response.data, items: validItems });
-      dispatch(addToCart(response?.data?.items?.length)); // Assume 1 item is added
-      if(response?.data?.items?.length == 0){
-        dispatch(clearCart())
+      if (response.data.items) {
+        const validItems = response.data.items.filter(
+          (item) => item.productId !== null
+        );
+        setCartData({ ...response.data, items: validItems });
+        dispatch(addToCart(response?.data?.items?.length));
+        if(response?.data){
+          dispatch(addToCart(0));
+        }
+        if (response?.data?.items?.length == 0) {
+          dispatch(clearCart())
+        }
+      } else {
+        // setCartData([])
       }
-    }else{
-      // setCartData([])
-    }
     } catch (error) {
       console.error("Error fetching cart data:", error);
     }
@@ -54,6 +63,12 @@ const CartPage = () => {
       // alert("Error fetching addresses. Please try again.");
     }
   };
+
+  const getProdDetails = (id) => {
+    if (id) {
+      navigate(`/product-details/${id}`)
+    }
+  }
 
   useEffect(() => {
     getAllCartData();
@@ -93,7 +108,7 @@ const CartPage = () => {
       subtotal + shippingEstimate + taxEstimate - subtotal * (discount / 100);
 
     return { subtotal, shippingEstimate, taxEstimate, orderTotal };
-  // }
+    // }
   };
 
   // State for totals
@@ -113,14 +128,15 @@ const CartPage = () => {
       if (response.data.status) {
         // setWishlist(wishlist.filter(item => item._id!== id));
         getAllCartData()
-        dispatch(removeFromCart(id))
       } else {
         console.error('Error removing from wishlist:', response.data);
       }
     } catch (error) {
-      console.log('catch block',error)
+      console.log('catch block', error)
     }
   };
+
+
   const applyCoupon = () => {
     if (couponCode === "SAVE10") {
       setDiscount(10);
@@ -186,7 +202,7 @@ const CartPage = () => {
               >
                 &times;
               </button>
-              <div className="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
+              <div className="flex items-center w-full sm:w-auto mb-4 sm:mb-0 cursor-pointer" onClick={() => getProdDetails(item.productId._id)}>
                 <img
                   src={item?.productId?.images[0]}
                   alt={item.productId.title}
@@ -238,16 +254,15 @@ const CartPage = () => {
             Order Summary
           </h3>
           <div className="mt-4">
-      <h1 className="text-red-800 font-bold">      Select Your Address:</h1>
+            <h1 className="text-red-800 font-bold">      Select Your Address:</h1>
             {Array.isArray(addresses) && addresses.length > 0 ? (
               addresses.map((address) => (
                 <div
                   key={address._id}
-                  className={`flex justify-between items-center p-2 border-b ${
-                    selectedAddress === address._id
-                      ? "bg-gray-200 dark:bg-gray-700"
-                      : ""
-                  }`}
+                  className={`flex justify-between items-center p-2 border-b ${selectedAddress === address._id
+                    ? "bg-gray-200 dark:bg-gray-700"
+                    : ""
+                    }`}
                 >
                   <div>
                     <p>

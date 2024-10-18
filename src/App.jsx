@@ -62,6 +62,7 @@ const App = () => {
 
 
   return (
+    <>
     <AppProvider>
       <ErrorBoundary>
         <Router>
@@ -136,6 +137,7 @@ const App = () => {
         </Router>
       </ErrorBoundary>
     </AppProvider>
+    </>
   );
 };
 

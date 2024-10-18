@@ -275,7 +275,7 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [comment, setComment] = useState("");
   const [star, setStar] = useState(0);
-  const [ratingError, setRatingError] = useState(""); // New state for rating error
+  const [ratingError, setRatingError] = useState("");
 
   const navigate = useNavigate();
   const token = Cookies.get("loginToken");

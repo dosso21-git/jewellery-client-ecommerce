@@ -417,6 +417,9 @@ const Navbar = () => {
   const location = useLocation();
   const [token, setToken] = useState('');
 
+  console.log("CArt Length:", cartItems);
+
+
   useEffect(() => {
     const token = Cookies.get('loginToken');
     setToken(token);
@@ -450,8 +453,9 @@ const Navbar = () => {
         <div className="container flex justify-between items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-1">
+              {/* <img src={Logo} alt="IridscentGems" width={50} height={50} /> */}
               <div className="sm:flex justify-center">
-                <h1 className="text-[12px] md:text-2xl flex flex-col text-gray-500"><p>Iridscent<b className="text-secondary">Gems</b></p> <span className="text-[6px] md:text-sm text-secondary">Jewels as Unique as You</span></h1>
+                <h1 className="text-[12px] md:text-2xl flex flex-col text-gray-500"><p>Iridescent<b className="text-secondary">Gems</b></p> <span className="text-[6px] md:text-sm text-gray-500">Jewels as Unique as You</span></h1>
               </div>
             </Link>
           </div>

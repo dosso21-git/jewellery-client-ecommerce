@@ -21,7 +21,7 @@ function Icon() {
   );
 }
 
-export function AlertCustomStyles({ visible, setVisible ,message}) {
+export function AlertCustomStyles({ visible, setVisible, message }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -43,7 +43,10 @@ export function AlertCustomStyles({ visible, setVisible ,message}) {
   return (
     <div className=''>
       {visible && (
-        <div className=" absolute top-32 right-0 m-4" style={{ width: '300px', height: '50px', zIndex: 40 }}>
+        <div
+          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 m-4"
+          style={{ width: '300px', height: '50px', zIndex: 40 }}
+        >
           <div
             style={{
               position: 'absolute',
@@ -59,10 +62,11 @@ export function AlertCustomStyles({ visible, setVisible ,message}) {
             icon={<Icon />}
             className="rounded-none border-l-4 border-[#2ec946] bg-[#ffffff] font-medium text-[#2ec946] relative h-full"
           >
-        {message}
+            {message}
           </Alert>
         </div>
       )}
     </div>
+
   );
 }

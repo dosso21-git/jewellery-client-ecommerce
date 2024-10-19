@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { FaHome, FaCalendar, FaFileAlt, FaUser, FaCog, FaArrowLeft, FaEnvelope, FaComment, } from 'react-icons/fa';
-import { MdContactPhone } from 'react-icons/md';
+import { FaHome, FaCalendar, FaFileAlt, FaEnvelope, FaComment, } from 'react-icons/fa';
 import { HiMiniTrophy } from 'react-icons/hi2';
-import { FaPhoneVolume } from 'react-icons/fa6';
 import { MdGroups2 } from 'react-icons/md';
+import { GiVerticalBanner } from "react-icons/gi";
 import Cookies from 'js-cookie';
 import BellIcon from '@heroicons/react/solid/BellIcon';
 import PaperAirplaneIcon from '@heroicons/react/solid/PaperAirplaneIcon';
@@ -175,7 +174,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Stock Status
                 </NavLink>
               </li> */}
-              {/* 
+              {/*
               <li>
                 <NavLink
                   to="/dashboard/getoffers"
@@ -204,7 +203,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   onClick={handleMenuClick}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('globalnotification') && 'bg-graydark dark:bg-meta-4'}`}
                 >
-                  < BellIcon className="h-8 w-8 text-orange-400" />
+                  < GiVerticalBanner className="h-8 w-8 text-orange-400" />
                   Banners
                 </NavLink>
               </li>

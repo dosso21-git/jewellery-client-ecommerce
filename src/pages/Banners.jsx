@@ -60,7 +60,7 @@ const Banners = () => {
         formData.append('offer', offer);
         formData.append('discount', discount);
         formData.append('type', type);
-        formData.append('imageUrl', image);
+        formData.append('pictures', image);
 
         try {
             if (editingBannerId) {

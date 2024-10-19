@@ -85,7 +85,14 @@ const MainPage = () => {
         setSuccessMessage('Product created successfully!');
       }
       fetchProducts();
-      setFormData({ title: '', description: '', price: '', quantity: '', category: '', img: [], });
+      setFormData({
+        title: '',
+        description: '',
+        price: '',
+        quantity: '',
+        category: '',
+        img: [],
+      });
       setEditingProduct(null);
     } catch (error) {
       console.error('Error submitting form:', error);

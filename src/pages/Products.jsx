@@ -1,33 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import PopupMessage from './PopupMessage';
-import { useNavigate, Link, useParams  } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import Popup from './Popup';
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  SearchIcon,
-  PlusIcon,
-  TrashIcon,
-  PencilIcon,
-  StarIcon,
-  ClipboardListIcon,
-  CurrencyDollarIcon,
-  TagIcon,
-} from '@heroicons/react/solid';
+import { ChevronLeftIcon, ChevronRightIcon, SearchIcon, PlusIcon, TrashIcon, PencilIcon, StarIcon, ClipboardListIcon, CurrencyDollarIcon, TagIcon, } from '@heroicons/react/solid';
 import { motion } from 'framer-motion';
 
 
 const MainPage = () => {
   const [products, setProducts] = useState([]);
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    price: '',
-    quantity: '',
-    category: '',
-    img: [],
-  });
+  const [formData, setFormData] = useState({ title: '', description: '', price: '', quantity: '', category: '', img: [], });
   const [loader, setLoader] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
   const [currentImageIndices, setCurrentImageIndices] = useState({});
@@ -54,10 +36,10 @@ const MainPage = () => {
     }
   };
 
-  const deleteImageFromServer = async (pictureIndex,productId) => {
-    
+  const deleteImageFromServer = async (pictureIndex, productId) => {
+
     setLoader(true);
-   
+
     try {
       await axios.delete(`user/admin/delete/${productId}/image/${pictureIndex}`);
       fetchProducts();
@@ -68,8 +50,8 @@ const MainPage = () => {
     }
   };
 
-  const deleteImageFromState = (index,productId) => {
-    deleteImageFromServer(index,productId);
+  const deleteImageFromState = (index, productId) => {
+    deleteImageFromServer(index, productId);
   };
 
   const handleInputChange = (e) => {
@@ -103,14 +85,7 @@ const MainPage = () => {
         setSuccessMessage('Product created successfully!');
       }
       fetchProducts();
-      setFormData({
-        title: '',
-        description: '',
-        price: '',
-        quantity: '',
-        category: '',
-        img: [],
-      });
+      setFormData({ title: '', description: '', price: '', quantity: '', category: '', img: [], });
       setEditingProduct(null);
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -167,8 +142,8 @@ const MainPage = () => {
 
       return {
         ...prevIndices,
-        [productId]: direction === 'left' 
-          ? (currentIndex === 0 ? totalImages - 1 : currentIndex - 1) 
+        [productId]: direction === 'left'
+          ? (currentIndex === 0 ? totalImages - 1 : currentIndex - 1)
           : (currentIndex === totalImages - 1 ? 0 : currentIndex + 1),
       };
     });
@@ -183,7 +158,7 @@ const MainPage = () => {
         <ChevronLeftIcon className="h-5 w-5 mr-2" />
         Back to Dashboard
       </button>
-      
+
       <div className="mb-4 relative">
         <label className="block text-purple-700 text-sm font-bold mb-2">Search by Category</label>
         <input
@@ -268,7 +243,7 @@ const MainPage = () => {
                     className="w-full h-48 rounded"
                   />
                   <button
-                    onClick={() => deleteImageFromState(currentImageIndex,product._id)}  
+                    onClick={() => deleteImageFromState(currentImageIndex, product._id)}
                     className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded"
                   >
                     X
@@ -295,7 +270,7 @@ const MainPage = () => {
 
               <div className="flex items-center text-gray-800 font-bold">
                 <CurrencyDollarIcon className="h-5 w-5 text-green-600 mr-2" />
-                <span className='text-blue-600'>$ {product.price}</span> 
+                <span className='text-blue-600'>$ {product.price}</span>
               </div>
 
               <div className="flex items-center text-gray-800 font-bold">
